@@ -22,12 +22,12 @@
 ### Ст. 1 — Один файл
 
 Весь продукт — один файл C: `src/agryp.c`, читаемый сверху вниз за один
-присест. Потолок — 720 строк (Поправка №6 от 2026-11-07: 700 → 720 —
-цена эскалации ctl-stop, Ст. 13, Виток 6): превысил — сначала упрощай,
+присест. Потолок — 820 строк (Поправка №7 от 2026-11-07: 720 → 820 —
+цена SIGHUP-reload, Ст. 13, Виток 6): превысил — сначала упрощай,
 потом добавляй.
 
 Проверка: `find . -name '*.c' | wc -l` → `1`;
-`wc -l src/agryp.c` → не больше 720 (сейчас 718).
+`wc -l src/agryp.c` → не больше 820 (сейчас 818).
 
 ### Ст. 2 — Ноль зависимостей
 
@@ -79,8 +79,8 @@ PDEATHSIG, клетка cgroup). Берём доказанные идеи (init-
 Каждое значимое событие — одна строка JSON в stdout: `boot`, `spawn`,
 `spawn-fail`, `exit`, `restart`, `stopped`, `failed`, `budget-kill`,
 `token-kill`, `ctl-down`, `ctl-up`, `ctl-drop`, `ctl-kill`, `finish`,
-`cgroup-skip`, `report-drop`, `subreaper`, `reap-orphan`, `shutdown`,
-`summary`. Числа summary обязаны сходиться с потоком событий;
+`reload`, `unit-added`, `unit-removed`, `cgroup-skip`, `report-drop`,
+`subreaper`, `reap-orphan`, `shutdown`, `summary`. Числа summary обязаны сходиться с потоком событий;
 лестница перезапуска обязана сходиться с конфигом юнита — аудитор
 проверяет каждую ступень; `up_ms` идёт по монотонным часам; ноль NUL-дыр
 — `O_APPEND` наследуется детьми через fork+exec, записи атомарны.
@@ -188,6 +188,14 @@ stop <unit>` кладёт `<dir>/.agryp-ctl/<unit>.down`, супервизор �
 (Поправка №6, школа systemd `TimeoutStopSec`): агент, игнорирующий
 TERM, живёт ровно `GRACE_MS` с момента `.down`, затем `ctl-kill` и
 SIGKILL группы; лестницу это не растит — закон исполнил супервизор.
+SIGHUP — daemon-reload (Поправка №7, школа systemd): каталог юнитов
+перечитывается без смерти детей; изменённые ключи применяются сразу
+(дедлайн бюджета — от живой попытки), новый `*.agent` — юнит
+появляется и стартует, удалённый — graceful-stop по Ст. 9
+(`unit-removed`, `stopped reason reload`); событие `reload` несёт
+числа добавлено/изменено/удалено; новые юниты получают комнатку
+cgroup или честный отказ. Перезапуск конкретного юнита — не здесь:
+это agrypctl stop/start (Виток 5).
 
 Проверка: в живом демо `./agryp status --dir examples` печатает NDJSON
 (`demo/status-snapshot.jsonl`: `crashy` в COOLDOWN, `hello` RUNNING
@@ -196,7 +204,10 @@ SIGKILL группы; лестницу это не растит — закон �
 (stop → смерть без рестартов, start → новая попытка; упрямый юнит с
 `trap '' TERM` живёт ≤ GRACE_MS, затем `ctl-kill` и exit по сигналу 9)
 и отрицательный тест `make audit-ctl` (спавн при живом .down, ctl-up
-без ctl-down и ctl-kill без трупа аудитор ловит).
+без ctl-down и ctl-kill без трупа аудитор ловит); reload доказан
+`make demo-reload`: изменённый бюджет виден в статус-срезе на той же
+попытке, удалённый юнит умер graceful, добавленный стартовал, числа
+`reload 1/1/1` сходятся с юнит-событиями.
 
 ### Ст. 14 — Токен — вторая валюта бюджета
 
@@ -291,6 +302,17 @@ TERM-упрямый агент живёт ≤ `GRACE_MS` с момента `.dow
 с `trap '' TERM`: ctl-down → ctl-kill через 3006 мс → exit по сигналу
 9, рестартов 0) и третья подделка в `demo/negative_ctl_test.py`
 (ctl-kill без последующего exit — FAIL).
+
+**№7 (2026-11-07, «договоры меняются, дети живут»)** — Ст. 13
+дополнена SIGHUP-reload (школа systemd daemon-reload, тикет 005,
+Виток 6): перечитывать каталог `*.agent` без смерти детей; события
+`reload` (числа) и `unit-added`/`unit-removed`; Ст. 6 — словарь
+расширен; Ст. 1 — потолок 720 → 820 (цена: 718 → 818, включая
+рефакторинг `parse_unit_file`/`cgroup_room` — общие для boot и
+reload). Один атом: код + статьи + проверки; доказательство —
+`make demo-reload` (alpha: budget 5→60 на той же попытке; beta:
+graceful `stopped reason reload`; gamma: `unit-added` + spawn;
+аудитор сверяет числа reload с юнит-событиями).
 
 ---
 
