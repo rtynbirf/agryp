@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# Живое демо agryp (35 с) — три статьи одним атомом:
+# Живое демо agryp (35 с) — статьи одним атомом:
 #   t=0    boot; Ст. 15: клетка памяти — в среде без cgroups честный cgroup-skip
 #   t=5    kill -9 -- -PGID всей группе процессов hello (Ст. 9)
 #   t=15   Ст. 13: ./agryp status снимает NDJSON-срез → demo/status-snapshot.jsonl
 #   t≈16   Ст. 14: попытка hello переросла token-budget 5000 → token-kill
+#   t≈25   Ст. 8: пятая своя смерть crashy → терминальный failed (crash-loop)
 #   t=35   SIGTERM → graceful shutdown; сирот 0; файла статуса больше нет
 set -u
 cd "$(dirname "$0")/.."

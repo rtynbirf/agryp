@@ -80,6 +80,14 @@ CLI-агенты (№22, 56, 79, 93), воркфлоу-платформы (№25
 
 `agryp` занимает пустую клетку: **агент-ориентированный супервизор на уровне процессов**.
 
+Сверка со средой обитания (2026-11-06, [`docs/TEACHERS.md`](docs/TEACHERS.md)):
+учителя — systemd, s6, runit, tini, supervisord, Kubernetes, launchd;
+сверстники — Claude Code, Codex, MCP, LangGraph, E2B/Modal, OTel GenAI,
+OpenHands, Letta. Принято четыре инварианта (лестница перезапуска,
+предохранитель crash-loop, subreaper, PDEATHSIG), семь подтверждены
+как «уже было», остальное отвергнуто с причинами — сингулярность
+держится на отказах не хуже, чем на принятиях.
+
 ## Формат юнита `.agent`
 
 ```
@@ -89,7 +97,7 @@ exec         = bash demo/hello_agent.sh
 restart      = always       # always | on-failure | no
 budget-sec   = 25           # time-бюджет попытки (Ст. 7)
 token-budget = 5000         # токен-бюджет: burn-rate агент отдаёт сам (Ст. 14)
-cooldown-ms  = 1000         # пауза перед перезапуском
+cooldown-ms  = 1000         # база лестницы перезапуска (Ст. 8)
 # mem-max-mb = 64           # клетка cgroups v2 (Ст. 15), 0 = без клетки
 # max-attempts = 0          # 0 = без лимита
 ```
@@ -102,29 +110,41 @@ make && ./agryp --dir examples
 ./agryp status --dir examples
 ```
 
-Логи — JSON-строки в stdout (`boot`, `spawn`, `exit`, `restart`, `budget-kill`,
-`token-kill`, `cgroup-skip`, `shutdown`, `summary`) — удобно направлять в любой сборщик.
+Логи — JSON-строки в stdout (`boot`, `spawn`, `exit`, `restart`, `stopped`,
+`failed`, `budget-kill`, `token-kill`, `cgroup-skip`, `subreaper`,
+`reap-orphan`, `shutdown`, `summary`) — удобно направлять в любой сборщик.
 
 ## Живое демо: что доказывает транскрипт
 
 Сценарий (`make demo`): поднимаются два агента; на 5-й секунде мы убиваем
 `hello` через `kill -9` всей группе процессов; на 15-й снимаем `agryp status`
-в живой семье; на 35-й супервизору уходит SIGTERM.
+в живой семье; на 25-й `crashy` добирается до терминального `failed`;
+на 35-й супервизору уходит SIGTERM.
 
 Факты из `demo/demo-transcript.jsonl` (реальный прогон 2026-11-06):
 
 - Ст. 15 в песочнице: `cgroup-skip` (cgroupfs read-only, errno 30) — лимит
   памяти объявлён вслух, супервизор работает дальше;
-- внешняя смерть поймана: `"event":"exit","by_signal":9` → `"event":"restart"`;
+- Ст. 9 при загрузке: `subreaper` с `"on":true` — супервизор объявил себя
+  собирателем сирот; каждый ребёнок уходит в жизнь со страховкой
+  `PR_SET_PDEATHSIG`;
+- внешняя смерть поймана: `"event":"exit","by_signal":9` → `"event":"restart"`
+  с `backoff_ms:1000` — база лестницы;
+- Ст. 8, лестница `crashy`: `backoff_ms` 1000 → 2000 → 4000 → 8000
+  (streak 1→4), пятая своя смерть — терминальный `failed` (streak 5) и
+  `stopped reason crash-loop`; спавнов после `failed` — ноль;
+- Ст. 8, лестница `hello`: казни закона её не растят — после двух
+  `token-kill` юнит продолжает с базой 1000 мс; попытка, прожившая
+  ≥ 10 с, гасит счётчик (`streak` 1 → 0);
 - Ст. 14: hello дважды усыпан токенами — 2 × `token-kill`, оба при
   `tokens:5000 == budget:5000`; `budget-kill` — 0: токены дороже 25 секунд;
-- Ст. 13: `demo/status-snapshot.jsonl` — срез в t=15: `crashy` в COOLDOWN,
-  `hello` RUNNING с счётчиком 4500/5000 — за секунду до казни;
-- падучий `crashy`: 9 попыток, 9 перезапусков, ни одного потерянного exit-а;
+- Ст. 13: `demo/status-snapshot.jsonl` — срез в t=15: `crashy` RUNNING
+  (attempt 4, streak 3 — на верхней ступени перед падением), `hello`
+  RUNNING 4500/5000 — за 0,3 с до казни;
 - graceful shutdown: TERM → ожидание → KILL, затем честный summary:
 
 ```
-{"unit":"crashy","event":"summary","attempts":9,"exits_ok":0,"exits_fail":9,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":9}
+{"unit":"crashy","event":"summary","attempts":5,"exits_ok":0,"exits_fail":5,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":4}
 {"unit":"hello","event":"summary","attempts":4,"exits_ok":0,"exits_fail":4,"budget_kills":0,"token_kills":2,"tokens_total":17000,"restarts":3}
 {"event":"shutdown","reason":"signal"}
 ```
@@ -134,9 +154,10 @@ make && ./agryp --dir examples
 наследуется детьми через fork+exec, и все записи атомарно идут в конец. Без
 него stdio родителя пишет по устаревшей позиции, пока дети уехали вперёд — в
 логе появляются разреженные дыры из NUL-байтов (44 КБ мусора в первом прогоне
-после рефакторинга имён). Транскрипт теперь — 7.3 КБ: 46 JSON-событий + 47 строк
-агентов одним файлом, ноль NUL; это проверяет аудитор `demo/audit_transcript.py` —
-`make audit` печатает `OK`.
+после рефакторинга имён). Транскрипт теперь — 6.6 КБ: 43 JSON-события + 43
+строки агентов одним файлом, ноль NUL; это проверяет аудитор
+`demo/audit_transcript.py` — он же сверяет каждую ступень лестницы с конфигом
+юнитов и терминальность `failed`; `make audit` печатает `OK`.
 
 ## Конституция
 
@@ -144,7 +165,11 @@ make && ./agryp --dir examples
 пяти разделах (Тело · Дело · Люди · Процесс · Поправки), и каждая статья
 снабжена командой проверки — статья без команды проверки не считается
 статьёй. Поправка №1: потолок Ст. 1 поднят 512 → 576 — цена трёх статей
-процесса (Ст. 13–15), оплачена одним атомом с ними. Аудит «журнал не лжёт»
+процесса (Ст. 13–15). Поправка №2 («урок учителей», 2026-11-06): Ст. 8
+получила лестницу перезапуска с предохранителем, Ст. 9 — страховку от
+сирот (PDEATHSIG + subreaper), Ст. 1 — потолок 576 → 608; всё одним
+атомом кода, статей и проверок по процедуре Ст. 16, источник —
+[`docs/TEACHERS.md`](docs/TEACHERS.md). Аудит «журнал не лжёт»
 (Ст. 6) — отдельная цель:
 
 ```
@@ -162,13 +187,17 @@ make audit
 ## Архитектура
 
 Один поток, один файл: `poll()`-цикл с таймаутом до ближайшего дедлайна бюджета;
-`waitpid(-1, …, WNOHANG)` собирает статусы; состояния юнита — `STOPPED`,
-`RUNNING`, `COOLDOWN`; restart-политики — `always`, `on-failure`, `no`;
-агент — обычный `fork`+`execl("/bin/sh","-c",…)`, попытка — группа
+`waitpid(-1, …, WNOHANG)` собирает статусы (супервизор — subreaper, чужих
+сирот хоронит событием `reap-orphan`); состояния юнита — `STOPPED`,
+`RUNNING`, `COOLDOWN`; restart-политики — `always`, `on-failure`, `no`,
+пауза — лестница: своя смерть удваивает `cooldown-ms` до `BACKOFF_CAP_MS`,
+прожитые `SUSTAIN_MS` гасят счётчик, `CRASH_LIMIT` подряд — терминальный
+`failed`; агент — обычный `fork`+`execl("/bin/sh","-c",…)`, попытка — группа
 процессов (`setpgid` в ребёнке и в родителе): бюджет-килл и shutdown
-режут семью целиком через `kill(-pgid)`, сирот не оставляем. Ст. 13–15:
-статус семьи — файл `<dir>/.agryp-status` (tmp + rename каждую итерацию,
-unlink на выходе; `agryp status` читает); токены — агент пишет
+режут семью целиком через `kill(-pgid)`, каждый ребёнок носит
+`PR_SET_PDEATHSIG` — сирот не оставляем даже при SIGKILL супервизора.
+Ст. 13–15: статус семьи — файл `<dir>/.agryp-status` (tmp + rename каждую
+итерацию, unlink на выходе; `agryp status` читает); токены — агент пишет
 `<unit> tokens <n>` в файл из env `AGRY_TOKEN_REPORT`, супервизор
 съедает раз в итерацию; память — `memory.max` в собственной делегированной
 ветке cgroup v2, агент переезжает до exec.
@@ -176,6 +205,8 @@ unlink на выходе; `agryp status` читает); токены — аге�
 ## Дорожная карта
 
 - agrypctl: start/stop/restart по юниту через те же файлы-договоры;
+- ./finish-хук юнита — очистка между смертью и рестартом (школа s6);
+- SIGHUP — перечитать каталог юнитов без смерти детей (школа daemon-reload);
 - namespace-изоляция попыток (pid/mount) рядом с клеткой cgroup;
 - трансляция `.agent` ↔ systemd unit;
 - токен-отчёт стримом вместо кванта 250 мс.
