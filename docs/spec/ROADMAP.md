@@ -9,24 +9,32 @@
 ревизия Ст. 5 (Поправка №3); живая сверка ниши — `docs/TEACHERS.md` §V.
 Код ядра не менялся (607/608).
 
-## Виток 5 — agrypctl: руки без сокетов · тикеты 001, 002 · open
+## Виток 5 — agrypctl: руки без сокетов · тикеты 001, 002 · исполнен 2026-11-07
 
-- Задача: управление юнитом файлами-договорами. `agrypctl stop <unit>` пишет
-  `<dir>/.agryp-ctl/<unit>.down`; ядро в каждой итерации читает ctl-каталог:
-  файл жив → SIGTERM группе, рестарт-политика заморожена; `agrypctl start`
-  снимает файл. События `ctl-down` / `ctl-up` в журнал (Ст. 6).
-- Учитель: s6 (`s6-svc -d/-u` — управление через файловую систему);
-  сверстник zeptopm (HTTP API) — отвергается, у нас файл-как-API (Ст. 13).
-- Цена: ~40 строк ядра → Поправка №4: потолок Ст. 1 608 → 656, одним атомом.
-- Приёмка: agrypctl stop → юнит умер без рестартов, есть `ctl-down`;
-  agrypctl start → новая попытка, есть `ctl-up`; сироты 0; `make audit` OK.
+- Ядро: `poll_ctl()` — файлы-договоры `<dir>/.agryp-ctl/<unit>.down`;
+  казнь TERM'ом группы и заморозка restart-политики при живом .down
+  (казнь закона — лестницу не растит, `stopped reason ctl-down`); ctl-up —
+  новая попытка с чистой лестницей, минуя cooldown; boot уважает .down
+  прошлой жизни; события `ctl-down`/`ctl-up`/`ctl-drop`; `"ctl_down"`
+  в статус-срезе. 607 → 654, потолок 656 — Поправка №4 одним атомом.
+- `agrypctl` — один POSIX sh-файл (stop/start/status), запись атомарна.
+- Аудитор: ctl-дисциплины + `demo/negative_ctl_test.py` — подделки
+  (спавн при живом .down; ctl-up без ctl-down) ловятся с точным приговором.
+- Приёмка: `make demo-ctl` — worker казнён без рестартов, ghost жив,
+  ctl-up → attempt 2, сирот 0; `make audit` и `make audit-ctl` — OK.
+- Репо: `rtynbirf/agryp` создан по github-runbook (private, описание,
+  topics, шум OFF, Dependabot+autofix), пуш main, тег `v0.5.0`.
 
 ## Виток 6 — чистота между смертью и рестартом · open
 
 - `./finish`-хук юнита (s6): exec-хук после смерти попытки до cooldown;
-  ключ `.agent`: `finish = <строка sh>`. Очистка tmp/worktree у фермы агентов.
+  ключ `.agent`: `finish = <строка sh>`. Очистка tmp/worktree у фермы
+  агентов. Тикет 004.
 - SIGHUP-reload: перечитать каталог юнитов без смерти детей (школа systemd
   daemon-reload; в витке 2 отвергнут как «пока» — возвращается по спросу).
+  Тикет 005.
+- Эскалация ctl-stop: TERM не убил за GRACE_MS → SIGKILL группы, событие
+  `ctl-kill` (школа systemd stop). Тикет 006.
 
 ## Виток 7 — изоляция и мосты · open
 
@@ -40,5 +48,5 @@
 - Бенчмарк-транскрипт: agryp (один файл C, ~20 КБ бинарь) vs zeptopm
   (Rust, ~11 МБ бинарь) vs stdiobus: rss на 100 агентов, байты журнала,
   сироты после kill -9 группы.
-- Пакет GitHub по доктрине (github-runbook, 15 минут): описание, topics,
-  флаги Settings, тег `v1.0`, MIT.
+- Перевод репо в public, финальный пакет GitHub по доктрине (github-runbook):
+  описание, topics, флаги Settings, тег `v1.0`, MIT.

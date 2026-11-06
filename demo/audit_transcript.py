@@ -23,6 +23,9 @@
      либо +1 к предыдущему;
   8. failed (Ст. 8) — терминален: streak == CRASH_LIMIT, после него
      спавнов юнита не бывает.
+  9. ctl-дисциплина (Виток 5, Ст. 13): spawn при живом .down невозможен;
+     ctl-up без ctl-down — ложь; казнённая ctl-down попытка обязана
+     получить exit и остановиться с reason ctl-down.
 
 Успех: печатает OK и сводку, код выхода 0. Иначе — список нарушений, код 1.
 """
@@ -34,8 +37,9 @@ import sys
 ALLOWED_AFTER_SHUTDOWN = {"exit", "summary", "uptime-ms", "reap-orphan"}
 VALID_EVENTS = {
     "boot", "spawn", "spawn-fail", "exit", "restart", "stopped", "failed",
-    "budget-kill", "token-kill", "cgroup-skip", "report-drop", "subreaper",
-    "reap-orphan", "shutdown", "summary", "uptime-ms",
+    "budget-kill", "token-kill", "ctl-down", "ctl-up", "ctl-drop",
+    "cgroup-skip", "report-drop", "subreaper", "reap-orphan", "shutdown",
+    "summary", "uptime-ms",
 }
 # константы Ст. 8 — сверены с #define в src/agryp.c
 BACKOFF_CAP_MS = 30000
@@ -128,9 +132,13 @@ def main(path):
             "spawns": [], "exits": [], "restarts": 0, "stopped": 0,
             "budget_kills": 0, "token_kills": 0, "running": False, "ok_exits": 0,
             "streak": None, "failed": False,
+            "ctl_down": False, "ctl_e0": None, "expect_stop": None,
         })
         et = ev["event"]
         if et == "spawn":
+            if u["ctl_down"]:
+                fail(errors, idx,
+                     f"spawn юнита {name} при живом .down — политика заморожена (Ст. 13)")
             if u["running"]:
                 fail(errors, idx, f"spawn юнита {name} поверх живой попытки")
             if u["failed"]:
@@ -165,8 +173,27 @@ def main(path):
             if ev.get("streak") != CRASH_LIMIT:
                 fail(errors, idx,
                      f"{name}: failed при streak={ev.get('streak')}, а fuse — {CRASH_LIMIT}")
+        elif et == "ctl-down":
+            if u["ctl_down"]:
+                fail(errors, idx, f"{name}: второй ctl-down без ctl-up")
+            u["ctl_down"] = True
+            if u["running"]:              # казнь ещё не отработала — ждём exit
+                u["ctl_e0"] = len(u["exits"])
+                u["expect_stop"] = "ctl-down"
+        elif et == "ctl-up":
+            if not u["ctl_down"]:
+                fail(errors, idx, f"{name}: ctl-up без ctl-down — журнал лжёт")
+            if u["ctl_e0"] is not None and len(u["exits"]) == u["ctl_e0"]:
+                fail(errors, idx, f"{name}: ctl-down казнил попытку, но exit не пришёл")
+            u["ctl_down"] = False
+            u["ctl_e0"] = None
         elif et == "stopped":
             u["stopped"] += 1
+            if u["expect_stop"] is not None:
+                if ev.get("reason") != u["expect_stop"]:
+                    fail(errors, idx,
+                         f"{name}: stopped reason={ev.get('reason')}, а обязан '{u['expect_stop']}'")
+                u["expect_stop"] = None
         elif et == "budget-kill":
             u["budget_kills"] += 1
         elif et == "token-kill":

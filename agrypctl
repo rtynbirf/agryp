@@ -1,0 +1,55 @@
+#!/bin/sh
+# agrypctl — руки для agryp: команда = файл-договор (Ст. 13, Виток 5, школа s6).
+# Никаких сокетов и FIFO: stop кладёт <dir>/.agryp-ctl/<unit>.down — супервизор
+# казнит попытку (TERM группе) и замораживает политику перезапуска, пока файл
+# жив; start снимает файл — ctl-up и новая попытка с чистой лестницей.
+# Статус не дублируем: читаем тот же файл семьи, что и `agryp status` (Ст. 13).
+#
+# usage: agrypctl [--dir DIR] stop <unit> | start <unit> | status
+
+set -u
+
+dir=examples
+if [ "${1:-}" = "--dir" ] && [ $# -ge 2 ]; then
+    dir=$2
+    shift 2
+fi
+
+cmd=${1:-}
+case "$cmd" in
+    stop|start)
+        unit=${2:-}
+        [ -n "$unit" ] || { echo "agrypctl: $cmd требует имя юнита" >&2; exit 2; }
+        ;;
+    status) ;;
+    *)
+        echo "usage: agrypctl [--dir DIR] stop <unit> | start <unit> | status" >&2
+        exit 2
+        ;;
+esac
+
+ctl="$dir/.agryp-ctl"
+
+case "$cmd" in
+    stop)
+        [ -f "$dir/$unit.agent" ] \
+            || { echo "agrypctl: нет юнита $dir/$unit.agent" >&2; exit 2; }
+        mkdir -p "$ctl"
+        # атомарность по Ст. 13: tmp + rename — супервизор не видит полфайла
+        tmp="$ctl/.tmp.$$"
+        : > "$tmp" && mv "$tmp" "$ctl/$unit.down"
+        echo "agrypctl: $unit.down положен — попытка будет казнена, политика заморожена"
+        ;;
+    start)
+        if [ -f "$ctl/$unit.down" ]; then
+            rm "$ctl/$unit.down"
+            echo "agrypctl: $unit.down снят — новая попытка пойдёт в ближайшей итерации"
+        else
+            echo "agrypctl: $ctl/$unit.down не существует — юнит живёт по своей политике"
+        fi
+        ;;
+    status)
+        [ -x ./agryp ] || { echo "agrypctl: соберите ядро: make" >&2; exit 2; }
+        exec ./agryp status --dir "$dir"
+        ;;
+esac
