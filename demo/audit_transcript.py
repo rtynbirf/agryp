@@ -16,27 +16,55 @@
        - каждый budget-kill / token-kill подтверждён exit-ом по сигналу 9;
        - exits_ok == число exit с ok:true, exits_fail == с ok:false;
   5. каждый счётчик summary == числу событий в потоке;
-  6. summary есть по каждому юниту, ровно по одному, uptime-ms — последним.
+  6. summary есть по каждому юниту, ровно по одному, uptime-ms — последним;
+  7. лестница перезапуска (Ст. 8): в каждом restart поле backoff_ms равно
+     cooldown-ms юнита, удвоенному (streak-1) раз до потолка BACKOFF_CAP_MS
+     (константы сверены с #define в src/agryp.c); streak либо сброс (0/1),
+     либо +1 к предыдущему;
+  8. failed (Ст. 8) — терминален: streak == CRASH_LIMIT, после него
+     спавнов юнита не бывает.
 
 Успех: печатает OK и сводку, код выхода 0. Иначе — список нарушений, код 1.
 """
+import glob
 import json
+import os
 import sys
 
-ALLOWED_AFTER_SHUTDOWN = {"exit", "summary", "uptime-ms"}
+ALLOWED_AFTER_SHUTDOWN = {"exit", "summary", "uptime-ms", "reap-orphan"}
 VALID_EVENTS = {
-    "boot", "spawn", "spawn-fail", "exit", "restart", "stopped",
-    "budget-kill", "token-kill", "cgroup-skip", "report-drop",
-    "shutdown", "summary", "uptime-ms",
+    "boot", "spawn", "spawn-fail", "exit", "restart", "stopped", "failed",
+    "budget-kill", "token-kill", "cgroup-skip", "report-drop", "subreaper",
+    "reap-orphan", "shutdown", "summary", "uptime-ms",
 }
+# константы Ст. 8 — сверены с #define в src/agryp.c
+BACKOFF_CAP_MS = 30000
+CRASH_LIMIT = 5
 
 
 def fail(errors, idx, msg):
     errors.append(f"строка {idx + 1}: {msg}")
 
 
+def load_unit_configs(repo_root):
+    """cooldown-ms из examples/*.agent — база лестницы (Ст. 8)."""
+    cfgs = {}
+    for p in sorted(glob.glob(os.path.join(repo_root, "examples", "*.agent"))):
+        cfg = {}
+        with open(p, encoding="utf-8") as f:
+            for ln in f:
+                ln = ln.strip()
+                if not ln or ln.startswith("#") or "=" not in ln:
+                    continue
+                k, v = ln.split("=", 1)
+                cfg[k.strip()] = v.strip()
+        cfgs[p.rsplit("/", 1)[-1][:-6]] = cfg
+    return cfgs
+
+
 def main(path):
     errors = []
+    cfgs = load_unit_configs(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     with open(path, "rb") as f:
         raw = f.read()
 
@@ -99,11 +127,14 @@ def main(path):
         u = units.setdefault(name, {
             "spawns": [], "exits": [], "restarts": 0, "stopped": 0,
             "budget_kills": 0, "token_kills": 0, "running": False, "ok_exits": 0,
+            "streak": None, "failed": False,
         })
         et = ev["event"]
         if et == "spawn":
             if u["running"]:
                 fail(errors, idx, f"spawn юнита {name} поверх живой попытки")
+            if u["failed"]:
+                fail(errors, idx, f"spawn юнита {name} после терминального failed")
             u["running"] = True
             u["spawns"].append((idx, ev.get("attempt")))
         elif et == "exit":
@@ -115,6 +146,25 @@ def main(path):
                 u["ok_exits"] += 1
         elif et == "restart":
             u["restarts"] += 1
+            streak, backoff = ev.get("streak"), ev.get("backoff_ms")
+            base = int(cfgs.get(name, {}).get("cooldown-ms", "1000"))
+            if not isinstance(streak, int) or not isinstance(backoff, int):
+                fail(errors, idx, f"{name}: restart без backoff_ms/streak")
+            else:
+                want = base if streak <= 1 else min(base * 2 ** (streak - 1), BACKOFF_CAP_MS)
+                if backoff != want:
+                    fail(errors, idx,
+                         f"{name}: ступень лестницы backoff_ms={backoff}, а по конфигу {want}")
+                prev = u["streak"]
+                if prev is not None and streak not in (0, 1, prev, prev + 1):
+                    fail(errors, idx,
+                         f"{name}: streak={streak} после {prev} — лестница нарушена")
+                u["streak"] = streak
+        elif et == "failed":
+            u["failed"] = True
+            if ev.get("streak") != CRASH_LIMIT:
+                fail(errors, idx,
+                     f"{name}: failed при streak={ev.get('streak')}, а fuse — {CRASH_LIMIT}")
         elif et == "stopped":
             u["stopped"] += 1
         elif et == "budget-kill":

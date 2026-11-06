@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/prctl.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
@@ -33,6 +34,9 @@
 #define EXEC_LEN  512
 #define CG_BASE_LEN 512 /* потолок пути делегированной ветки cgroup (Ст. 11) */
 #define GRACE_MS  3000   /* время на вежливую смерть при SIGTERM */
+#define SUSTAIN_MS     10000 /* «проработал» гасит лестницу перезапуска (Ст. 8) */
+#define BACKOFF_CAP_MS 30000 /* потолок лестницы перезапуска (Ст. 8) */
+#define CRASH_LIMIT    5     /* подряд своих смертей → терминальный failed (Ст. 8) */
 
 typedef enum { R_ALWAYS = 0, R_ON_FAILURE = 1, R_NO = 2 } restart_t;
 typedef enum { U_STOPPED = 0, U_RUNNING = 1, U_COOLDOWN = 2 } state_t;
@@ -61,6 +65,9 @@ typedef struct {
     int       token_kills;
     int       tokens;        /* съедено в текущей попытке */
     int       tokens_total;  /* съедено за всё время */
+    int       fail_streak;   /* подряд своих смертей — растит лестницу (Ст. 8) */
+    int       sup_kill;      /* казнь законом (бюджет/токены) — не ошибка агента */
+    long long run_started_ms; /* старт текущей попытки: «проработал» меряем от неё */
 } unit_t;
 
 static unit_t g_units[MAX_UNITS];
@@ -214,6 +221,11 @@ static void spawn_unit(unit_t *u)
     if (p == 0) {                              /* ребёнок: агент */
         signal(SIGTERM, SIG_DFL);
         signal(SIGINT,  SIG_DFL);
+        pid_t ppid = getppid();                /* страховка от сирот (Ст. 9): */
+        if (prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0) < 0 || getppid() != ppid) {
+            fprintf(stderr, "agryp: %s: страховка PDEATHSIG не встала\n", u->name);
+            _exit(125);
+        }
         setpgid(0, 0);                         /* своя группа: режем семью целиком */
         setenv("AGRY_UNIT", u->name, 1);       /* договор hook'а: кто ты и куда отчитываться */
         setenv("AGRY_TOKEN_REPORT", g_report_path, 1);
@@ -234,6 +246,7 @@ static void spawn_unit(unit_t *u)
     u->pgid        = p;
     u->state       = U_RUNNING;
     u->attempts++;
+    u->run_started_ms = now_ms();
     u->tokens      = 0;
     u->deadline_ms = (u->budget_sec > 0)
                      ? now_ms() + (long long)u->budget_sec * 1000LL
@@ -256,18 +269,40 @@ static void handle_exit(unit_t *u, int status)
 
     if (g_stop) { u->state = U_STOPPED; return; }
 
+    /* Лестница перезапуска (Ст. 8, учителя — docs/TEACHERS.md): своя смерть
+     * растит счётчик, победа гасит, казнь закона нейтральна, «проработал» — с нуля. */
+    int sup_killed = u->sup_kill;
+    u->sup_kill = 0;
+    if (!sup_killed) {                         /* казнь закона лестницу не трогает */
+        if (ok) u->fail_streak = 0;
+        else    u->fail_streak++;
+    }
+    if (now_ms() - u->run_started_ms >= SUSTAIN_MS)
+        u->fail_streak = 0;
+
     int want = (u->restart == R_ALWAYS) ||
                (u->restart == R_ON_FAILURE && !ok);
-    if (want && (u->max_attempts == 0 || u->attempts < u->max_attempts)) {
+    int fused = want && !ok && !sup_killed && u->fail_streak >= CRASH_LIMIT;
+
+    if (want && !fused && (u->max_attempts == 0 || u->attempts < u->max_attempts)) {
+        int delay = u->cooldown_ms;
+        if (u->fail_streak > 1) {
+            int k = u->fail_streak - 1;
+            while (k-- > 0 && delay < BACKOFF_CAP_MS) delay *= 2;
+            if (delay > BACKOFF_CAP_MS) delay = BACKOFF_CAP_MS;
+        }
         u->state = U_COOLDOWN;
-        u->next_start_ms = now_ms() + u->cooldown_ms;
+        u->next_start_ms = now_ms() + delay;
         u->restarts++;
-        log_ev(u, "restart", "\"next_attempt\":%d,\"cooldown_ms\":%d",
-               u->attempts + 1, u->cooldown_ms);
+        log_ev(u, "restart", "\"next_attempt\":%d,\"backoff_ms\":%d,\"streak\":%d",
+               u->attempts + 1, delay, u->fail_streak);
     } else {
         u->state = U_STOPPED;
+        if (fused)
+            log_ev(u, "failed", "\"reason\":\"crash-loop\",\"streak\":%d,\"attempts\":%d",
+                   u->fail_streak, u->attempts);
         log_ev(u, "stopped", "\"reason\":\"%s\"",
-               want ? "max-attempts" : "policy");
+               fused ? "crash-loop" : want ? "max-attempts" : "policy");
     }
 }
 
@@ -279,9 +314,13 @@ static void reap(void)
         int i;
 
         if (p <= 0) break;
+        int known = 0;
         for (i = 0; i < g_nunits; i++) {
-            if (g_units[i].pid == p) { handle_exit(&g_units[i], status); break; }
+            if (g_units[i].pid == p) { handle_exit(&g_units[i], status); known = 1; break; }
         }
+        if (!known)                            /* subreaper: усыновлённого хороним вслух */
+            log_ev(NULL, "reap-orphan", "\"pid\":%d,\"code\":%d", (int)p,
+                   WIFEXITED(status) ? WEXITSTATUS(status) : -1);
     }
 }
 
@@ -312,11 +351,11 @@ static void write_status(void)
                    "\"budget_sec\":%d,\"token_budget\":%d,\"tokens\":%d,"
                    "\"mem_max_mb\":%d,\"attempts\":%d,\"exits_ok\":%d,"
                    "\"exits_fail\":%d,\"budget_kills\":%d,\"token_kills\":%d,"
-                   "\"restarts\":%d}\n",
+                   "\"restarts\":%d,\"streak\":%d}\n",
                 u->name, state_name(u->state), (int)u->pid, u->attempts,
                 u->budget_sec, u->token_budget, u->tokens, u->mem_max_mb,
                 u->attempts, u->exits_ok, u->exits_fail,
-                u->budget_kills, u->token_kills, u->restarts);
+                u->budget_kills, u->token_kills, u->restarts, u->fail_streak);
     }
     fclose(f);
     rename(tmp, g_status_path);
@@ -470,6 +509,10 @@ int main(int argc, char **argv)
         return 2;
     }
     log_ev(NULL, "boot", "\"units\":%d,\"dir\":\"%s\"", g_nunits, dir);
+    if (prctl(PR_SET_CHILD_SUBREAPER, 1, 0, 0, 0) == 0)
+        log_ev(NULL, "subreaper", "\"on\":true");
+    else
+        log_ev(NULL, "subreaper", "\"on\":false,\"errno\":%d", errno);
     cgroup_init();                     /* Ст. 15: комнаты или честный отказ — до первого spawn */
     for (i = 0; i < g_nunits; i++) spawn_unit(&g_units[i]);
 
@@ -497,6 +540,7 @@ int main(int argc, char **argv)
                 long long left = u->deadline_ms - now;
                 if (left <= 0) {
                     u->budget_kills++;
+                    u->sup_kill = 1;
                     log_ev(u, "budget-kill", "\"pid\":%d,\"attempt\":%d",
                            (int)u->pid, u->attempts);
                     if (kill(-u->pgid, SIGKILL) < 0)
@@ -513,6 +557,7 @@ int main(int argc, char **argv)
             if (u->state == U_RUNNING && u->token_budget > 0 &&
                 u->tokens >= u->token_budget) {
                 u->token_kills++;
+                u->sup_kill = 1;
                 log_ev(u, "token-kill", "\"tokens\":%d,\"budget\":%d",
                        u->tokens, u->token_budget);
                 if (kill(-u->pgid, SIGKILL) < 0)
