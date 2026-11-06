@@ -115,6 +115,7 @@ token-budget = 5000         # токен-бюджет: burn-rate агент от
 cooldown-ms  = 1000         # база лестницы перезапуска (Ст. 8)
 # finish       = rm -rf /tmp/$AGRY_UNIT-worktree   # хук после каждой смерти (Виток 6)
 # mem-max-mb = 64           # клетка cgroups v2 (Ст. 15), 0 = без клетки
+# jail       = pid,mount    # комнаты имён попытки: pid | mount | pid,mount (Виток 7)
 # max-attempts = 0          # 0 = без лимита
 ```
 
@@ -134,7 +135,7 @@ kill -HUP $(pgrep -f 'agryp --dir examples')
 Логи — JSON-строки в stdout (`boot`, `spawn`, `exit`, `restart`, `stopped`,
 `failed`, `budget-kill`, `token-kill`, `ctl-down`, `ctl-up`, `ctl-drop`,
 `ctl-kill`, `finish`, `reload`, `unit-added`, `unit-removed`, `cgroup-skip`,
-`subreaper`, `reap-orphan`, `shutdown`, `summary`) —
+`jail-skip`, `report-drop`, `subreaper`, `reap-orphan`, `shutdown`, `summary`) —
 удобно направлять в любой сборщик.
 
 ## Живое демо: что доказывает транскрипт
@@ -234,6 +235,54 @@ worker казнён без единого рестарта, сосед-ghost н�
   же попытке, beta удалён graceful, gamma добавлен — reload 1/1/1).
   Перезапуск конкретного юнита — не здесь, это agrypctl stop/start.
 
+## Виток 7: клетка имён, токен-будильник и мост на язык systemd
+
+Три функции третьего витка, исполнены автором лично (коллеги не делают):
+
+- **Namespace-клетка попыток** (`jail = pid | pid,mount`): вход в новую
+  pid-комнату — только родиться в ней, поэтому вместо `fork()` —
+  `clone(CLONE_NEWPID[|CLONE_NEWNS])`: ребёнок супервизора и есть PID 1
+  своей комнаты, а геометрия попытки не меняется — та же группа
+  (`kill(-pgid)` режет семью и сквозь стену), тот же `PDEATHSIG`, тот же
+  `waitpid`. Mount-ветка сразу делает `/` рекурсивно private —
+  propagation наружу закрыт. Это не Docker: без образов, сетей и слоёв;
+  user-ns не трогаем. Среда не дала unshare — loud `jail-skip` с errno
+  и работа дальше без клетки, как у `cgroup-skip` (Ст. 15):
+  `make demo-jail` — в песочнице `jail-skip` с errno 1, юнит живёт,
+  сироты 0; аудитор ловит «молчаливую усечку» и «двух правд».
+- **Токен-будильник** (Ст. 14, тикет 009): квант итерации 250 мс съедал
+  латентность казни — агент, жгущий 10k токенов/с, умирал с задержкой
+  до тика. Теперь агент после записи рапорта бьёт `SIGUSR2` супервизору
+  (пид — в env `AGRY_SUPER_PID`); файл остаётся единственной правдой,
+  сигнал — только звонок (тот же приём, что у статус-среза, Ст. 13).
+  FIFO отвергнут: в этом доме сокет, FIFO и HTTP запрещены. Старый
+  протокол работает как работал: молчащий агент собирается раз в
+  итерацию. Доказательство — `make demo-stream`: стример жжёт 20k
+  токенов/с, казнь приходит в пределах кванта от пересечения (прогон:
+  < 5 мс, в token-kill tokens = 5000 — ровно линия; приёмка ≤ 300 мс).
+- **Мост на язык systemd** (тикет 008): у фермы с systemd уже есть
+  супервизор — не пере-делывать его (Ст. 5), а разговаривать на его
+  языке. `tools/agent2unit.sh` и `tools/unit2agent.sh` (POSIX sh) —
+  файл порождает файл; ядро не растёт ни на строку. Эквивалентность
+  не обещается — обещается честная таблица потерь; test туда-обратно:
+  `make bridge-test` (systemd-analyze verify — зелёный).
+
+Таблица соответствия и потерь (мост, тикет 008):
+
+| `.agent` | `.service` | Потеря |
+|---|---|---|
+| `name` | имя файла + `Description=agryp unit …` | — |
+| `exec` | `ExecStart=/bin/sh -c '<exec>'` | — |
+| `restart` | `Restart=` (always/on-failure/no) | — |
+| `budget-sec N` | `RuntimeMaxSec=N` / `infinity` | у нас SIGKILL группы попытки, у systemd TERM→KILL сервиса |
+| `cooldown-ms` | `RestartSec=` (с точностью до мс) | — |
+| `max-attempts N` | `StartLimitBurst=N` + `StartLimitIntervalSec=0` | у systemd — в окне интервала, у нас — за жизнь юнита |
+| `token-budget` | — | у systemd нет второй валюты: честно в шапке .service (Ст. 14) |
+| `mem-max-mb` | `MemoryMax=N M` | — |
+| `finish` | `ExecStopPost=/bin/sh -c '…'` | env: у нас `AGRY_EXIT_CODE`/`AGRY_BY_SIGNAL`, у systemd `$EXIT_CODE`/`$EXIT_STATUS` |
+| `jail` | — | комнаты имён не переносятся: это не контейнер |
+| — | `WorkingDirectory=` (каталог .agent) | обратная трансляция cwd не восстанавливает — это не договор |
+
 ## Конституция
 
 Правила репозитория — в [`CONSTITUTION.md`](CONSTITUTION.md): 16 статей в
@@ -263,6 +312,8 @@ make audit
 
 - [`AGENTS.md`](AGENTS.md) — конституция агентов-коллег: инварианты дома,
   контракты субъектов (ЯДРО/АУДИТОР/РАЗВЕДЧИК/ДОКТОР), протокол витка (≤8 КБ);
+- [`docs/spec/TZ-7.md`](docs/spec/TZ-7.md) — техзадание витка 7 «Изоляция
+  и мосты» с приёмками и отчётом о исполнении;
 - [`docs/spec/TZ-6.md`](docs/spec/TZ-6.md) — техзадание витка 6 «Чистота
   между смертью и рестартом» с приёмками и отчётом о исполнении;
 - [`docs/spec/TZ-5.md`](docs/spec/TZ-5.md) — техзадание витка 5 «Руки без
@@ -286,9 +337,13 @@ make audit
 `PR_SET_PDEATHSIG` — сирот не оставляем даже при SIGKILL супервизора.
 Ст. 13–15: статус семьи — файл `<dir>/.agryp-status` (tmp + rename каждую
 итерацию, unlink на выходе; `agryp status` читает); токены — агент пишет
-`<unit> tokens <n>` в файл из env `AGRY_TOKEN_REPORT`, супервизор
-съедает раз в итерацию; память — `memory.max` в собственной делегированной
-ветке cgroup v2, агент переезжает до exec.
+`<unit> tokens <n>` в файл из env `AGRY_TOKEN_REPORT` и будит петлю
+`SIGUSR2` (пид — в env `AGRY_SUPER_PID`, Виток 7); память — `memory.max`
+в собственной делегированной ветке cgroup v2, агент переезжает до exec;
+комнаты имён (Виток 7) — попытка с ключом `jail` рождается в собственных
+pid/mount namespace'ах через `clone(CLONE_NEWPID[|CLONE_NEWNS])` — без
+смены геометрии попытки; отказ среды — loud `jail-skip` и работа без
+клетки.
 
 ## Дорожная карта
 
@@ -300,11 +355,14 @@ make audit
 - виток 6 — **исполнен** (2026-11-07): finish-хук (s6), эскалация
   ctl-stop до SIGKILL (systemd TimeoutStopSec), SIGHUP-reload
   (daemon-reload); ядро 818/820, Поправки №5–№7; тег `v0.6.0`;
-- виток 7 — ЦУ коллегам (тикет 007–009): namespace-клетка попыток
-  рядом с cgroup (Ст. 15); мост `.agent` ↔ systemd unit; токен-отчёт
-  стримом;
+- виток 7 — **исполнен** (2026-11-07): namespace-клетка попыток
+  (`jail = pid|pid,mount`, clone вместо fork), токен-будильник
+  (`SIGUSR2`, env `AGRY_SUPER_PID` — казнь за миллисекунды, не тик),
+  мост `.agent` ↔ systemd unit (`tools/`, таблица потерь);
+  ядро 876/880, Поправка №8; тег `v0.7.0`;
 - виток 8 — v1.0: бенчмарк против сверстников (rss/байты журнала/сироты
-  после kill -9), перевод репо в public, пакет GitHub по доктрине.
+  после kill -9), прогон jail на хосте с CAP_SYS_ADMIN, перевод репо
+  в public, пакет GitHub по доктрине.
 
 ## Лицензия
 

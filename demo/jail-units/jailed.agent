@@ -1,0 +1,8 @@
+# Виток 7, тикет 007: попытка в клетке имён (pid + mount).
+# В песочнице (нет CAP_SYS_ADMIN) — loud jail-skip с errno и жизнь без
+# клетки; на хозяйском хосте — рождение в своих комнатах. В обоих
+# случаях агент просто работает и уходит сам, код 0.
+name         = jailed
+exec         = . demo/jail_worker.sh jailed
+restart      = no
+jail         = pid,mount
