@@ -77,7 +77,8 @@
 журнал, бюджет. Остальное отвергнуто с причиной: сингулярность держится
 на отказах не хуже, чем на принятиях.
 
-## V. Живая сверка ниши (2026-11-07, GitHub API с токеном Хозяина)
+## V. Живая сверка ниши (срезы: виток 4 — 2026-11-07, виток 6 — 2026-11-07;
+GitHub API с токеном Хозяина, read-only)
 
 Метод витка 4: не «что я помню», а живой поиск API — поисковые запросы +
 README топов ниши (токен Хозяина, read-only, значение не печатается).
@@ -88,7 +89,7 @@ README топов ниши (токен Хозяина, read-only, значени
 
 | Сверстник | ★ | Слой | Что даёт | Чего не даёт (клетка agryp) |
 |---|---|---|---|---|
-| qhkm/zeptopm | 6 | PM2 для LLM (Rust) | процесс на агента, рестарт с экспонентой, бюджеты токены/USD, hot reload | один файл C / ноль зависимостей; файл-как-API (у него HTTP); самоверифицирующийся журнал; конституция |
+| qhkm/zeptopm | 6 | PM2 для LLM (Rust) | процесс на агента, рестарт с экспонентой, бюджеты токены/USD, hot reload | один файл C / ноль зависимостей; файл-как-API (у него HTTP); самоверифицирующийся журнал; конституция. **Срез витка 6: спит — последний push 2026-04** |
 | stdiobus/stdiobus | 20 | C-демон-роутер | NDJSON JSON-RPC между клиентами и воркерами, session affinity, epoll/kqueue, libc-only | жизненный цикл: нет бюджетов, рестартов, сирот, аудита — роутер, не PID1 (agryp и stdiobus дополняют друг друга) |
 | z80dev/lemon | 136 | агент-демон (Elixir/OTP) | supervised BEAM-процессы на run/tool-call, circuit breaker, cron, judge | требует BEAM-рантайм; не один файл; не PID1 для произвольных `sh -c` агентов |
 | elchemista/spectre | 13 | OTP-библиотека (Elixir) | supervision-деревья для conversation/tool-процессов | библиотека слоя приложения, не ОС-надзор |
@@ -97,10 +98,10 @@ README топов ниши (токен Хозяина, read-only, значени
 
 | Сверстник | ★ | Слой | Урок | Вердикт |
 |---|---|---|---|---|
-| paperclipai/paperclip | 111677 | «компания для агентов» (Node/React) | бюджеты и governance на уровне организации | не процессный слой; подтверждает спрос |
-| herdrdev/herdr | 48487 | терминальный мультиплексор агентов (Rust) | panes working/blocked/idle — статус рядом с агентом | «original processes do not survive» — не PID1 |
-| tinyhumansai/openhuman | 42567 | harness (Rust) | 500 агентов на $10 VPS — экономика плотности | harness, не супервизор |
-| OrchestratorInc/agent-orchestrator | 14172 | fleet-менеджер (worktree на задачу) | CI-конвейер обратно в воркера | приложение, не процессный слой |
+| paperclipai/paperclip | 111737 | «компания для агентов» (Node/React) | бюджеты и governance на уровне организации | не процессный слой; подтверждает спрос |
+| herdrdev/herdr | 48670 | терминальный мультиплексор агентов (Rust) | panes working/blocked/idle — статус рядом с агентом | «original processes do not survive» — не PID1 |
+| tinyhumansai/openhuman | 42570 | harness (Rust) | 500 агентов на $10 VPS — экономика плотности | harness, не супервизор |
+| OrchestratorInc/agent-orchestrator | 14182 | fleet-менеджер (worktree на задачу) | CI-конвейер обратно в воркера | приложение, не процессный слой |
 
 ### Что следует для Ст. 5 (Поправка №3)
 
@@ -114,14 +115,29 @@ README топов ниши (токен Хозяина, read-only, значени
 3. Бюджеты (Ст. 7/14) — не уникальны (zeptopm ведёт токены/USD): наша валюта
    — контракт юнита, согласование двух валют и казнь всей группы, а не факт бюджета.
 
-### Числа живого поиска (срез 2026-11-07)
+### Числа живого поиска (срезы 2026-11-07)
 
-- `"agent supervisor process"` → 135 репо; `topic:agent-orchestration` → 4894;
-  `"ai agent orchestrator process manager"` → 6; `"llm agent supervisor restart"`
-  → 1; `"agent process group supervisor"` → 2.
-- Учителя живы: systemd ★17003 (push 2026-11-06), s6 ★991, s6-rc ★166,
-  tini ★11290 (последний push 2025-05 — уснул). supervisord живёт на
-  `Supervisor/supervisor`; runit — вне GitHub (smarden.org).
+| Запрос | виток 4 | виток 6 |
+|---|---|---|
+| `"agent supervisor process"` | 135 | 0 |
+| `topic:agent-orchestration` | 4894 | 4898 |
+| `"ai agent orchestrator process manager"` | 6 | 0 |
+| `"llm agent supervisor restart"` | 1 | 0 |
+| `"agent process group supervisor"` | 2 | 0 |
+
+Примечание разведчика (виток 6): кавыченные фразовые запросы на срезе
+дали 0 — либо GitHub изменил трактовку фраз в репо-поиске, либо единичные
+репо срезов витка 4 переименованы/скрыты; topic-запрос растёт
+(4894 → 4898 за сутки). Вердикт не меняется: ни один из топов не PID1
+процессного слоя. Новых сверстников уровня процессов на срезе не найдено:
+кандидаты из топов — Mintplex-Labs/anything-llm (68012*, приложение RAG)
+и codewhale-hq/Codewhale (41156*, CLI-агент) — оба выше процессного слоя.
+
+Учителя (срез витка 6): systemd ★17003 (push 2026-11-06 — жив), s6 ★991
+(push 2026-10-19), s6-rc ★166 (push 2026-10-30), supervisord ★9162
+(последний push 2025-12 — затих), tini ★11291 (последний push 2025-05 —
+уснул). zeptopm — единственный процессный сверстник, уснувший целиком
+(2026-04). runit — вне GitHub (smarden.org).
 
 ## Источники
 
