@@ -13,7 +13,7 @@
   4. на юнит:
        - попытки нумеруются подряд 1, 2, 3... и не перекрываются
          (новый spawn только после exit предыдущего);
-       - каждый budget-kill подтверждён exit-ом по сигналу 9;
+       - каждый budget-kill / token-kill подтверждён exit-ом по сигналу 9;
        - exits_ok == число exit с ok:true, exits_fail == с ok:false;
   5. каждый счётчик summary == числу событий в потоке;
   6. summary есть по каждому юниту, ровно по одному, uptime-ms — последним.
@@ -26,7 +26,8 @@ import sys
 ALLOWED_AFTER_SHUTDOWN = {"exit", "summary", "uptime-ms"}
 VALID_EVENTS = {
     "boot", "spawn", "spawn-fail", "exit", "restart", "stopped",
-    "budget-kill", "shutdown", "summary", "uptime-ms",
+    "budget-kill", "token-kill", "cgroup-skip", "report-drop",
+    "shutdown", "summary", "uptime-ms",
 }
 
 
@@ -97,7 +98,7 @@ def main(path):
             continue
         u = units.setdefault(name, {
             "spawns": [], "exits": [], "restarts": 0, "stopped": 0,
-            "budget_kills": 0, "running": False, "ok_exits": 0,
+            "budget_kills": 0, "token_kills": 0, "running": False, "ok_exits": 0,
         })
         et = ev["event"]
         if et == "spawn":
@@ -118,6 +119,8 @@ def main(path):
             u["stopped"] += 1
         elif et == "budget-kill":
             u["budget_kills"] += 1
+        elif et == "token-kill":
+            u["token_kills"] += 1
         elif et == "summary":
             u.setdefault("summary", []).append((idx, ev))
 
@@ -126,11 +129,11 @@ def main(path):
         if attempts != list(range(1, len(attempts) + 1)):
             fail(errors, 0, f"{name}: номера попыток не подряд: {attempts}")
 
-        # каждый budget-kill → последующий exit того же юнита
+        # каждый budget-kill / token-kill → последующий exit того же юнита
         for kidx, kev in events:
-            if kev.get("unit") == name and kev["event"] == "budget-kill":
+            if kev.get("unit") == name and kev["event"] in ("budget-kill", "token-kill"):
                 if not any(eidx > kidx for eidx, _ in u["exits"]):
-                    fail(errors, kidx, f"{name}: budget-kill без последующего exit")
+                    fail(errors, kidx, f"{name}: {kev['event']} без последующего exit")
 
         if len(u["spawns"]) != len(u["exits"]):
             fail(errors, 0, f"{name}: spawn'ов {len(u['spawns'])}, exit'ов {len(u['exits'])}")
@@ -144,6 +147,7 @@ def main(path):
                     "attempts": len(u["spawns"]),
                     "restarts": u["restarts"],
                     "budget_kills": u["budget_kills"],
+                    "token_kills": u["token_kills"],
                 }
                 for key, expect in checks.items():
                     if s.get(key) != expect:
@@ -156,11 +160,16 @@ def main(path):
                 if s.get("exits_fail") != n_fail:
                     fail(errors, 0,
                          f"{name}: summary.exits_fail={s.get('exits_fail')}, в потоке {n_fail}")
-                # graceful-финал: последний exit не перезапущен
-                if u["restarts"] + u["stopped"] != len(u["exits"]) - 1:
+                # каждый exit ДО shutdown обязан получить restart или stopped;
+                # exit-ы во время shutdown (после события shutdown) — исключение
+                n_exit_before = sum(
+                    1 for eidx, _ in u["exits"]
+                    if shutdown_idx is not None and eidx < shutdown_idx
+                )
+                if u["restarts"] + u["stopped"] != n_exit_before:
                     fail(errors, 0,
                          f"{name}: restarts({u['restarts']})+stopped({u['stopped']}) "
-                         f"≠ exits-1({len(u['exits']) - 1})")
+                         f"≠ exit'ов до shutdown ({n_exit_before})")
 
     if not units:
         errors.append("в транскрипте нет ни одного юнита")

@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
-# Живое демо agryp:
-#   t=0    супервизор поднимает hello (restart=always, budget 8 c)
-#          и crashy (restart=on-failure, падает каждые 2 c)
-#   t=5    мы убиваем ВСЮ группу процессов hello: kill -9 -- -PGID
-#          → agryp фиксирует смерть (by_signal 9) и поднимает новую попытку
-#   t≈14   попытка hello перерастает бюджет 8 с
-#          → agryp сам режет её SIGKILL по группе процессов и перезапускает
-#   t=30   SIGTERM супервизору → graceful shutdown + summary по каждому агенту
-#   финал — проверка Ст. 9 конституции: сирот после shutdown быть не должно
+# Живое демо agryp (35 с) — три статьи одним атомом:
+#   t=0    boot; Ст. 15: клетка памяти — в среде без cgroups честный cgroup-skip
+#   t=5    kill -9 -- -PGID всей группе процессов hello (Ст. 9)
+#   t=15   Ст. 13: ./agryp status снимает NDJSON-срез → demo/status-snapshot.jsonl
+#   t≈16   Ст. 14: попытка hello переросла token-budget 5000 → token-kill
+#   t=35   SIGTERM → graceful shutdown; сирот 0; файла статуса больше нет
 set -u
 cd "$(dirname "$0")/.."
 
@@ -25,14 +22,25 @@ if [ -n "${PID:-}" ]; then
         && echo ">> демо: kill -9 -- -$PID отправлен группе процессов hello"
 fi
 
-sleep 25
+sleep 10
+./agryp status --dir examples > demo/status-snapshot.jsonl
+if [ -s demo/status-snapshot.jsonl ]; then
+    echo ">> демо: Ст. 13 — статус снят в t=15, семья живая (NDJSON в demo/status-snapshot.jsonl)"
+else
+    echo ">> ДЕМО ПРОВАЛЕНО: статус-файл пуст при живом супервизоре (Ст. 13)"; exit 1
+fi
+
+sleep 20
 kill -TERM "$SUP" 2>/dev/null
 wait "$SUP" 2>/dev/null
 sleep 1
 
+if [ -f examples/.agryp-status ]; then
+    echo ">> ДЕМО ПРОВАЛЕНО: файл статуса пережил супервизор (Ст. 13)"; exit 1
+fi
 ORPHANS=$(pgrep -f 'demo/hello_agent.sh|demo/crashy_agent.sh' | wc -l)
 if [ "$ORPHANS" -ne 0 ]; then
     echo ">> ДЕМО ПРОВАЛЕНО: $ORPHANS сирот остались живы (Ст. 9 нарушена)"
     exit 1
 fi
-echo ">> демо завершено: сирот после shutdown — 0, транскрипт: demo/demo-transcript.jsonl"
+echo ">> демо завершено: сирот — 0, файла статуса нет, транскрипт: demo/demo-transcript.jsonl"
