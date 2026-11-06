@@ -1,3 +1,4 @@
-{"sup":"agryp","pid":1786,"units":2,"uptime_ms":6764}
-{"unit":"ghost","state":"RUNNING","pid":1788,"attempt":1,"budget_sec":0,"token_budget":0,"tokens":0,"mem_max_mb":0,"attempts":1,"exits_ok":0,"exits_fail":0,"budget_kills":0,"token_kills":0,"restarts":0,"streak":0,"ctl_down":0}
-{"unit":"worker","state":"RUNNING","pid":1813,"attempt":2,"budget_sec":0,"token_budget":0,"tokens":0,"mem_max_mb":0,"attempts":2,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"restarts":0,"streak":0,"ctl_down":0}
+{"sup":"agryp","pid":2854,"units":3,"uptime_ms":6763}
+{"unit":"ghost","state":"RUNNING","pid":2856,"attempt":1,"budget_sec":0,"token_budget":0,"tokens":0,"mem_max_mb":0,"attempts":1,"exits_ok":0,"exits_fail":0,"budget_kills":0,"token_kills":0,"restarts":0,"streak":0,"ctl_down":0}
+{"unit":"worker","state":"RUNNING","pid":2888,"attempt":2,"budget_sec":0,"token_budget":0,"tokens":0,"mem_max_mb":0,"attempts":2,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"restarts":0,"streak":0,"ctl_down":0}
+{"unit":"stubborn","state":"RUNNING","pid":2858,"attempt":1,"budget_sec":0,"token_budget":0,"tokens":0,"mem_max_mb":0,"attempts":1,"exits_ok":0,"exits_fail":0,"budget_kills":0,"token_kills":0,"restarts":0,"streak":0,"ctl_down":0}

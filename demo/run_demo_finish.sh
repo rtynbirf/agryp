@@ -7,6 +7,11 @@
 set -u
 cd "$(dirname "$0")/.."
 
+# Зачистка стреев прошлого падения (два супервизора на одном каталоге лгут)
+pkill -9 -f "agryp --dir demo/finish-units" 2>/dev/null
+pkill -9 -f "demo/finish_worker.sh" 2>/dev/null
+sleep 0.3
+
 make -s agryp || exit 1
 mkdir -p demo/finish-units
 rm -f demo/finish-sweep.log

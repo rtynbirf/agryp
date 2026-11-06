@@ -37,7 +37,7 @@ import sys
 ALLOWED_AFTER_SHUTDOWN = {"exit", "summary", "uptime-ms", "reap-orphan", "finish"}
 VALID_EVENTS = {
     "boot", "spawn", "spawn-fail", "exit", "restart", "stopped", "failed",
-    "budget-kill", "token-kill", "ctl-down", "ctl-up", "ctl-drop",
+    "budget-kill", "token-kill", "ctl-down", "ctl-up", "ctl-drop", "ctl-kill",
     "cgroup-skip", "report-drop", "subreaper", "reap-orphan", "shutdown",
     "summary", "uptime-ms", "finish",
 }
@@ -221,9 +221,9 @@ def main(path):
                 if fidx < eidx:
                     fail(errors, fidx, f"{name}: finish раньше своей смерти — хронология лжёт")
 
-        # каждый budget-kill / token-kill → последующий exit того же юнита
+        # каждый budget-kill / token-kill / ctl-kill → последующий exit того же юнита
         for kidx, kev in events:
-            if kev.get("unit") == name and kev["event"] in ("budget-kill", "token-kill"):
+            if kev.get("unit") == name and kev["event"] in ("budget-kill", "token-kill", "ctl-kill"):
                 if not any(eidx > kidx for eidx, _ in u["exits"]):
                     fail(errors, kidx, f"{name}: {kev['event']} без последующего exit")
 

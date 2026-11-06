@@ -70,6 +70,7 @@ typedef struct {
     int       fail_streak;   /* подряд своих смертей — растит лестницу (Ст. 8) */
     int       sup_kill;      /* казнь законом (бюджет/токены) — не ошибка агента */
     int       ctl_down;      /* файл <unit>.down жив — политика заморожена (Ст. 13) */
+    long long ctl_since_ms;  /* с каких пор жив .down: TERM не убил за GRACE_MS — казнь (Виток 6) */
     long long run_started_ms; /* старт текущей попытки: «проработал» меряем от неё */
 } unit_t;
 
@@ -80,6 +81,8 @@ static char g_status_path[1152];  /* Ст. 13: снимок состояния �
 static char g_report_path[1152];  /* Ст. 14: сюда агенты отдают burn-rate */
 static char g_cgbase[CG_BASE_LEN]; /* Ст. 15: наша делегированная ветка cgroup v2 */
 static char g_ctl_dir[1152];  /* agrypctl: файлы-договоры вместо сокетов (Ст. 13) */
+static char g_dropped[8][NAME_LEN]; /* Виток 6: ctl-drop не шумит — реестр последних 8 имён */
+static int  g_ndropped = 0;
 static long long g_t0;
 
 /* ---------- время и логи ---------- */
@@ -475,12 +478,19 @@ static void poll_ctl(void)
         snprintf(name, sizeof name, "%.*s", (int)(len - 5), de->d_name);
         for (i = 0; i < g_nunits && strcmp(g_units[i].name, name); i++);
         if (i == g_nunits) {
-            log_ev(NULL, "ctl-drop", "\"file\":\"%.63s\"", de->d_name);
-            continue;                          /* чужое имя — вслух (Ст. 6) */
+            int j, said = 0;                   /* чужое имя — вслух один раз (Ст. 6, Виток 6) */
+            for (j = 0; j < g_ndropped && j < 8; j++)
+                if (!strcmp(g_dropped[j], name)) { said = 1; break; }
+            if (!said) {
+                snprintf(g_dropped[g_ndropped % 8], NAME_LEN, "%s", name);
+                g_ndropped++;
+                log_ev(NULL, "ctl-drop", "\"file\":\"%.63s\"", de->d_name);
+            }
+            continue;
         }
         seen[i] = 1; unit_t *u = &g_units[i];
         if (!u->ctl_down) {                    /* файл появился: казнь и заморозка */
-            u->ctl_down = 1; log_ev(u, "ctl-down", NULL);
+            u->ctl_down = 1; u->ctl_since_ms = now_ms(); log_ev(u, "ctl-down", NULL);
             if (u->state == U_RUNNING && u->pid > 0) {
                 u->sup_kill = 1;               /* казнь закона лестницу не растит */
                 if (kill(-u->pgid, SIGTERM) < 0) kill(u->pid, SIGTERM);
@@ -488,6 +498,16 @@ static void poll_ctl(void)
         }
     }
     closedir(d);
+    for (i = 0; i < g_nunits; i++) {           /* тикет 006: TERM не убил за GRACE_MS — казнь */
+        unit_t *u = &g_units[i];
+        if (u->ctl_down && u->ctl_since_ms > 0 && u->state == U_RUNNING &&
+            u->pid > 0 && now_ms() - u->ctl_since_ms > GRACE_MS) {
+            u->sup_kill = 1;                   /* казнь закона: лестницу не растит */
+            u->ctl_since_ms = 0;               /* закон казнил один раз — вторым бить не надо */
+            log_ev(u, "ctl-kill", "\"pid\":%d,\"attempt\":%d", (int)u->pid, u->attempts);
+            if (kill(-u->pgid, SIGKILL) < 0) kill(u->pid, SIGKILL);
+        }
+    }
     for (i = 0; i < g_nunits; i++) {
         unit_t *u = &g_units[i];
         if (u->ctl_down && !seen[i]) {         /* файл снят: ctl-up — новая жизнь */
