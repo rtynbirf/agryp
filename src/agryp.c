@@ -18,13 +18,16 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <poll.h>
+#include <sched.h>
 #include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/mount.h>
 #include <sys/prctl.h>
 #include <sys/stat.h>
+#include <sys/syscall.h>
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
@@ -52,6 +55,7 @@ typedef struct {
     int       max_attempts;  /* 0 = без лимита */
     int       token_budget;  /* 0 = без лимита: вторая валюта бюджета (Ст. 14) */
     int       mem_max_mb;    /* 0 = без клетки: memory.max cgroups v2 (Ст. 15) */
+    int       jail;          /* 0|1=pid|2=mount|3 — комнаты имён попытки (Виток 7) */
     char      finish[256];   /* хук уборки между смертью и рестартом (Виток 6, школа s6) */
     /* рантайм */
     state_t   state;
@@ -152,6 +156,24 @@ static int parse_restart(const char *v, restart_t *out)
     return -1;
 }
 
+/* Виток 7 (тикет 007): ключ jail — комнаты имён попытки: `pid`, `mount`,
+ * `pid,mount` или пусто. Неизвестное слово — вслух в stderr, клетка пустее
+ * (Ст. 6: ничего не происходит молча). */
+static int parse_jail(const char *val)
+{
+    char buf[32];
+    char *tok, *s = buf;
+    int mask = 0;
+
+    snprintf(buf, sizeof buf, "%.31s", val);
+    for (tok = strtok(s, ","); tok; tok = strtok(NULL, ",")) {
+        if      (!strcmp(tok, "pid"))   mask |= 1;
+        else if (!strcmp(tok, "mount")) mask |= 2;
+        else fprintf(stderr, "agryp: jail: неизвестное слово '%s' — пропущено\n", tok);
+    }
+    return mask;
+}
+
 /* Читает один *.agent-файл в u: 0 — юнит готов, -1 — пропустить.
  * Общая для boot (load_units) и SIGHUP-reload (Виток 6). */
 static int parse_unit_file(const char *path, const char *stem, size_t stem_len, unit_t *u)
@@ -189,6 +211,7 @@ static int parse_unit_file(const char *path, const char *stem, size_t stem_len, 
         else if (!strcmp(key, "max-attempts")) u->max_attempts = atoi(val);
         else if (!strcmp(key, "token-budget")) u->token_budget = atoi(val);
         else if (!strcmp(key, "mem-max-mb"))   u->mem_max_mb   = atoi(val);
+        else if (!strcmp(key, "jail"))         u->jail         = parse_jail(val);
         else if (!strcmp(key, "finish"))       snprintf(u->finish, sizeof u->finish, "%.250s", val);
         else fprintf(stderr, "agryp: %s:%d: неизвестный ключ '%s'\n", path, lineno, key);
     }
@@ -224,10 +247,29 @@ static void load_units(const char *dir)
 
 /* ---------- жизнь юнита ---------- */
 
+/* Виток 7 (тикет 007): PID 1 pid-комнаты глух к сигналам без обработчика
+ * (pid_namespaces(7)) — прокси умирает так же, как умер бы агент без клетки. */
+static void jail_term(int s) { signal(s, SIG_DFL); raise(s); }
+
 static void spawn_unit(unit_t *u)
 {
-    pid_t p = fork();
+    /* Клетка имён (Ст. 15-сосед, тикет 007): вход в новую pid-комнату —
+     * только родиться в ней, поэтому вместо fork() — clone(CLONE_NEWPID
+     * [|CLONE_NEWNS]): ребёнок и есть PID 1 своей комнаты, геометрия
+     * попытки не меняется (тот же ребёнок супервизора, та же группа,
+     * тот же PDEATHSIG). Среда не дала (EPERM) — loud jail-skip и работа
+     * дальше без клетки, как cgroup-skip (Ст. 15); молчаливой усечки нет. */
+    int jmask = u->jail & 3;
+    int jf    = ((jmask & 1) ? CLONE_NEWPID : 0) | ((jmask & 2) ? CLONE_NEWNS : 0);
+    pid_t p = jf ? (pid_t)syscall(SYS_clone, (long)jf | SIGCHLD,
+                                  0, NULL, NULL, NULL)
+                 : fork();
 
+    if (p < 0 && jf) {
+        log_ev(u, "jail-skip", "\"reason\":\"clone\",\"errno\":%d", errno);
+        u->jail = 0; jmask = 0; jf = 0;    /* вслух один раз; reload перевзводит */
+        p = fork();
+    }
     if (p < 0) {
         log_ev(u, "spawn-fail", "\"error\":\"fork\",\"errno\":%d", errno);
         u->state = U_COOLDOWN;
@@ -245,6 +287,19 @@ static void spawn_unit(unit_t *u)
         setpgid(0, 0);                         /* своя группа: режем семью целиком */
         setenv("AGRY_UNIT", u->name, 1);       /* договор hook'а: кто ты и куда отчитываться */
         setenv("AGRY_TOKEN_REPORT", g_report_path, 1);
+        if (jmask & 1) {                       /* терминал комнаты глух: TERM проксируется */
+            signal(SIGTERM, jail_term);
+            signal(SIGINT,  jail_term);
+        }
+        if (jmask & 2 &&                       /* mount-клетка: propagation наружу закрыт; */
+            mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL) < 0)
+            fprintf(stderr, "agryp: %s: jail: / не стал private: %s\n",
+                    u->name, strerror(errno));
+        {   /* тикет 009: кому будить после записи токен-рапорта (SIGUSR2) */
+            char supbuf[16];
+            snprintf(supbuf, sizeof supbuf, "%d", (int)ppid);
+            setenv("AGRY_SUPER_PID", supbuf, 1);
+        }
         if (u->mem_max_mb > 0) {               /* в клетку до exec: ни байта мимо лимита */
             char procs[1280], pbuf[32];
             int fd, n = snprintf(pbuf, sizeof pbuf, "%d", (int)getpid());
@@ -267,8 +322,8 @@ static void spawn_unit(unit_t *u)
     u->deadline_ms = (u->budget_sec > 0)
                      ? now_ms() + (long long)u->budget_sec * 1000LL
                      : 0;
-    log_ev(u, "spawn", "\"pid\":%d,\"attempt\":%d,\"budget_sec\":%d",
-           (int)p, u->attempts, u->budget_sec);
+    log_ev(u, "spawn", "\"pid\":%d,\"attempt\":%d,\"budget_sec\":%d,\"jailed\":%d",
+           (int)p, u->attempts, u->budget_sec, jf ? jmask : 0);
 }
 
 /* finish-хук (Виток 6, школа s6): уборка между смертью попытки и рестартом.
@@ -407,12 +462,12 @@ static void write_status(void)
         unit_t *u = &g_units[i];
         fprintf(f, "{\"unit\":\"%s\",\"state\":\"%s\",\"pid\":%d,\"attempt\":%d,"
                    "\"budget_sec\":%d,\"token_budget\":%d,\"tokens\":%d,"
-                   "\"mem_max_mb\":%d,\"attempts\":%d,\"exits_ok\":%d,"
+                   "\"mem_max_mb\":%d,\"jail\":%d,\"attempts\":%d,\"exits_ok\":%d,"
                    "\"exits_fail\":%d,\"budget_kills\":%d,\"token_kills\":%d,"
                    "\"restarts\":%d,\"streak\":%d,\"ctl_down\":%d}\n",
                 u->name, state_name(u->state), (int)u->pid, u->attempts,
                 u->budget_sec, u->token_budget, u->tokens, u->mem_max_mb,
-                u->attempts, u->exits_ok, u->exits_fail,
+                u->jail, u->attempts, u->exits_ok, u->exits_fail,
                 u->budget_kills, u->token_kills, u->restarts, u->fail_streak, u->ctl_down);
     }
     fclose(f);
@@ -577,7 +632,7 @@ static void cgroup_init(void)
         cgroup_room(&g_units[i]);
 }
 
-/* ---------- SIGHUP-reload: договоры меняются, дети живут (Виток 6, школа systemd) ---------- */
+/* ---------- SIGHUP-reload: договоры меняются, дети живут (Виток 6, школа daemon-reload) ---------- */
 
 /* daemon-reload без кровопролития: живые попытки не умирают; изменённые
  * ключи применяются сразу (дедлайн бюджета пересчитывается от текущей
@@ -610,6 +665,7 @@ static void do_reload(const char *dir)
             if (u->restart != nu->restart || u->budget_sec != nu->budget_sec ||
                 u->cooldown_ms != nu->cooldown_ms || u->max_attempts != nu->max_attempts ||
                 u->token_budget != nu->token_budget || u->mem_max_mb != nu->mem_max_mb ||
+                u->jail != nu->jail ||
                 strcmp(u->exec, nu->exec) || strcmp(u->finish, nu->finish)) {
                 changed++;
                 u->restart = nu->restart;
@@ -618,6 +674,7 @@ static void do_reload(const char *dir)
                 u->max_attempts = nu->max_attempts;
                 u->token_budget = nu->token_budget;
                 u->mem_max_mb = nu->mem_max_mb;
+                u->jail = nu->jail;            /* reload перевзводит клетку имён */
                 snprintf(u->exec, sizeof u->exec, "%.500s", nu->exec);
                 snprintf(u->finish, sizeof u->finish, "%.250s", nu->finish);
                 if (u->state == U_RUNNING)     /* дедлайн — от живой попытки */
@@ -696,6 +753,7 @@ int main(int argc, char **argv)
     sigaction(SIGINT,  &sa, NULL);
     sa.sa_handler = on_status;
     sigaction(SIGUSR1, &sa, NULL);   /* Ст. 13: пинг будит цикл, статус и так свежий */
+    sigaction(SIGUSR2, &sa, NULL);   /* тикет 009: токен-рапорт в файле — будим немедленно */
     sa.sa_handler = on_reload;
     sigaction(SIGHUP, &sa, NULL);    /* Виток 6: daemon-reload без смерти детей */
     signal(SIGPIPE, SIG_IGN);

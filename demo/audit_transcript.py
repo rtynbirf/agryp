@@ -38,8 +38,9 @@ ALLOWED_AFTER_SHUTDOWN = {"exit", "summary", "uptime-ms", "reap-orphan", "finish
 VALID_EVENTS = {
     "boot", "spawn", "spawn-fail", "exit", "restart", "stopped", "failed",
     "budget-kill", "token-kill", "ctl-down", "ctl-up", "ctl-drop", "ctl-kill",
-    "cgroup-skip", "report-drop", "subreaper", "reap-orphan", "shutdown",
-    "summary", "uptime-ms", "finish", "reload", "unit-added", "unit-removed",
+    "cgroup-skip", "jail-skip", "report-drop", "subreaper", "reap-orphan",
+    "shutdown", "summary", "uptime-ms", "finish", "reload", "unit-added",
+    "unit-removed",
 }
 # константы Ст. 8 — сверены с #define в src/agryp.c
 BACKOFF_CAP_MS = 30000
@@ -54,7 +55,8 @@ def load_unit_configs(repo_root):
     """cooldown-ms из *.agent — база лестницы (Ст. 8); finish — хук (Виток 6).
     Юниты лежат в examples/ и в каталогах демо — аудитор читает все сразу."""
     cfgs = {}
-    for sub in ("examples", "demo/ctl-units", "demo/finish-units", "demo/reload-units"):
+    for sub in ("examples", "demo/ctl-units", "demo/finish-units", "demo/reload-units",
+                "demo/jail-units", "demo/stream-units"):
         for p in sorted(glob.glob(os.path.join(repo_root, sub, "*.agent"))):
             cfg = {}
             with open(p, encoding="utf-8") as f:
@@ -238,6 +240,22 @@ def main(path):
 
         if len(u["spawns"]) != len(u["exits"]):
             fail(errors, 0, f"{name}: spawn'ов {len(u['spawns'])}, exit'ов {len(u['exits'])}")
+
+        # виток 7 (тикет 007): клетке имён положена ровно одна правда —
+        # jailed в спавне или loud jail-skip; молчаливой усечки нет (Ст. 6)
+        jcfg = cfgs.get(name, {}).get("jail", "").strip()
+        j_spawn = sum(1 for _, e in events
+                      if e.get("unit") == name and e["event"] == "spawn"
+                      and e.get("jailed", 0))
+        j_skip = sum(1 for _, e in events
+                     if e.get("unit") == name and e["event"] == "jail-skip")
+        if jcfg:
+            if j_spawn and j_skip:
+                fail(errors, 0, f"{name}: jailed и jail-skip одновременно — двух правд не бывает")
+            if not j_spawn and not j_skip:
+                fail(errors, 0, f"{name}: объявлен jail, но ни jailed, ни jail-skip — молчаливая усечка (Ст. 6)")
+        elif j_spawn or j_skip:
+            fail(errors, 0, f"{name}: клеточные события без объявления jail в конфиге")
 
         if "summary" in u:
             if len(u["summary"]) != 1:

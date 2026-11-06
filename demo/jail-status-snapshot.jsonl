@@ -1,0 +1,3 @@
+{"sup":"agryp","pid":6854,"units":2,"uptime_ms":2756}
+{"unit":"jailed","state":"RUNNING","pid":6856,"attempt":1,"budget_sec":0,"token_budget":0,"tokens":0,"mem_max_mb":0,"jail":0,"attempts":1,"exits_ok":0,"exits_fail":0,"budget_kills":0,"token_kills":0,"restarts":0,"streak":0,"ctl_down":0}
+{"unit":"plain","state":"RUNNING","pid":6857,"attempt":1,"budget_sec":0,"token_budget":0,"tokens":0,"mem_max_mb":0,"jail":0,"attempts":1,"exits_ok":0,"exits_fail":0,"budget_kills":0,"token_kills":0,"restarts":0,"streak":0,"ctl_down":0}

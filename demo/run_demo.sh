@@ -11,6 +11,10 @@ cd "$(dirname "$0")/.."
 
 make -s agryp || exit 1
 
+# Ст. 14: отчёт от неизвестного юнита остался с прошлой жизни — loud
+# report-drop в первой же итерации, ничто не пропадает молча
+printf 'ghost tokens 100\n' > examples/.agryp-report
+
 ./agryp --dir examples > demo/demo-transcript.jsonl 2>&1 &
 SUP=$!
 sleep 5

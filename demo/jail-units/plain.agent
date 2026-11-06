@@ -1,0 +1,5 @@
+# Виток 7, тикет 007: контрольный юнит без клетки — про него в журнале
+# нет ни одного клеточного слова (jailed:0, без jail-skip).
+name         = plain
+exec         = . demo/jail_worker.sh plain
+restart      = no
