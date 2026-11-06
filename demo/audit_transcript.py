@@ -34,12 +34,12 @@ import json
 import os
 import sys
 
-ALLOWED_AFTER_SHUTDOWN = {"exit", "summary", "uptime-ms", "reap-orphan"}
+ALLOWED_AFTER_SHUTDOWN = {"exit", "summary", "uptime-ms", "reap-orphan", "finish"}
 VALID_EVENTS = {
     "boot", "spawn", "spawn-fail", "exit", "restart", "stopped", "failed",
     "budget-kill", "token-kill", "ctl-down", "ctl-up", "ctl-drop",
     "cgroup-skip", "report-drop", "subreaper", "reap-orphan", "shutdown",
-    "summary", "uptime-ms",
+    "summary", "uptime-ms", "finish",
 }
 # константы Ст. 8 — сверены с #define в src/agryp.c
 BACKOFF_CAP_MS = 30000
@@ -51,18 +51,20 @@ def fail(errors, idx, msg):
 
 
 def load_unit_configs(repo_root):
-    """cooldown-ms из examples/*.agent — база лестницы (Ст. 8)."""
+    """cooldown-ms из *.agent — база лестницы (Ст. 8); finish — хук (Виток 6).
+    Юниты лежат в examples/ и в каталогах демо — аудитор читает все сразу."""
     cfgs = {}
-    for p in sorted(glob.glob(os.path.join(repo_root, "examples", "*.agent"))):
-        cfg = {}
-        with open(p, encoding="utf-8") as f:
-            for ln in f:
-                ln = ln.strip()
-                if not ln or ln.startswith("#") or "=" not in ln:
-                    continue
-                k, v = ln.split("=", 1)
-                cfg[k.strip()] = v.strip()
-        cfgs[p.rsplit("/", 1)[-1][:-6]] = cfg
+    for sub in ("examples", "demo/ctl-units", "demo/finish-units", "demo/reload-units"):
+        for p in sorted(glob.glob(os.path.join(repo_root, sub, "*.agent"))):
+            cfg = {}
+            with open(p, encoding="utf-8") as f:
+                for ln in f:
+                    ln = ln.strip()
+                    if not ln or ln.startswith("#") or "=" not in ln:
+                        continue
+                    k, v = ln.split("=", 1)
+                    cfg[k.strip()] = v.strip()
+            cfgs[p.rsplit("/", 1)[-1][:-6]] = cfg
     return cfgs
 
 
@@ -133,6 +135,7 @@ def main(path):
             "budget_kills": 0, "token_kills": 0, "running": False, "ok_exits": 0,
             "streak": None, "failed": False,
             "ctl_down": False, "ctl_e0": None, "expect_stop": None,
+            "finishes": [], "retired": False,
         })
         et = ev["event"]
         if et == "spawn":
@@ -152,6 +155,10 @@ def main(path):
             u["exits"].append((idx, ev.get("ok")))
             if ev.get("ok") is True:
                 u["ok_exits"] += 1
+        elif et == "finish":
+            if not u["exits"]:
+                fail(errors, idx, f"finish юнита {name} без смерти попытки — журнал лжёт")
+            u["finishes"].append(idx)
         elif et == "restart":
             u["restarts"] += 1
             streak, backoff = ev.get("streak"), ev.get("backoff_ms")
@@ -205,6 +212,14 @@ def main(path):
         attempts = [a for _, a in u["spawns"]]
         if attempts != list(range(1, len(attempts) + 1)):
             fail(errors, 0, f"{name}: номера попыток не подряд: {attempts}")
+
+        # finish-хук (Виток 6): у юнита с объявленным finish — хук после КАЖДОЙ смерти
+        if cfgs.get(name, {}).get("finish", "").strip():
+            if len(u["finishes"]) != len(u["exits"]):
+                fail(errors, 0, f"{name}: finish-хуков {len(u['finishes'])}, а смертей {len(u['exits'])} — что-то убрано молча")
+            for (eidx, _), fidx in zip(u["exits"], u["finishes"]):
+                if fidx < eidx:
+                    fail(errors, fidx, f"{name}: finish раньше своей смерти — хронология лжёт")
 
         # каждый budget-kill / token-kill → последующий exit того же юнита
         for kidx, kev in events:

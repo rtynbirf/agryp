@@ -1,0 +1,5 @@
+name         = sweeper
+exec         = sh demo/finish_worker.sh
+restart      = always
+cooldown-ms  = 500
+finish       = echo "sweep unit=$AGRY_UNIT code=$AGRY_EXIT_CODE sig=$AGRY_BY_SIGNAL" >> demo/finish-sweep.log

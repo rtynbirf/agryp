@@ -34,3 +34,34 @@ s6-урок: у службы есть `finish`-скрипт, который ис
    каждой смерти, в журнале `finish` по каждой; сироты 0.
 3. `make audit` → OK (аудитор знает `finish` и сверяет с числом exit'ов).
 4. Слепая зона предыдущих витков (завалы /tmp) закрыта демо-транскриптом.
+
+## Отчёт (2026-11-07, Виток 6)
+
+Изменения:
+
+- `src/agryp.c`: `run_finish()` (+38 строк: 654 → 698, потолок 700,
+  Поправка №5 одним атомом) — хук после КАЖДОЙ смерти попытки
+  (`handle_exit` до лестницы), своя группа (`setpgid(0,0)` — группу
+  попытки не режем), env `AGRY_UNIT`/`AGRY_EXIT_CODE`/`AGRY_BY_SIGNAL`,
+  `FINISH_MS 5000` (Ст. 11), упор — SIGKILL + событие `finish`
+  `"timeout":true`; сбой хука лестницу не трогает; константа и ключ
+  `finish` парсятся в `load_units`.
+- `demo/run_demo_finish.sh`, `demo/finish-units/sweeper.agent`,
+  `demo/finish_worker.sh`; Makefile: `demo-finish`, `audit-finish`.
+- Аудитор: `finish` в VALID_EVENTS и в ALLOWED_AFTER_SHUTDOWN;
+  дисциплина — у юнита с объявленным finish хук обязателен после КАЖДОЙ
+  смерти (1:1 со смертями, хронология finish после exit);
+  `load_unit_configs` читает юниты демо-каталогов.
+- Конституция: Ст. 9 (finish-хук), Ст. 6 (`finish`), Ст. 11
+  (`FINISH_MS 5000`), Ст. 1 (656 → 700), журнал поправок №5;
+  TEACHERS §I: строка s6 `./finish` — отвергнуто → принято.
+
+Приёмки (прогон 2026-11-07):
+
+1. `make clean && make 2>&1 | grep -i warning` → пусто.
+2. `make demo-finish`: 3 смерти → 3 finish-хука, след уборки
+   `demo/finish-sweep.log` (3 строки `sweep unit=sweeper code=3 sig=0`),
+   лестница 500→1000→2000, сирот 0, аудит OK (17 событий + 6 строк).
+3. `make audit` → OK (42 события + 43 строки, регрессия витков 1–5);
+   `make demo-ctl` + `make audit-ctl` → OK.
+4. `wc -l src/agryp.c` → 698 ≤ 700.

@@ -37,6 +37,7 @@
 #define SUSTAIN_MS     10000 /* «проработал» гасит лестницу перезапуска (Ст. 8) */
 #define BACKOFF_CAP_MS 30000 /* потолок лестницы перезапуска (Ст. 8) */
 #define CRASH_LIMIT    5     /* подряд своих смертей → терминальный failed (Ст. 8) */
+#define FINISH_MS 5000   /* потолок жизни finish-хука: упор — вслух (Ст. 11, Виток 6) */
 
 typedef enum { R_ALWAYS = 0, R_ON_FAILURE = 1, R_NO = 2 } restart_t;
 typedef enum { U_STOPPED = 0, U_RUNNING = 1, U_COOLDOWN = 2 } state_t;
@@ -51,6 +52,7 @@ typedef struct {
     int       max_attempts;  /* 0 = без лимита */
     int       token_budget;  /* 0 = без лимита: вторая валюта бюджета (Ст. 14) */
     int       mem_max_mb;    /* 0 = без клетки: memory.max cgroups v2 (Ст. 15) */
+    char      finish[256];   /* хук уборки между смертью и рестартом (Виток 6, школа s6) */
     /* рантайм */
     state_t   state;
     pid_t     pid;
@@ -195,6 +197,7 @@ static void load_units(const char *dir)
             else if (!strcmp(key, "max-attempts")) u.max_attempts = atoi(val);
             else if (!strcmp(key, "token-budget")) u.token_budget = atoi(val);
             else if (!strcmp(key, "mem-max-mb"))   u.mem_max_mb   = atoi(val);
+            else if (!strcmp(key, "finish"))       snprintf(u.finish, sizeof u.finish, "%.250s", val);
             else fprintf(stderr, "agryp: %s:%d: неизвестный ключ '%s'\n", path, lineno, key);
         }
         fclose(f);
@@ -257,6 +260,45 @@ static void spawn_unit(unit_t *u)
            (int)p, u->attempts, u->budget_sec);
 }
 
+/* finish-хук (Виток 6, школа s6): уборка между смертью попытки и рестартом.
+ * Хук — часть попытки, но вне её группы; FINISH_MS на прощание, упор — вслух
+ * (Ст. 11); сбой хука лестницу перезапуска не трогает — он не часть политики. */
+static void run_finish(unit_t *u, int code, int sig)
+{
+    char ec[16], bs[16];
+    int status;
+    pid_t p, r;
+    long long deadline;
+
+    if (!u->finish[0]) return;                 /* хук не объявлен — молчание честно */
+    snprintf(ec, sizeof ec, "%d", code);
+    snprintf(bs, sizeof bs, "%d", sig);
+    p = fork();
+    if (p < 0) { log_ev(u, "finish", "\"error\":\"fork\",\"errno\":%d", errno); return; }
+    if (p == 0) {
+        setpgid(0, 0);                         /* свою группу: группу попытки не режем */
+        setenv("AGRY_UNIT", u->name, 1);       /* договор: кто ты и чем кончил */
+        setenv("AGRY_EXIT_CODE", ec, 1);
+        setenv("AGRY_BY_SIGNAL", bs, 1);
+        execl("/bin/sh", "sh", "-c", u->finish, (char *)NULL);
+        _exit(127);
+    }
+    deadline = now_ms() + FINISH_MS;
+    while ((r = waitpid(p, &status, WNOHANG)) == 0 && now_ms() < deadline)
+        poll(NULL, 0, 25);
+    if (r == 0) {                              /* упёрся в потолок — говорим вслух */
+        kill(p, SIGKILL);
+        waitpid(p, &status, 0);
+        log_ev(u, "finish", "\"timeout\":true");
+        return;
+    }
+    if (r < 0) { log_ev(u, "finish", "\"error\":\"waitpid\",\"errno\":%d", errno); return; }
+    if (WIFSIGNALED(status))
+        log_ev(u, "finish", "\"by_signal\":%d", WTERMSIG(status));
+    else
+        log_ev(u, "finish", "\"code\":%d", WEXITSTATUS(status));
+}
+
 static void handle_exit(unit_t *u, int status)
 {
     int code = WIFEXITED(status)   ? WEXITSTATUS(status) : -1;
@@ -268,6 +310,8 @@ static void handle_exit(unit_t *u, int status)
 
     if (sig) log_ev(u, "exit", "\"by_signal\":%d,\"ok\":%s", sig, ok ? "true" : "false");
     else     log_ev(u, "exit", "\"code\":%d,\"ok\":%s",       code, ok ? "true" : "false");
+
+    run_finish(u, code, sig);                  /* Виток 6: уборка до лестницы (тикет 004) */
 
     if (g_stop) { u->state = U_STOPPED; return; }
 
