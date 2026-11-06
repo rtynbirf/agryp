@@ -1,0 +1,23 @@
+{"ts":"2026-11-06T22:54:33Z","up_ms":3951127,"event":"boot","units":1,"dir":"demo/finish-units"}
+{"ts":"2026-11-06T22:54:33Z","up_ms":3951127,"event":"subreaper","on":true}
+{"ts":"2026-11-06T22:54:33Z","up_ms":3951127,"unit":"sweeper","event":"spawn","pid":1541,"attempt":1,"budget_sec":0}
+[sweeper] попытка 1542 началась
+[sweeper] работа окончена — падаю (код 3)
+{"ts":"2026-11-06T22:54:35Z","up_ms":3953131,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-06T22:54:35Z","up_ms":3953156,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-06T22:54:35Z","up_ms":3953156,"unit":"sweeper","event":"restart","next_attempt":2,"backoff_ms":500,"streak":1}
+{"ts":"2026-11-06T22:54:36Z","up_ms":3953657,"unit":"sweeper","event":"spawn","pid":1545,"attempt":2,"budget_sec":0}
+[sweeper] попытка 1546 началась
+[sweeper] работа окончена — падаю (код 3)
+{"ts":"2026-11-06T22:54:38Z","up_ms":3955660,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-06T22:54:38Z","up_ms":3955686,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-06T22:54:38Z","up_ms":3955686,"unit":"sweeper","event":"restart","next_attempt":3,"backoff_ms":1000,"streak":2}
+{"ts":"2026-11-06T22:54:39Z","up_ms":3956687,"unit":"sweeper","event":"spawn","pid":1549,"attempt":3,"budget_sec":0}
+[sweeper] попытка 1550 началась
+[sweeper] работа окончена — падаю (код 3)
+{"ts":"2026-11-06T22:54:41Z","up_ms":3958691,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-06T22:54:41Z","up_ms":3958716,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-06T22:54:41Z","up_ms":3958716,"unit":"sweeper","event":"restart","next_attempt":4,"backoff_ms":2000,"streak":3}
+{"ts":"2026-11-06T22:54:42Z","up_ms":3960127,"event":"shutdown","reason":"signal"}
+{"ts":"2026-11-06T22:54:42Z","up_ms":3960127,"unit":"sweeper","event":"summary","attempts":3,"exits_ok":0,"exits_fail":3,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":3}
+{"ts":"2026-11-06T22:54:42Z","up_ms":3960127,"event":"uptime-ms","value":9000}
