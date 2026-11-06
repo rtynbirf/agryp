@@ -113,6 +113,7 @@ restart      = always       # always | on-failure | no
 budget-sec   = 25           # time-бюджет попытки (Ст. 7)
 token-budget = 5000         # токен-бюджет: burn-rate агент отдаёт сам (Ст. 14)
 cooldown-ms  = 1000         # база лестницы перезапуска (Ст. 8)
+# finish       = rm -rf /tmp/$AGRY_UNIT-worktree   # хук после каждой смерти (Виток 6)
 # mem-max-mb = 64           # клетка cgroups v2 (Ст. 15), 0 = без клетки
 # max-attempts = 0          # 0 = без лимита
 ```
@@ -126,11 +127,14 @@ make && ./agryp --dir examples
 # остановить/поднять юнит — файл-договор, не сокет (Виток 5):
 ./agrypctl stop hello     # кладёт examples/.agryp-ctl/hello.down → ctl-down
 ./agrypctl start hello    # снимает → ctl-up, новая попытка
+# поменять бюджет/добавить/удалить *.agent и перечитать договоры без смерти детей (Виток 6):
+kill -HUP $(pgrep -f 'agryp --dir examples')
 ```
 
 Логи — JSON-строки в stdout (`boot`, `spawn`, `exit`, `restart`, `stopped`,
 `failed`, `budget-kill`, `token-kill`, `ctl-down`, `ctl-up`, `ctl-drop`,
-`cgroup-skip`, `subreaper`, `reap-orphan`, `shutdown`, `summary`) —
+`ctl-kill`, `finish`, `reload`, `unit-added`, `unit-removed`, `cgroup-skip`,
+`subreaper`, `reap-orphan`, `shutdown`, `summary`) —
 удобно направлять в любой сборщик.
 
 ## Живое демо: что доказывает транскрипт
@@ -194,9 +198,41 @@ make && ./agryp --dir examples
 Дисциплину доказывает второе демо (`make demo-ctl && make audit-ctl`):
 worker казнён без единого рестарта, сосед-ghost не тронут (заморозка
 пер-юнит), после start — attempt 2; сирот 0. Аудитор знает ctl-события
-и ловит подделки: спавн при живом .down и ctl-up без ctl-down —
-отрицательный тест `demo/negative_ctl_test.py` скармливает ему обе и
-требует точного приговора.
+и ловит подделки: спавн при живом .down, ctl-up без ctl-down и ctl-kill
+без трупа — отрицательный тест `demo/negative_ctl_test.py` скармливает
+ему все три и требует точного приговора.
+
+## Чистота между смертью и рестартом (Виток 6)
+
+Три урока учителей одним витком, тремя атомами:
+
+- **finish-хук** (школа s6 `./finish`): ключ `finish = <строка sh>` —
+  после КАЖДОЙ смерти попытки, до лестницы перезапуска; хук получает
+  env `AGRY_UNIT`, `AGRY_EXIT_CODE`, `AGRY_BY_SIGNAL` и живёт вне
+  группы попытки (казнь группы его не трогает); потолок `FINISH_MS`
+  (5 с), упор — громкое событие `finish` с `"timeout":true`; сбой
+  хука лестницу не трогает. Типовое применение фермы:
+  `finish = rm -rf /tmp/$AGRY_UNIT-worktree` — каждый новый заход
+  агента начинается в чистом рабочем пространстве
+  (`make demo-finish`: 3 смерти → 3 хука, след уборки в
+  `demo/finish-sweep.log`).
+- **Эскалация ctl-stop** (школа systemd `TimeoutStopSec`): агент,
+  игнорирующий TERM (`trap '' TERM`), живёт ровно `GRACE_MS` с момента
+  `.down`, затем `ctl-kill` и SIGKILL группы — остановка доводится до
+  конца даже упрямым; казнь закона лестницу не растит. Нюанс юнит-автору:
+  trap обязан жить в лидере группы — `exec = . script.sh` (source),
+  иначе `sh script.sh` плодит второго dash, а казнят по лидеру
+  (`make demo-ctl`: stubborn получил ctl-kill через 3006 мс и умер по
+  сигналу 9 без рестартов).
+- **SIGHUP-reload** (школа systemd daemon-reload): `kill -HUP` —
+  каталог `*.agent` перечитывается без смерти детей; изменённые ключи
+  применяются сразу (дедлайн бюджета пересчитывается от живой попытки),
+  новый `*.agent` — юнит появляется и стартует (с комнаткой cgroup,
+  Ст. 15), удалённый — graceful-stop (`stopped reason reload`);
+  событие `reload` несёт числа добавлено/изменено/удалено, аудитор
+  сверяет их с юнит-событиями (`make demo-reload`: бюджет 5→60 на той
+  же попытке, beta удалён graceful, gamma добавлен — reload 1/1/1).
+  Перезапуск конкретного юнита — не здесь, это agrypctl stop/start.
 
 ## Конституция
 
@@ -227,6 +263,8 @@ make audit
 
 - [`AGENTS.md`](AGENTS.md) — конституция агентов-коллег: инварианты дома,
   контракты субъектов (ЯДРО/АУДИТОР/РАЗВЕДЧИК/ДОКТОР), протокол витка (≤8 КБ);
+- [`docs/spec/TZ-6.md`](docs/spec/TZ-6.md) — техзадание витка 6 «Чистота
+  между смертью и рестартом» с приёмками и отчётом о исполнении;
 - [`docs/spec/TZ-5.md`](docs/spec/TZ-5.md) — техзадание витка 5 «Руки без
   сокетов» с приёмками и отчётом о исполнении;
 - [`docs/spec/TZ-4.md`](docs/spec/TZ-4.md) — техзадание витка 4 «От ученика
@@ -259,10 +297,12 @@ make audit
 
 - виток 5 — **исполнен** (2026-11-07): agrypctl — start/stop юнита
   файлами-договорами (школа s6-svc); ядро 654/656, Поправка №4;
-- виток 6 — ./finish-хук юнита (s6), SIGHUP-reload (школа daemon-reload),
-  эскалация ctl-stop до SIGKILL;
-- виток 7 — namespace-клетка попыток рядом с cgroup (Ст. 15); трансляция
-  `.agent` ↔ systemd unit;
+- виток 6 — **исполнен** (2026-11-07): finish-хук (s6), эскалация
+  ctl-stop до SIGKILL (systemd TimeoutStopSec), SIGHUP-reload
+  (daemon-reload); ядро 818/820, Поправки №5–№7; тег `v0.6.0`;
+- виток 7 — ЦУ коллегам (тикет 007–009): namespace-клетка попыток
+  рядом с cgroup (Ст. 15); мост `.agent` ↔ systemd unit; токен-отчёт
+  стримом;
 - виток 8 — v1.0: бенчмарк против сверстников (rss/байты журнала/сироты
   после kill -9), перевод репо в public, пакет GitHub по доктрине.
 
