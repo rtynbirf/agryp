@@ -2,11 +2,12 @@
 # Живое демо agryp:
 #   t=0    супервизор поднимает hello (restart=always, budget 8 c)
 #          и crashy (restart=on-failure, падает каждые 2 c)
-#   t=5    мы убиваем процесс hello командой kill -9
+#   t=5    мы убиваем ВСЮ группу процессов hello: kill -9 -- -PGID
 #          → agryp фиксирует смерть (by_signal 9) и поднимает новую попытку
 #   t≈14   попытка hello перерастает бюджет 8 с
-#          → agryp сам режет её SIGKILL и перезапускает
+#          → agryp сам режет её SIGKILL по группе процессов и перезапускает
 #   t=30   SIGTERM супервизору → graceful shutdown + summary по каждому агенту
+#   финал — проверка Ст. 9 конституции: сирот после shutdown быть не должно
 set -u
 cd "$(dirname "$0")/.."
 
@@ -20,10 +21,18 @@ PID=$(grep -a '"unit":"hello"' demo/demo-transcript.jsonl \
       | grep -a '"event":"spawn"' | tail -1 \
       | sed -E 's/.*"pid":([0-9]+).*/\1/')
 if [ -n "${PID:-}" ]; then
-    kill -9 "$PID" 2>/dev/null && echo ">> демо: kill -9 $PID отправлен агенту hello"
+    kill -9 -- "-$PID" 2>/dev/null \
+        && echo ">> демо: kill -9 -- -$PID отправлен группе процессов hello"
 fi
 
 sleep 25
 kill -TERM "$SUP" 2>/dev/null
 wait "$SUP" 2>/dev/null
-echo ">> демо завершено, транскрипт: demo/demo-transcript.jsonl"
+sleep 1
+
+ORPHANS=$(pgrep -f 'demo/hello_agent.sh|demo/crashy_agent.sh' | wc -l)
+if [ "$ORPHANS" -ne 0 ]; then
+    echo ">> ДЕМО ПРОВАЛЕНО: $ORPHANS сирот остались живы (Ст. 9 нарушена)"
+    exit 1
+fi
+echo ">> демо завершено: сирот после shutdown — 0, транскрипт: demo/demo-transcript.jsonl"
