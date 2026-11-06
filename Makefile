@@ -13,6 +13,9 @@ demo-ctl: agryp
 demo-finish: agryp
 	bash demo/run_demo_finish.sh
 
+demo-reload: agryp
+	bash demo/run_demo_reload.sh
+
 audit:
 	python3 demo/audit_transcript.py demo/demo-transcript.jsonl
 
@@ -23,7 +26,10 @@ audit-ctl:
 audit-finish:
 	python3 demo/audit_transcript.py demo/finish-transcript.jsonl
 
+audit-reload:
+	python3 demo/audit_transcript.py demo/reload-transcript.jsonl
+
 clean:
 	rm -f agryp
 
-.PHONY: demo demo-ctl demo-finish audit audit-ctl audit-finish clean
+.PHONY: demo demo-ctl demo-finish demo-reload audit audit-ctl audit-finish audit-reload clean

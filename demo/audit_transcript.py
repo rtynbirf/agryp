@@ -39,7 +39,7 @@ VALID_EVENTS = {
     "boot", "spawn", "spawn-fail", "exit", "restart", "stopped", "failed",
     "budget-kill", "token-kill", "ctl-down", "ctl-up", "ctl-drop", "ctl-kill",
     "cgroup-skip", "report-drop", "subreaper", "reap-orphan", "shutdown",
-    "summary", "uptime-ms", "finish",
+    "summary", "uptime-ms", "finish", "reload", "unit-added", "unit-removed",
 }
 # константы Ст. 8 — сверены с #define в src/agryp.c
 BACKOFF_CAP_MS = 30000
@@ -135,10 +135,13 @@ def main(path):
             "budget_kills": 0, "token_kills": 0, "running": False, "ok_exits": 0,
             "streak": None, "failed": False,
             "ctl_down": False, "ctl_e0": None, "expect_stop": None,
-            "finishes": [], "retired": False,
+            "finishes": [], "retired": False, "added": False,
         })
         et = ev["event"]
         if et == "spawn":
+            if u["retired"]:
+                fail(errors, idx,
+                     f"spawn юнита {name} после unit-removed — жизни больше нет (Виток 6)")
             if u["ctl_down"]:
                 fail(errors, idx,
                      f"spawn юнита {name} при живом .down — политика заморожена (Ст. 13)")
@@ -180,6 +183,12 @@ def main(path):
             if ev.get("streak") != CRASH_LIMIT:
                 fail(errors, idx,
                      f"{name}: failed при streak={ev.get('streak')}, а fuse — {CRASH_LIMIT}")
+        elif et == "unit-added":
+            u["added"] = True
+        elif et == "unit-removed":
+            u["retired"] = True               # файл удалён: спавнов быть не должно
+            if u["running"]:
+                u["expect_stop"] = "reload"   # graceful-stop по Ст. 9
         elif et == "ctl-down":
             if u["ctl_down"]:
                 fail(errors, idx, f"{name}: второй ctl-down без ctl-up")
@@ -265,6 +274,16 @@ def main(path):
 
     if not units:
         errors.append("в транскрипте нет ни одного юнита")
+
+    # SIGHUP-reload (Виток 6): числа события обязаны сходиться с юнит-событиями
+    reloads = [e for _, e in events if e["event"] == "reload"]
+    if len(reloads) == 1:
+        n_add = sum(1 for _, e in events if e["event"] == "unit-added")
+        n_rem = sum(1 for _, e in events if e["event"] == "unit-removed")
+        if reloads[0].get("added") != n_add or reloads[0].get("removed") != n_rem:
+            fail(errors, 0,
+                 f"reload лжёт: added={reloads[0].get('added')} (unit-added {n_add}), "
+                 f"removed={reloads[0].get('removed')} (unit-removed {n_rem})")
 
     tail = [ev["event"] for _, ev in events[-len(units) - 1:]]
     if "uptime-ms" not in tail:

@@ -1,3 +1,3 @@
-{"sup":"agryp","pid":1700,"units":2,"uptime_ms":14778}
-{"unit":"crashy","state":"RUNNING","pid":1734,"attempt":4,"budget_sec":10,"token_budget":0,"tokens":0,"mem_max_mb":0,"attempts":4,"exits_ok":0,"exits_fail":3,"budget_kills":0,"token_kills":0,"restarts":3,"streak":3,"ctl_down":0}
-{"unit":"hello","state":"RUNNING","pid":1721,"attempt":2,"budget_sec":25,"token_budget":5000,"tokens":4500,"mem_max_mb":0,"attempts":2,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"restarts":1,"streak":1,"ctl_down":0}
+{"sup":"agryp","pid":3329,"units":2,"uptime_ms":14778}
+{"unit":"crashy","state":"RUNNING","pid":3363,"attempt":4,"budget_sec":10,"token_budget":0,"tokens":0,"mem_max_mb":0,"attempts":4,"exits_ok":0,"exits_fail":3,"budget_kills":0,"token_kills":0,"restarts":3,"streak":3,"ctl_down":0}
+{"unit":"hello","state":"RUNNING","pid":3350,"attempt":2,"budget_sec":25,"token_budget":5000,"tokens":4500,"mem_max_mb":0,"attempts":2,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"restarts":1,"streak":1,"ctl_down":0}

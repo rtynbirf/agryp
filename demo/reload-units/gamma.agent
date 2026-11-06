@@ -1,0 +1,4 @@
+name        = gamma
+exec        = sh demo/reload_worker.sh
+restart     = always
+cooldown-ms = 800
