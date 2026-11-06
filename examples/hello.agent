@@ -1,8 +1,8 @@
 # Бессмертный сервис: перезапускается при любой смерти.
-# На 5-й секунде демо убьёт его kill -9 — agryp поднимет заново.
-# Бюджет попытки 8 секунд: слишком долгие попытки agryp режет сам.
-name        = hello
-exec        = bash demo/hello_agent.sh
-restart     = always
-budget-sec  = 8
-cooldown-ms = 1000
+# Две валюты бюджета: время 25 с и токены 5000 — токены дороже, усыпят по ним.
+name         = hello
+exec         = bash demo/hello_agent.sh
+restart      = always
+budget-sec   = 25
+token-budget = 5000
+cooldown-ms  = 1000

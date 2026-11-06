@@ -84,39 +84,48 @@ CLI-агенты (№22, 56, 79, 93), воркфлоу-платформы (№25
 
 ```
 # examples/hello.agent
-name        = hello
-exec        = bash demo/hello_agent.sh
-restart     = always       # always | on-failure | no
-budget-sec  = 8            # попытка дольше 8 с — agryp режет её SIGKILL
-cooldown-ms = 1000         # пауза перед перезапуском
-max-attempts = 0           # 0 = без лимита
+name         = hello
+exec         = bash demo/hello_agent.sh
+restart      = always       # always | on-failure | no
+budget-sec   = 25           # time-бюджет попытки (Ст. 7)
+token-budget = 5000         # токен-бюджет: burn-rate агент отдаёт сам (Ст. 14)
+cooldown-ms  = 1000         # пауза перед перезапуском
+# mem-max-mb = 64           # клетка cgroups v2 (Ст. 15), 0 = без клетки
+# max-attempts = 0          # 0 = без лимита
 ```
 
 ## Быстрый старт
 
 ```
 make && ./agryp --dir examples
+# другой терминал — живой NDJSON-срез семьи (Ст. 13):
+./agryp status --dir examples
 ```
 
 Логи — JSON-строки в stdout (`boot`, `spawn`, `exit`, `restart`, `budget-kill`,
-`shutdown`, `summary`) — удобно направлять в любой сборщик.
+`token-kill`, `cgroup-skip`, `shutdown`, `summary`) — удобно направлять в любой сборщик.
 
 ## Живое демо: что доказывает транскрипт
 
 Сценарий (`make demo`): поднимаются два агента; на 5-й секунде мы убиваем
-`hello` через `kill -9` всей группе процессов; его попытки ограничены бюджетом 8 с;
-на 30-й секунде супервизору уходит SIGTERM.
+`hello` через `kill -9` всей группе процессов; на 15-й снимаем `agryp status`
+в живой семье; на 35-й супервизору уходит SIGTERM.
 
 Факты из `demo/demo-transcript.jsonl` (реальный прогон 2026-11-06):
 
+- Ст. 15 в песочнице: `cgroup-skip` (cgroupfs read-only, errno 30) — лимит
+  памяти объявлён вслух, супервизор работает дальше;
 - внешняя смерть поймана: `"event":"exit","by_signal":9` → `"event":"restart"`;
-- agryp сам дважды обрезал переросшие бюджет попытки (2 × `budget-kill`);
-- падучий `crashy` перезапущен 7 раз после своих кодов выхода 3;
+- Ст. 14: hello дважды усыпан токенами — 2 × `token-kill`, оба при
+  `tokens:5000 == budget:5000`; `budget-kill` — 0: токены дороже 25 секунд;
+- Ст. 13: `demo/status-snapshot.jsonl` — срез в t=15: `crashy` в COOLDOWN,
+  `hello` RUNNING с счётчиком 4500/5000 — за секунду до казни;
+- падучий `crashy`: 9 попыток, 9 перезапусков, ни одного потерянного exit-а;
 - graceful shutdown: TERM → ожидание → KILL, затем честный summary:
 
 ```
-{"unit":"crashy","event":"summary","attempts":8,"exits_fail":8,"restarts":7,"budget_kills":0}
-{"unit":"hello","event":"summary","attempts":4,"exits_fail":4,"restarts":3,"budget_kills":2}
+{"unit":"crashy","event":"summary","attempts":9,"exits_ok":0,"exits_fail":9,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":9}
+{"unit":"hello","event":"summary","attempts":4,"exits_ok":0,"exits_fail":4,"budget_kills":0,"token_kills":2,"tokens_total":17000,"restarts":3}
 {"event":"shutdown","reason":"signal"}
 ```
 
@@ -125,16 +134,18 @@ make && ./agryp --dir examples
 наследуется детьми через fork+exec, и все записи атомарно идут в конец. Без
 него stdio родителя пишет по устаревшей позиции, пока дети уехали вперёд — в
 логе появляются разреженные дыры из NUL-байтов (44 КБ мусора в первом прогоне
-после рефакторинга имён). Транскрипт теперь — 6.3 КБ: 41 JSON-событие + 39 строк
+после рефакторинга имён). Транскрипт теперь — 7.3 КБ: 46 JSON-событий + 47 строк
 агентов одним файлом, ноль NUL; это проверяет аудитор `demo/audit_transcript.py` —
 `make audit` печатает `OK`.
 
 ## Конституция
 
-Правила репозитория — в [`CONSTITUTION.md`](CONSTITUTION.md): 12 статей в
-четырёх разделах (Тело · Дело · Люди · Поправки), и каждая статья снабжена
-командой проверки — статья без команды проверки не считается статьёй.
-Аудит «журнал не лжёт» (Ст. 6) — отдельная цель:
+Правила репозитория — в [`CONSTITUTION.md`](CONSTITUTION.md): 16 статей в
+пяти разделах (Тело · Дело · Люди · Процесс · Поправки), и каждая статья
+снабжена командой проверки — статья без команды проверки не считается
+статьёй. Поправка №1: потолок Ст. 1 поднят 512 → 576 — цена трёх статей
+процесса (Ст. 13–15), оплачена одним атомом с ними. Аудит «журнал не лжёт»
+(Ст. 6) — отдельная цель:
 
 ```
 make audit
@@ -155,15 +166,19 @@ make audit
 `RUNNING`, `COOLDOWN`; restart-политики — `always`, `on-failure`, `no`;
 агент — обычный `fork`+`execl("/bin/sh","-c",…)`, попытка — группа
 процессов (`setpgid` в ребёнке и в родителе): бюджет-килл и shutdown
-режут семью целиком через `kill(-pgid)`, сирот не оставляем.
+режут семью целиком через `kill(-pgid)`, сирот не оставляем. Ст. 13–15:
+статус семьи — файл `<dir>/.agryp-status` (tmp + rename каждую итерацию,
+unlink на выходе; `agryp status` читает); токены — агент пишет
+`<unit> tokens <n>` в файл из env `AGRY_TOKEN_REPORT`, супервизор
+съедает раз в итерацию; память — `memory.max` в собственной делегированной
+ветке cgroup v2, агент переезжает до exec.
 
 ## Дорожная карта
 
-- лимиты памяти через cgroups v2 (второй ресурсный бюджет рядом со временем);
-- namespace-изоляция попыток;
-- token-budget hook: агент сам отдаёт burn-rate, agryp убивает по токенам;
+- agrypctl: start/stop/restart по юниту через те же файлы-договоры;
+- namespace-изоляция попыток (pid/mount) рядом с клеткой cgroup;
 - трансляция `.agent` ↔ systemd unit;
-- `agryp status` по SIGUSR1 и `agrypctl` для управления семейством.
+- токен-отчёт стримом вместо кванта 250 мс.
 
 ## Лицензия
 

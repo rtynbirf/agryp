@@ -1,7 +1,8 @@
-# Падучий агент: при каждом запуске отрабатывает 2 с и выходит с кодом 3.
-# Политика on-failure: перезапускать только после неуспешной попытки.
+# Падучий агент: честно работает 2 секунды и выходит с кодом 3.
+# Клетка Ст. 15: 64 МБ на попытку (в среде без cgroups — loud cgroup-skip).
 name        = crashy
 exec        = bash demo/crashy_agent.sh
 restart     = on-failure
 budget-sec  = 10
 cooldown-ms = 2000
+mem-max-mb  = 64
