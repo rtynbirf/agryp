@@ -4,6 +4,8 @@
  * Один файл. Только libc. Ноль зависимостей. Этика LFS:
  * агент — это процесс первого класса, у которого есть
  * политика перезапуска и бюджет попытки, а не «табличка в терминале».
+ * Попытка — группа процессов (setpgid): режем всю семью,
+ * внуков-сирот не оставляем.
  *
  * Сборка:  gcc -O2 -Wall -Wextra -std=c99 -o agryp src/agryp.c
  * Запуск:  ./agryp --dir examples
@@ -44,6 +46,7 @@ typedef struct {
     /* рантайм */
     state_t   state;
     pid_t     pid;
+    pid_t     pgid;      /* группа попытки: kill(-pgid) режет всю семью */
     long long deadline_ms;   /* дедлайн бюджета текущей попытки */
     long long next_start_ms; /* когда выходить из cooldown */
     int       attempts;
@@ -198,10 +201,13 @@ static void spawn_unit(unit_t *u)
     if (p == 0) {                              /* ребёнок: агент */
         signal(SIGTERM, SIG_DFL);
         signal(SIGINT,  SIG_DFL);
+        setpgid(0, 0);                         /* своя группа: режем семью целиком */
         execl("/bin/sh", "sh", "-c", u->exec, (char *)NULL);
         _exit(127);
     }
+    setpgid(p, p);                             /* и в родителе — закрываем гонку */
     u->pid         = p;
+    u->pgid        = p;
     u->state       = U_RUNNING;
     u->attempts++;
     u->deadline_ms = (u->budget_sec > 0)
@@ -324,7 +330,8 @@ int main(int argc, char **argv)
                     u->budget_kills++;
                     log_ev(u, "budget-kill", "\"pid\":%d,\"attempt\":%d",
                            (int)u->pid, u->attempts);
-                    kill(u->pid, SIGKILL);
+                    if (kill(-u->pgid, SIGKILL) < 0)
+                        kill(u->pid, SIGKILL);   /* группа уже пуста — по pid */
                     u->deadline_ms = 0;      /* не бьём второй раз */
                 } else if (left < timeout) {
                     timeout = left;
@@ -339,7 +346,8 @@ int main(int argc, char **argv)
     log_ev(NULL, "shutdown", "\"reason\":\"signal\"");
     for (i = 0; i < g_nunits; i++)
         if (g_units[i].state == U_RUNNING && g_units[i].pid > 0)
-            kill(g_units[i].pid, SIGTERM);
+            if (kill(-g_units[i].pgid, SIGTERM) < 0)
+                kill(g_units[i].pid, SIGTERM);
 
     long long deadline = now_ms() + GRACE_MS;
     for (;;) {
@@ -352,7 +360,8 @@ int main(int argc, char **argv)
     }
     for (i = 0; i < g_nunits; i++)
         if (g_units[i].state == U_RUNNING && g_units[i].pid > 0)
-            kill(g_units[i].pid, SIGKILL);
+            if (kill(-g_units[i].pgid, SIGKILL) < 0)
+                kill(g_units[i].pid, SIGKILL);
     reap();
 
     for (i = 0; i < g_nunits; i++) {

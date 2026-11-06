@@ -7,7 +7,10 @@ agryp: src/agryp.c
 demo: agryp
 	bash demo/run_demo.sh
 
+audit:
+	python3 demo/audit_transcript.py demo/demo-transcript.jsonl
+
 clean:
 	rm -f agryp
 
-.PHONY: demo clean
+.PHONY: demo audit clean
