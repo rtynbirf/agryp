@@ -77,6 +77,52 @@
 журнал, бюджет. Остальное отвергнуто с причиной: сингулярность держится
 на отказах не хуже, чем на принятиях.
 
+## V. Живая сверка ниши (2026-11-07, GitHub API с токеном Хозяина)
+
+Метод витка 4: не «что я помню», а живой поиск API — поисковые запросы +
+README топов ниши (токен Хозяина, read-only, значение не печатается).
+Итог: ниша больше не пуста — она **размечена слоями**. Клетку agryp
+(PID1-ядро жизненного цикла) не занял никто.
+
+### Сверстники уровня процессов
+
+| Сверстник | ★ | Слой | Что даёт | Чего не даёт (клетка agryp) |
+|---|---|---|---|---|
+| qhkm/zeptopm | 6 | PM2 для LLM (Rust) | процесс на агента, рестарт с экспонентой, бюджеты токены/USD, hot reload | один файл C / ноль зависимостей; файл-как-API (у него HTTP); самоверифицирующийся журнал; конституция |
+| stdiobus/stdiobus | 20 | C-демон-роутер | NDJSON JSON-RPC между клиентами и воркерами, session affinity, epoll/kqueue, libc-only | жизненный цикл: нет бюджетов, рестартов, сирот, аудита — роутер, не PID1 (agryp и stdiobus дополняют друг друга) |
+| z80dev/lemon | 136 | агент-демон (Elixir/OTP) | supervised BEAM-процессы на run/tool-call, circuit breaker, cron, judge | требует BEAM-рантайм; не один файл; не PID1 для произвольных `sh -c` агентов |
+| elchemista/spectre | 13 | OTP-библиотека (Elixir) | supervision-деревья для conversation/tool-процессов | библиотека слоя приложения, не ОС-надзор |
+
+### Сверстники уровней выше (рантаймы и приложения)
+
+| Сверстник | ★ | Слой | Урок | Вердикт |
+|---|---|---|---|---|
+| paperclipai/paperclip | 111677 | «компания для агентов» (Node/React) | бюджеты и governance на уровне организации | не процессный слой; подтверждает спрос |
+| herdrdev/herdr | 48487 | терминальный мультиплексор агентов (Rust) | panes working/blocked/idle — статус рядом с агентом | «original processes do not survive» — не PID1 |
+| tinyhumansai/openhuman | 42567 | harness (Rust) | 500 агентов на $10 VPS — экономика плотности | harness, не супервизор |
+| OrchestratorInc/agent-orchestrator | 14172 | fleet-менеджер (worktree на задачу) | CI-конвейер обратно в воркера | приложение, не процессный слой |
+
+### Что следует для Ст. 5 (Поправка №3)
+
+1. Процессный слой для агентов возник в 2026 — вопрос больше не «кто первый»,
+   а «кто даёт гарантии ядра».
+2. Сингулярность agryp — пять свойств, которых нет ни у одного сверстника:
+   один файл C; ноль зависимостей; файл-как-API (статус/отчёт/ctl — файлы,
+   не сокеты); самоверифицирующийся NDJSON-журнал (аудитор сверяет счётчики
+   и каждую ступень лестницы); гарантии уровня ядра (группа попытки,
+   subreaper, PDEATHSIG, клетка cgroup).
+3. Бюджеты (Ст. 7/14) — не уникальны (zeptopm ведёт токены/USD): наша валюта
+   — контракт юнита, согласование двух валют и казнь всей группы, а не факт бюджета.
+
+### Числа живого поиска (срез 2026-11-07)
+
+- `"agent supervisor process"` → 135 репо; `topic:agent-orchestration` → 4894;
+  `"ai agent orchestrator process manager"` → 6; `"llm agent supervisor restart"`
+  → 1; `"agent process group supervisor"` → 2.
+- Учителя живы: systemd ★17003 (push 2026-11-06), s6 ★991, s6-rc ★166,
+  tini ★11290 (последний push 2025-05 — уснул). supervisord живёт на
+  `Supervisor/supervisor`; runit — вне GitHub (smarden.org).
+
 ## Источники
 
 Учителя:
@@ -109,3 +155,15 @@
 - OTel GenAI: https://github.com/open-telemetry/semantic-conventions-genai
 - OpenHands stuck detector: https://docs.openhands.dev/sdk/guides/agent-stuck-detector
 - Letta stateful agents: https://docs.letta.com/concepts/stateful-agents
+
+Сверстники §V (живая сверка 2026-11-07, GitHub API):
+
+- zeptopm: https://github.com/qhkm/zeptopm
+- stdiobus: https://github.com/stdiobus/stdiobus
+- lemon: https://github.com/z80dev/lemon
+- spectre: https://github.com/elchemista/spectre
+- paperclip: https://github.com/paperclipai/paperclip
+- herdr: https://github.com/herdrdev/herdr
+- openhuman: https://github.com/tinyhumansai/openhuman
+- agent-orchestrator: https://github.com/OrchestratorInc/agent-orchestrator
+- supervisor (учитель, верное место на GitHub): https://github.com/Supervisor/supervisor
