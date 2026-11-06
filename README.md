@@ -123,11 +123,15 @@ cooldown-ms  = 1000         # база лестницы перезапуска (
 make && ./agryp --dir examples
 # другой терминал — живой NDJSON-срез семьи (Ст. 13):
 ./agryp status --dir examples
+# остановить/поднять юнит — файл-договор, не сокет (Виток 5):
+./agrypctl stop hello     # кладёт examples/.agryp-ctl/hello.down → ctl-down
+./agrypctl start hello    # снимает → ctl-up, новая попытка
 ```
 
 Логи — JSON-строки в stdout (`boot`, `spawn`, `exit`, `restart`, `stopped`,
-`failed`, `budget-kill`, `token-kill`, `cgroup-skip`, `subreaper`,
-`reap-orphan`, `shutdown`, `summary`) — удобно направлять в любой сборщик.
+`failed`, `budget-kill`, `token-kill`, `ctl-down`, `ctl-up`, `ctl-drop`,
+`cgroup-skip`, `subreaper`, `reap-orphan`, `shutdown`, `summary`) —
+удобно направлять в любой сборщик.
 
 ## Живое демо: что доказывает транскрипт
 
@@ -174,6 +178,26 @@ make && ./agryp --dir examples
 `demo/audit_transcript.py` — он же сверяет каждую ступень лестницы с конфигом
 юнитов и терминальность `failed`; `make audit` печатает `OK`.
 
+## agrypctl: руки без сокетов (Виток 5)
+
+Управление юнитом — без сокетов, FIFO и HTTP, только файловая система
+(школа s6-svc): `agrypctl stop <unit>` кладёт `<dir>/.agryp-ctl/<unit>.down`
+— супервизор в ближайшей итерации казнит попытку TERM'ом группы и
+замораживает restart-политику, пока файл жив (события `ctl-down`, остановка
+с `reason:ctl-down` — казнь закона, лестницу не растит); `agrypctl start`
+снимает файл — `ctl-up` и новая попытка с чистой лестницей, минуя cooldown.
+`.down` с прошлой жизни уважается на boot: юнит не встаёт до снятия файла.
+`agrypctl status` не дублирует Ст. 13 — читает тот же файл семьи. Сам
+`agrypctl` — один POSIX sh-файл, ноль зависимостей кроме coreutils;
+запись файла-договора атомарна (tmp + rename, как у статус-среза).
+
+Дисциплину доказывает второе демо (`make demo-ctl && make audit-ctl`):
+worker казнён без единого рестарта, сосед-ghost не тронут (заморозка
+пер-юнит), после start — attempt 2; сирот 0. Аудитор знает ctl-события
+и ловит подделки: спавн при живом .down и ctl-up без ctl-down —
+отрицательный тест `demo/negative_ctl_test.py` скармливает ему обе и
+требует точного приговора.
+
 ## Конституция
 
 Правила репозитория — в [`CONSTITUTION.md`](CONSTITUTION.md): 16 статей в
@@ -203,6 +227,8 @@ make audit
 
 - [`AGENTS.md`](AGENTS.md) — конституция агентов-коллег: инварианты дома,
   контракты субъектов (ЯДРО/АУДИТОР/РАЗВЕДЧИК/ДОКТОР), протокол витка (≤8 КБ);
+- [`docs/spec/TZ-5.md`](docs/spec/TZ-5.md) — техзадание витка 5 «Руки без
+  сокетов» с приёмками и отчётом о исполнении;
 - [`docs/spec/TZ-4.md`](docs/spec/TZ-4.md) — техзадание витка 4 «От ученика
   к учителю» с приёмками и отчётом о исполнении;
 - [`docs/spec/ROADMAP.md`](docs/spec/ROADMAP.md) — дорожная карта витков 4→8;
@@ -231,13 +257,14 @@ make audit
 Витки и тикеты живут в [`docs/spec/ROADMAP.md`](docs/spec/ROADMAP.md) и
 [`tasks/open/`](tasks/open/) (норма НОУС: очередь воли). Кратко:
 
-- виток 5 — agrypctl: start/stop юнита файлами-договорами (школа s6-svc,
-  файлы вместо сокетов);
-- виток 6 — ./finish-хук юнита (s6) и SIGHUP-reload (школа daemon-reload);
+- виток 5 — **исполнен** (2026-11-07): agrypctl — start/stop юнита
+  файлами-договорами (школа s6-svc); ядро 654/656, Поправка №4;
+- виток 6 — ./finish-хук юнита (s6), SIGHUP-reload (школа daemon-reload),
+  эскалация ctl-stop до SIGKILL;
 - виток 7 — namespace-клетка попыток рядом с cgroup (Ст. 15); трансляция
   `.agent` ↔ systemd unit;
 - виток 8 — v1.0: бенчмарк против сверстников (rss/байты журнала/сироты
-  после kill -9), тег `v1.0`, пакет GitHub по доктрине.
+  после kill -9), перевод репо в public, пакет GitHub по доктрине.
 
 ## Лицензия
 
