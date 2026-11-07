@@ -1,0 +1,6 @@
+{"ts":"2026-11-07T17:49:42Z","participant":"stdiobus","metric":"M1","binary_bytes":97032,"dyn_deps":5,"src_commit":"a20f422981cd28182957de2cea83dc07b4016a9c","src":"github.com/stdiobus/stdiobus releases/v2.0.3/linux-amd64 (prebuilt)"}
+{"ts":"2026-11-07T17:49:42Z","participant":"stdiobus","metric":"M2","rss_kb_samples":[2848,2848,2848],"rss_kb_median":2848,"agents":1,"orphans_after_kill9":1}
+{"ts":"2026-11-07T17:49:42Z","participant":"stdiobus","metric":"M3","agents":100,"workers_seen":100,"rss_kb_samples":[3016,3016,3016],"rss_kb_median":3016}
+{"ts":"2026-11-07T17:49:42Z","participant":"stdiobus","metric":"M4","window_sec":30,"journal_bytes_delta":0}
+{"ts":"2026-11-07T17:49:42Z","participant":"stdiobus","metric":"M6","workers_before":100,"workers_after":100,"worker_started_before":100,"worker_started_after":101}
+{"ts":"2026-11-07T17:49:42Z","participant":"stdiobus","metric":"M5","workers_before":100,"orphans_after_5s":100}

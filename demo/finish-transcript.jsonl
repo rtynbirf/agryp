@@ -1,23 +1,23 @@
-{"ts":"2026-11-06T23:20:34Z","up_ms":5511629,"event":"boot","units":1,"dir":"demo/finish-units"}
-{"ts":"2026-11-06T23:20:34Z","up_ms":5511629,"event":"subreaper","on":true}
-{"ts":"2026-11-06T23:20:34Z","up_ms":5511629,"unit":"sweeper","event":"spawn","pid":6767,"attempt":1,"budget_sec":0,"jailed":0}
-[sweeper] попытка 6768 началась
+{"ts":"2026-11-07T18:19:06Z","up_ms":1,"event":"boot","units":1,"dir":"demo/finish-units"}
+{"ts":"2026-11-07T18:19:06Z","up_ms":1,"event":"subreaper","on":true}
+{"ts":"2026-11-07T18:19:06Z","up_ms":1,"unit":"sweeper","event":"spawn","pid":22961,"attempt":1,"budget_sec":0,"jailed":0}
+[sweeper] попытка 22962 началась
 [sweeper] работа окончена — падаю (код 3)
-{"ts":"2026-11-06T23:20:36Z","up_ms":5513633,"unit":"sweeper","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-06T23:20:36Z","up_ms":5513658,"unit":"sweeper","event":"finish","code":0}
-{"ts":"2026-11-06T23:20:36Z","up_ms":5513658,"unit":"sweeper","event":"restart","next_attempt":2,"backoff_ms":500,"streak":1}
-{"ts":"2026-11-06T23:20:36Z","up_ms":5514159,"unit":"sweeper","event":"spawn","pid":6771,"attempt":2,"budget_sec":0,"jailed":0}
-[sweeper] попытка 6772 началась
+{"ts":"2026-11-07T18:19:08Z","up_ms":2004,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-07T18:19:08Z","up_ms":2030,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-07T18:19:08Z","up_ms":2030,"unit":"sweeper","event":"restart","next_attempt":2,"backoff_ms":500,"streak":1}
+{"ts":"2026-11-07T18:19:09Z","up_ms":2531,"unit":"sweeper","event":"spawn","pid":22965,"attempt":2,"budget_sec":0,"jailed":0}
+[sweeper] попытка 22966 началась
 [sweeper] работа окончена — падаю (код 3)
-{"ts":"2026-11-06T23:20:38Z","up_ms":5516163,"unit":"sweeper","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-06T23:20:38Z","up_ms":5516188,"unit":"sweeper","event":"finish","code":0}
-{"ts":"2026-11-06T23:20:38Z","up_ms":5516188,"unit":"sweeper","event":"restart","next_attempt":3,"backoff_ms":1000,"streak":2}
-{"ts":"2026-11-06T23:20:39Z","up_ms":5517190,"unit":"sweeper","event":"spawn","pid":6775,"attempt":3,"budget_sec":0,"jailed":0}
-[sweeper] попытка 6776 началась
+{"ts":"2026-11-07T18:19:11Z","up_ms":4535,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-07T18:19:11Z","up_ms":4560,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-07T18:19:11Z","up_ms":4560,"unit":"sweeper","event":"restart","next_attempt":3,"backoff_ms":1000,"streak":2}
+{"ts":"2026-11-07T18:19:12Z","up_ms":5562,"unit":"sweeper","event":"spawn","pid":22969,"attempt":3,"budget_sec":0,"jailed":0}
+[sweeper] попытка 22970 началась
 [sweeper] работа окончена — падаю (код 3)
-{"ts":"2026-11-06T23:20:41Z","up_ms":5519193,"unit":"sweeper","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-06T23:20:41Z","up_ms":5519219,"unit":"sweeper","event":"finish","code":0}
-{"ts":"2026-11-06T23:20:41Z","up_ms":5519219,"unit":"sweeper","event":"restart","next_attempt":4,"backoff_ms":2000,"streak":3}
-{"ts":"2026-11-06T23:20:43Z","up_ms":5520629,"event":"shutdown","reason":"signal"}
-{"ts":"2026-11-06T23:20:43Z","up_ms":5520630,"unit":"sweeper","event":"summary","attempts":3,"exits_ok":0,"exits_fail":3,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":3}
-{"ts":"2026-11-06T23:20:43Z","up_ms":5520630,"event":"uptime-ms","value":9001}
+{"ts":"2026-11-07T18:19:14Z","up_ms":7565,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-07T18:19:14Z","up_ms":7590,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-07T18:19:14Z","up_ms":7590,"unit":"sweeper","event":"restart","next_attempt":4,"backoff_ms":2000,"streak":3}
+{"ts":"2026-11-07T18:19:15Z","up_ms":9001,"event":"shutdown","reason":"signal"}
+{"ts":"2026-11-07T18:19:15Z","up_ms":9001,"unit":"sweeper","event":"summary","attempts":3,"exits_ok":0,"exits_fail":3,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":3}
+{"ts":"2026-11-07T18:19:15Z","up_ms":9001,"event":"uptime-ms","value":9001}

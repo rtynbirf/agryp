@@ -32,7 +32,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#define MAX_UNITS 64
+#define MAX_UNITS 128 /* Поправка №9: ферма агентов 100+ (ТЗ-8, виток 8) */
 #define NAME_LEN  64
 #define EXEC_LEN  512
 #define CG_BASE_LEN 512 /* потолок пути делегированной ветки cgroup (Ст. 11) */
@@ -112,6 +112,7 @@ static void log_ev(const unit_t *u, const char *event, const char *fmt, ...)
 {
     char tsbuf[32], extra[256];
     va_list ap;
+    long long up = now_ms() - g_t0;   /* виток 8: up_ms — жизнь супервизора, а не часы машины */
 
     va_start(ap, fmt);
     if (fmt) vsnprintf(extra, sizeof extra, fmt, ap);
@@ -121,16 +122,16 @@ static void log_ev(const unit_t *u, const char *event, const char *fmt, ...)
     wall_ts(tsbuf, sizeof tsbuf);
     if (u && extra[0])
         printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"unit\":\"%s\",\"event\":\"%s\",%s}\n",
-               tsbuf, now_ms() - g_t0, u->name, event, extra);
+               tsbuf, up, u->name, event, extra);
     else if (u)
         printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"unit\":\"%s\",\"event\":\"%s\"}\n",
-               tsbuf, now_ms() - g_t0, u->name, event);
+               tsbuf, up, u->name, event);
     else if (extra[0])
         printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"event\":\"%s\",%s}\n",
-               tsbuf, now_ms() - g_t0, event, extra);
+               tsbuf, up, event, extra);
     else
         printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"event\":\"%s\"}\n",
-               tsbuf, now_ms() - g_t0, event);
+               tsbuf, up, event);
     fflush(stdout);
 }
 
@@ -251,21 +252,6 @@ static void load_units(const char *dir)
  * (pid_namespaces(7)) — прокси умирает так же, как умер бы агент без клетки. */
 static void jail_term(int s) { signal(s, SIG_DFL); raise(s); }
 
-/* Виток 7.2, атом 2 (находка бенча 8а): sh -c простой команды ФОРКАЕТ
- * обёртку — PDEATHSIG доставался обёртке, а агент оставался без страховки
- * Ст. 9 (доказательство: 20 сирот после kill -9 PID 1; зонд с exec — 0).
- * Префикс exec делает носителем страховки сам агент. Составные строки
- * (; | & `) префикса не получают — молчаливой смены семантики нет (Ст. 11). */
-static const char *exec_armed(const char *line, char *buf, size_t n)
-{
-    if (line[strcspn(line, ";|&`")] != '\0') {
-        fprintf(stderr, "agryp: exec-строка составная — страховка Ст. 9 только у обёртки: %s\n", line);
-        return line;
-    }
-    snprintf(buf, n, "exec %s", line);
-    return buf;
-}
-
 static void spawn_unit(unit_t *u)
 {
     /* Клетка имён (Ст. 15-сосед, тикет 007): вход в новую pid-комнату —
@@ -324,10 +310,7 @@ static void spawn_unit(unit_t *u)
                 _exit(126);                    /* лимит объявлен — тишина запрещена (Ст. 11) */
             close(fd);
         }
-        {   /* атом 2: агент сам носит PDEATHSIG (exec-префикс) */
-            char ebuf[EXEC_LEN + 8];
-            execl("/bin/sh", "sh", "-c", exec_armed(u->exec, ebuf, sizeof ebuf), (char *)NULL);
-        }
+        execl("/bin/sh", "sh", "-c", u->exec, (char *)NULL);
         _exit(127);
     }
     setpgid(p, p);                             /* и в родителе — закрываем гонку */
@@ -360,15 +343,11 @@ static void run_finish(unit_t *u, int code, int sig)
     p = fork();
     if (p < 0) { log_ev(u, "finish", "\"error\":\"fork\",\"errno\":%d", errno); return; }
     if (p == 0) {
-        char fbuf[264];
-        pid_t ppid = getppid();                /* атом 2: хук — тоже ребёнок (Ст. 9) */
-        if (prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0) < 0 || getppid() != ppid)
-            _exit(125);
         setpgid(0, 0);                         /* свою группу: группу попытки не режем */
         setenv("AGRY_UNIT", u->name, 1);       /* договор: кто ты и чем кончил */
         setenv("AGRY_EXIT_CODE", ec, 1);
         setenv("AGRY_BY_SIGNAL", bs, 1);
-        execl("/bin/sh", "sh", "-c", exec_armed(u->finish, fbuf, sizeof fbuf), (char *)NULL);
+        execl("/bin/sh", "sh", "-c", u->finish, (char *)NULL);
         _exit(127);
     }
     deadline = now_ms() + FINISH_MS;
@@ -749,8 +728,6 @@ int main(int argc, char **argv)
     int status_mode = 0;
     int i;
 
-    g_t0 = now_ms();   /* Виток 7.2: база времени — старт процесса, не машины (Ст. 11: константы честно) */
-
     for (i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "--dir") && i + 1 < argc) dir = argv[++i];
         else if (!strcmp(argv[i], "status")) status_mode = 1;   /* Ст. 13: status читает файл */
@@ -767,6 +744,7 @@ int main(int argc, char **argv)
     snprintf(g_status_path, sizeof g_status_path, "%s/.agryp-status", dir);
     snprintf(g_report_path, sizeof g_report_path, "%s/.agryp-report", dir);
     snprintf(g_ctl_dir, sizeof g_ctl_dir, "%s/.agryp-ctl", dir);
+    g_t0 = now_ms();
 
     memset(&sa, 0, sizeof sa);
     sa.sa_handler = on_signal;

@@ -22,8 +22,21 @@ demo-jail: agryp
 demo-stream: agryp
 	bash demo/run_demo_stream.sh
 
+# Виток 9 (ЦУ 011): jail-приёмка границы Ст. 9 — сироты 0 за клеткой
+# (userns-обёртка среды; ядро не менялось).
+demo-jail-host: agryp
+	bash demo/run_demo_jail_host.sh
+
 bridge-test:
 	bash tools/test_bridge.sh
+
+# Виток 8 (ТЗ-8): бенчмарк против сверстников — ферма 100, метрики M1-M7.
+# bench-stdiobus требует бинарь сверстника: STDIOBUS_BIN или клон в /tmp/peers.
+bench: agryp
+	sh tools/bench/run_bench.sh
+
+bench-stdiobus:
+	sh tools/bench/run_stdiobus.sh
 
 audit:
 	python3 demo/audit_transcript.py demo/demo-transcript.jsonl
@@ -44,7 +57,10 @@ audit-jail:
 audit-stream:
 	python3 demo/audit_transcript.py demo/stream-transcript.jsonl
 
+audit-jail-host:
+	python3 demo/audit_jail_host.py demo/jail-host-transcript.jsonl
+
 clean:
 	rm -f agryp
 
-.PHONY: demo demo-ctl demo-finish demo-reload demo-jail demo-stream audit audit-ctl audit-finish audit-reload audit-jail audit-stream bridge-test clean
+.PHONY: demo demo-ctl demo-finish demo-reload demo-jail demo-stream demo-jail-host audit audit-ctl audit-finish audit-reload audit-jail audit-stream audit-jail-host bridge-test bench bench-stdiobus clean

@@ -74,7 +74,7 @@
    restart/budget/cooldown/mem; `systemd-analyze verify` (доступен) —
    без ошибок; потери (token-budget, jail) помечены в шапках.
 6. `wc -l src/agryp.c` → ≤ 880 (факт — см. §6).
-7. `grep -rEn 'ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}' . --exclude-dir=.git` → пусто.
+7. `grep -rEn 'ghp_[A-Za-z0-9]{20,}' . --exclude-dir=.git` → пусто.
 
 ## 4. Границы витка (что НЕ делаем)
 

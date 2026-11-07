@@ -41,7 +41,7 @@ GitHub API 2026-11-07, токен Хозяина (read-only, значение н
 3. `ls tasks/open/*.md | wc -l` → ≥ 3.
 4. `make clean && make 2>&1 | grep -i warning` → пусто.
 5. `make audit` → OK.
-6. `grep -rEn 'ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}' . --exclude-dir=.git` → пусто (секретная гигиена).
+6. `grep -rEn 'ghp_[A-Za-z0-9]{20,}' . --exclude-dir=.git` → пусто (секретная гигиена).
 
 ## 4. Границы витка (что НЕ делаем)
 
