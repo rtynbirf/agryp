@@ -251,6 +251,21 @@ static void load_units(const char *dir)
  * (pid_namespaces(7)) — прокси умирает так же, как умер бы агент без клетки. */
 static void jail_term(int s) { signal(s, SIG_DFL); raise(s); }
 
+/* Виток 7.2, атом 2 (находка бенча 8а): sh -c простой команды ФОРКАЕТ
+ * обёртку — PDEATHSIG доставался обёртке, а агент оставался без страховки
+ * Ст. 9 (доказательство: 20 сирот после kill -9 PID 1; зонд с exec — 0).
+ * Префикс exec делает носителем страховки сам агент. Составные строки
+ * (; | & `) префикса не получают — молчаливой смены семантики нет (Ст. 11). */
+static const char *exec_armed(const char *line, char *buf, size_t n)
+{
+    if (line[strcspn(line, ";|&`")] != '\0') {
+        fprintf(stderr, "agryp: exec-строка составная — страховка Ст. 9 только у обёртки: %s\n", line);
+        return line;
+    }
+    snprintf(buf, n, "exec %s", line);
+    return buf;
+}
+
 static void spawn_unit(unit_t *u)
 {
     /* Клетка имён (Ст. 15-сосед, тикет 007): вход в новую pid-комнату —
@@ -309,7 +324,10 @@ static void spawn_unit(unit_t *u)
                 _exit(126);                    /* лимит объявлен — тишина запрещена (Ст. 11) */
             close(fd);
         }
-        execl("/bin/sh", "sh", "-c", u->exec, (char *)NULL);
+        {   /* атом 2: агент сам носит PDEATHSIG (exec-префикс) */
+            char ebuf[EXEC_LEN + 8];
+            execl("/bin/sh", "sh", "-c", exec_armed(u->exec, ebuf, sizeof ebuf), (char *)NULL);
+        }
         _exit(127);
     }
     setpgid(p, p);                             /* и в родителе — закрываем гонку */
@@ -342,11 +360,15 @@ static void run_finish(unit_t *u, int code, int sig)
     p = fork();
     if (p < 0) { log_ev(u, "finish", "\"error\":\"fork\",\"errno\":%d", errno); return; }
     if (p == 0) {
+        char fbuf[264];
+        pid_t ppid = getppid();                /* атом 2: хук — тоже ребёнок (Ст. 9) */
+        if (prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0) < 0 || getppid() != ppid)
+            _exit(125);
         setpgid(0, 0);                         /* свою группу: группу попытки не режем */
         setenv("AGRY_UNIT", u->name, 1);       /* договор: кто ты и чем кончил */
         setenv("AGRY_EXIT_CODE", ec, 1);
         setenv("AGRY_BY_SIGNAL", bs, 1);
-        execl("/bin/sh", "sh", "-c", u->finish, (char *)NULL);
+        execl("/bin/sh", "sh", "-c", exec_armed(u->finish, fbuf, sizeof fbuf), (char *)NULL);
         _exit(127);
     }
     deadline = now_ms() + FINISH_MS;
