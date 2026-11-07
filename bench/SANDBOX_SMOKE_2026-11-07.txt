@@ -1,0 +1,11 @@
+PROOF  старт 20+1 юнитов до полного RUNNING: 24 мс
+PROOF  RSS супервизора при 20 агентах: 1816 КБ (окно 10с)
+PROOF  журнал: 12372 байт NDJSON; статус-файл: 5293 байт
+PROOF  на агента приходится ~589 байт журнала/агент за 10с
+PROOF  лестница crashy (cooldown мс по журналу): 1000 2000 4000 
+HONEST jail: на хосте клетка пропущена —  / "event":"cgroup-skip","reason":"cgroupfs недоступен","errno":30
+HONEST jail: полный jail-прогон — на машине владельца с CAP_SYS_ADMIN (§14 дислокации)
+PROOF  сирот hello_agent.sh через 2 с после kill -9 PID 1: 0 (ожидание 0 — PR_SET_PDEATHSIG)
+PROOF  tini (50 прогонов): медиана накладных 1.04 мс/спавн
+SKIPPED zeptopm: не установлен (zeptopm: push 2026-04 — уснул)
+SKIPPED stdiobus: не установлен (zeptopm: push 2026-04 — уснул)
