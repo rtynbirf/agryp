@@ -34,10 +34,12 @@
    лимит доктрины runbook 5–11 уже исчерпан полезным набором с
    `init-system`, `ndjson`, `posix`, `agent-infrastructure`, `cgroups`).
    Флаги Settings приведены к runbook: `delete_branch_on_merge` false→true,
-   `allow_auto_merge` false→true, squash/merge-заголовки
-   COMMIT_OR_PR_TITLE→PR_TITLE/PR_BODY; Issues ON и
+   squash/merge-заголовки COMMIT_OR_PR_TITLE→PR_TITLE/PR_BODY; Issues ON и
    Wiki/Discussions/Projects OFF подтверждены; Dependabot-алерты и
-   автоматические security-фиксы — 204.
+   автоматические security-фиксы — 204. Хвост правды (Ст. 6):
+   `allow_auto_merge` API аккаунта не принял — PATCH с ним и точечный
+   повтор вернули прежнее значение; флаг назван неустановленным, а не
+   «поставлен».
 4. **Скан секретов до флипа**: пусто и по рабочему дереву
    (`grep -rEn 'ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}'`,
    плюс литералы старого и нового токенов), и по всей истории

@@ -58,8 +58,9 @@
   только в URL), overlay локальной правды, коммит витков 8–9, тег
   `v1.0`, релиз с таблицей бенчмарка, флаги Settings по runbook
   (Issues ON; Wiki/Discussions/Projects OFF; `delete_branch_on_merge`,
-  `allow_auto_merge`, squash/merge-заголовки `PR_TITLE`/`PR_BODY`;
-  Dependabot-алерты + автофиксы), скан секретов по дереву и истории
+  squash/merge-заголовки `PR_TITLE`/`PR_BODY`; Dependabot-алерты +
+  автофиксы; хвост правды: `allow_auto_merge` API аккаунта не принял —
+  названо вслух), скан секретов по дереву и истории
   (`ghp_`, `github_pat_`, литералы обоих токенов) → перевод в public
   → анонимная сверка `ls-remote`, релиза, README/LICENSE/CONSTITUTION.
 
