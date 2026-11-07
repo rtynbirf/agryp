@@ -58,7 +58,7 @@
    unit-added → spawn; `reload 1/1/1`; сирот 0, аудит OK.
 5. `wc -l src/agryp.c` → ≤ 820 (факт 818; 654 → 818 — цена трёх
    функций и рефакторинга).
-6. `grep -rEn 'ghp_[A-Za-z0-9]{20,}' . --exclude-dir=.git` → пусто.
+6. `grep -rEn 'ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}' . --exclude-dir=.git` → пусто.
 7. Регрессия витков 1–5: `make demo`+`audit` OK (42 события + 43 строки).
 
 ## 4. Границы витка (что НЕ делаем)
