@@ -1,10 +1,38 @@
-{"ts":"2026-11-06T23:20:21Z","up_ms":5499091,"event":"boot","units":3,"dir":"demo/ctl-units"}
-{"ts":"2026-11-06T23:20:21Z","up_ms":5499091,"event":"subreaper","on":true}
-{"ts":"2026-11-06T23:20:21Z","up_ms":5499091,"unit":"ghost","event":"spawn","pid":6677,"attempt":1,"budget_sec":0,"jailed":0}
-{"ts":"2026-11-06T23:20:21Z","up_ms":5499091,"unit":"worker","event":"spawn","pid":6678,"attempt":1,"budget_sec":0,"jailed":0}
-{"ts":"2026-11-06T23:20:21Z","up_ms":5499091,"unit":"stubborn","event":"spawn","pid":6679,"attempt":1,"budget_sec":0,"jailed":0}
-[ghost] работаю, pid 6680
-[worker] работаю, pid 6683
+{"ts":"2026-11-07T18:18:54Z","up_ms":1,"event":"boot","units":3,"dir":"demo/ctl-units"}
+{"ts":"2026-11-07T18:18:54Z","up_ms":1,"event":"subreaper","on":true}
+{"ts":"2026-11-07T18:18:54Z","up_ms":1,"unit":"ghost","event":"spawn","pid":22872,"attempt":1,"budget_sec":0,"jailed":0}
+{"ts":"2026-11-07T18:18:54Z","up_ms":1,"unit":"stubborn","event":"spawn","pid":22873,"attempt":1,"budget_sec":0,"jailed":0}
+{"ts":"2026-11-07T18:18:54Z","up_ms":1,"unit":"worker","event":"spawn","pid":22874,"attempt":1,"budget_sec":0,"jailed":0}
+[worker] работаю, pid 22875
+[ghost] работаю, pid 22877
+[stubborn] жив вопреки TERM
+[ghost] heartbeat
+[worker] heartbeat
+[stubborn] жив вопреки TERM
+[ghost] heartbeat
+[worker] heartbeat
+[stubborn] жив вопреки TERM
+[worker] heartbeat
+[ghost] heartbeat
+{"ts":"2026-11-07T18:18:57Z","up_ms":3006,"unit":"worker","event":"ctl-down"}
+{"ts":"2026-11-07T18:18:57Z","up_ms":3256,"unit":"worker","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-07T18:18:57Z","up_ms":3256,"unit":"worker","event":"stopped","reason":"ctl-down"}
+{"ts":"2026-11-07T18:18:57Z","up_ms":3256,"event":"reap-orphan","pid":22891,"code":-1}
+{"ts":"2026-11-07T18:18:57Z","up_ms":3256,"event":"reap-orphan","pid":22875,"code":-1}
+[stubborn] жив вопреки TERM
+[ghost] heartbeat
+[stubborn] жив вопреки TERM
+[ghost] heartbeat
+{"ts":"2026-11-07T18:18:59Z","up_ms":5260,"unit":"worker","event":"ctl-up"}
+{"ts":"2026-11-07T18:18:59Z","up_ms":5260,"unit":"worker","event":"spawn","pid":22904,"attempt":2,"budget_sec":0,"jailed":0}
+[worker] работаю, pid 22905
+[stubborn] жив вопреки TERM
+[ghost] heartbeat
+[worker] heartbeat
+[stubborn] жив вопреки TERM
+[ghost] heartbeat
+[worker] heartbeat
+{"ts":"2026-11-07T18:19:01Z","up_ms":7264,"unit":"stubborn","event":"ctl-down"}
 [ghost] heartbeat
 [stubborn] жив вопреки TERM
 [worker] heartbeat
@@ -14,45 +42,17 @@
 [ghost] heartbeat
 [stubborn] жив вопреки TERM
 [worker] heartbeat
-{"ts":"2026-11-06T23:20:24Z","up_ms":5502096,"unit":"worker","event":"ctl-down"}
-{"ts":"2026-11-06T23:20:24Z","up_ms":5502347,"unit":"worker","event":"exit","by_signal":15,"ok":false}
-{"ts":"2026-11-06T23:20:24Z","up_ms":5502347,"unit":"worker","event":"stopped","reason":"ctl-down"}
-{"ts":"2026-11-06T23:20:24Z","up_ms":5502347,"event":"reap-orphan","pid":6697,"code":-1}
+{"ts":"2026-11-07T18:19:04Z","up_ms":10270,"unit":"stubborn","event":"ctl-kill","pid":22873,"attempt":1}
+{"ts":"2026-11-07T18:19:04Z","up_ms":10520,"unit":"stubborn","event":"exit","by_signal":9,"ok":false}
+{"ts":"2026-11-07T18:19:04Z","up_ms":10520,"unit":"stubborn","event":"stopped","reason":"ctl-down"}
+{"ts":"2026-11-07T18:19:04Z","up_ms":10520,"event":"reap-orphan","pid":22930,"code":-1}
 [ghost] heartbeat
-[stubborn] жив вопреки TERM
-[ghost] heartbeat
-[stubborn] жив вопреки TERM
-{"ts":"2026-11-06T23:20:26Z","up_ms":5504100,"unit":"worker","event":"ctl-up"}
-{"ts":"2026-11-06T23:20:26Z","up_ms":5504100,"unit":"worker","event":"spawn","pid":6709,"attempt":2,"budget_sec":0,"jailed":0}
-[worker] работаю, pid 6710
-[stubborn] жив вопреки TERM
-[ghost] heartbeat
-[worker] heartbeat
-[stubborn] жив вопреки TERM
-[ghost] heartbeat
-[worker] heartbeat
-{"ts":"2026-11-06T23:20:28Z","up_ms":5506354,"unit":"stubborn","event":"ctl-down"}
-[stubborn] жив вопреки TERM
-[ghost] heartbeat
-[worker] heartbeat
-[ghost] heartbeat
-[stubborn] жив вопреки TERM
-[worker] heartbeat
-[stubborn] жив вопреки TERM
-[ghost] heartbeat
-[worker] heartbeat
-{"ts":"2026-11-06T23:20:31Z","up_ms":5509360,"unit":"stubborn","event":"ctl-kill","pid":6679,"attempt":1}
-{"ts":"2026-11-06T23:20:32Z","up_ms":5509610,"unit":"stubborn","event":"exit","by_signal":9,"ok":false}
-{"ts":"2026-11-06T23:20:32Z","up_ms":5509610,"unit":"stubborn","event":"stopped","reason":"ctl-down"}
-{"ts":"2026-11-06T23:20:32Z","up_ms":5509610,"event":"reap-orphan","pid":6734,"code":-1}
-[ghost] heartbeat
-[worker] heartbeat
-{"ts":"2026-11-06T23:20:32Z","up_ms":5510111,"event":"shutdown","reason":"signal"}
-{"ts":"2026-11-06T23:20:32Z","up_ms":5510161,"unit":"ghost","event":"exit","by_signal":15,"ok":false}
-{"ts":"2026-11-06T23:20:32Z","up_ms":5510161,"unit":"worker","event":"exit","by_signal":15,"ok":false}
-{"ts":"2026-11-06T23:20:32Z","up_ms":5510161,"event":"reap-orphan","pid":6680,"code":-1}
-{"ts":"2026-11-06T23:20:32Z","up_ms":5510161,"event":"reap-orphan","pid":6710,"code":-1}
-{"ts":"2026-11-06T23:20:32Z","up_ms":5510161,"unit":"ghost","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
-{"ts":"2026-11-06T23:20:32Z","up_ms":5510161,"unit":"worker","event":"summary","attempts":2,"exits_ok":0,"exits_fail":2,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
-{"ts":"2026-11-06T23:20:32Z","up_ms":5510161,"unit":"stubborn","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
-{"ts":"2026-11-06T23:20:32Z","up_ms":5510161,"event":"uptime-ms","value":11070}
+{"ts":"2026-11-07T18:19:05Z","up_ms":11021,"event":"shutdown","reason":"signal"}
+{"ts":"2026-11-07T18:19:05Z","up_ms":11071,"unit":"ghost","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-07T18:19:05Z","up_ms":11071,"unit":"worker","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-07T18:19:05Z","up_ms":11071,"event":"reap-orphan","pid":22877,"code":-1}
+{"ts":"2026-11-07T18:19:05Z","up_ms":11071,"event":"reap-orphan","pid":22931,"code":-1}
+{"ts":"2026-11-07T18:19:05Z","up_ms":11071,"unit":"ghost","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-07T18:19:05Z","up_ms":11071,"unit":"stubborn","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-07T18:19:05Z","up_ms":11071,"unit":"worker","event":"summary","attempts":2,"exits_ok":0,"exits_fail":2,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-07T18:19:05Z","up_ms":11071,"event":"uptime-ms","value":11071}

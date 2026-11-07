@@ -1,0 +1,7 @@
+{"ts":"2026-11-07T17:46:50Z","participant":"agryp","metric":"M1","binary_bytes":39800,"dyn_deps":3,"deps_note":"libc only"}
+{"ts":"2026-11-07T17:47:00Z","participant":"agryp","metric":"M2","rss_kb_samples":[1096,1096,1096],"rss_kb_median":1096,"agents":1,"orphans_after_kill9":0,"note":"0 агентов ядро не поддерживает (Ст. 11): покой = 1 агент"}
+{"ts":"2026-11-07T17:47:08Z","participant":"agryp","metric":"M3","agents":100,"workers_seen":100,"rss_kb_samples":[1936,1936,1936],"rss_kb_median":1936}
+{"ts":"2026-11-07T17:47:38Z","participant":"agryp","metric":"M4","window_sec":30,"journal_bytes_delta":0}
+{"ts":"2026-11-07T17:47:48Z","participant":"agryp","metric":"M6","workers_before":100,"workers_after":100,"spawn_events_before":100,"spawn_events_after":101}
+{"ts":"2026-11-07T17:47:53Z","participant":"agryp","metric":"M5","agents":100,"orphans_after_5s":0,"expect":"0: PDEATHSIG убивает прямого ребёнка — он и есть агент"}
+{"ts":"2026-11-07T17:48:04Z","participant":"agryp","metric":"M7","agents":20,"procs_before_kill":40,"grandchildren_orphans":20,"verdict":"граница Ст. 9: PDEATHSIG — один уровень; внуки переживают супервизора; дом-ответ — jail=pid (pid_namespaces(7): смерть init убивает комнату)"}
