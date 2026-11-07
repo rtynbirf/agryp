@@ -121,16 +121,16 @@ static void log_ev(const unit_t *u, const char *event, const char *fmt, ...)
     wall_ts(tsbuf, sizeof tsbuf);
     if (u && extra[0])
         printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"unit\":\"%s\",\"event\":\"%s\",%s}\n",
-               tsbuf, now_ms(), u->name, event, extra);
+               tsbuf, now_ms() - g_t0, u->name, event, extra);
     else if (u)
         printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"unit\":\"%s\",\"event\":\"%s\"}\n",
-               tsbuf, now_ms(), u->name, event);
+               tsbuf, now_ms() - g_t0, u->name, event);
     else if (extra[0])
         printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"event\":\"%s\",%s}\n",
-               tsbuf, now_ms(), event, extra);
+               tsbuf, now_ms() - g_t0, event, extra);
     else
         printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"event\":\"%s\"}\n",
-               tsbuf, now_ms(), event);
+               tsbuf, now_ms() - g_t0, event);
     fflush(stdout);
 }
 
@@ -727,6 +727,8 @@ int main(int argc, char **argv)
     int status_mode = 0;
     int i;
 
+    g_t0 = now_ms();   /* Виток 7.2: база времени — старт процесса, не машины (Ст. 11: константы честно) */
+
     for (i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "--dir") && i + 1 < argc) dir = argv[++i];
         else if (!strcmp(argv[i], "status")) status_mode = 1;   /* Ст. 13: status читает файл */
@@ -743,7 +745,6 @@ int main(int argc, char **argv)
     snprintf(g_status_path, sizeof g_status_path, "%s/.agryp-status", dir);
     snprintf(g_report_path, sizeof g_report_path, "%s/.agryp-report", dir);
     snprintf(g_ctl_dir, sizeof g_ctl_dir, "%s/.agryp-ctl", dir);
-    g_t0 = now_ms();
 
     memset(&sa, 0, sizeof sa);
     sa.sa_handler = on_signal;
