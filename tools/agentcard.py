@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# agentcard.py — П37: A2A AgentCard для `agrypctl status`.
+# agentcard.py — П37: A2A AgentCard для `agrypctl card` (= `agrypctl status --card`).
 #
 # Карта строится ТОЛЬКО из живого супервизора: `./agryp status --dir DIR`
 # (тот же файл-договор семьи, второй источник правды не заводится) и
@@ -7,7 +7,9 @@
 # артефакта, который существует прямо сейчас; несвежий/мертвый — отказ.
 #
 # Схема: schemas/a2a-agentcard.schema.json (A2A v1.0 AgentCard по мотивам;
-# транспорт agryp — файл, Ст. 13; расширения — x-agryp). Валидатор —
+# транспорт agryp — файл, Ст. 13; расширения — x-agryp; волна ×6 добавила
+# x-agryp.signing — ed25519-подпись конвертов). Копия схемы для тестов —
+# tests/a2a-agentcard.schema.json (дрейф заперт тестом). Валидатор —
 # std-only подмножество draft-07: type/required/properties/items/enum/
 # const/pattern/minItems/minLength/minimum/additionalProperties.
 import argparse
@@ -156,8 +158,15 @@ def build_card(dir_path: Path, version: str = CARD_VERSION) -> dict:
                 "metrics": _file_uri(metrics),
                 "journal": _file_uri(dir_path / ".agryp-journal.ndjson"),
                 "ctl": "file:" + str((dir_path / ".agryp-ctl").resolve()),
+                "card": "command: ./agrypctl card [--dir DIR]  (= ./agrypctl status --card)",
             },
-            "security": "конверты подписаны sha256-цепочкой (П37, tools/signed_envelope.py); overseer fail-closed",
+            "signing": {
+                "alg": "ed25519",
+                "envelope_version": 2,
+                "tool": "tools/ed25519tool (vendored orlp/ed25519, zlib) + tools/signed_envelope.py",
+                "key_id_format": "sha256(pub_bytes)[:16]",
+            },
+            "security": "конверты крови/событий подписаны ed25519 (RFC 8032; П37, волна ×6); overseer fail-closed: битая/чужая/повторная подпись = отказ завода юнита",
         },
     }
 

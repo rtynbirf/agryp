@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://raw.githubusercontent.com/rtynbirf/agryp/main/schemas/a2a-agentcard.schema.json",
   "title": "A2A AgentCard — agryp (П37)",
-  "description": "Карта агента для agrypctl status по мотивам A2A v1.0 Signed Agent Cards. Транспорт agryp — файл вместо сокета (Ст. 13), поэтому url/endpoints — file:// URI живых артефактов супервизора; расширенные поля помечены префиксом x-agryp. Валидатор — std-only (tools/agentcard.py, подмножество draft-07).",
+  "description": "Карта агента для agrypctl card (в т.ч. agrypctl status --card) по мотивам A2A v1.0 Signed Agent Cards. Транспорт agryp — файл вместо сокета (Ст. 13), поэтому url/endpoints — file:// URI живых артефактов супервизора; расширенные поля помечены префиксом x-agryp; волна ×6 добавила x-agryp.signing — ed25519-подпись конвертов крови/событий (vendored orlp/ed25519, RFC 8032). Валидатор — std-only (tools/agentcard.py, подмножество draft-07).",
   "type": "object",
   "required": [
     "type",
@@ -70,7 +70,7 @@
     },
     "x-agryp": {
       "type": "object",
-      "required": ["identity", "endpoints", "security"],
+      "required": ["identity", "endpoints", "security", "signing"],
       "additionalProperties": false,
       "properties": {
         "identity": {
@@ -92,7 +92,19 @@
             "status": { "type": "string", "minLength": 1 },
             "metrics": { "type": "string", "pattern": "^file://" },
             "journal": { "type": "string", "pattern": "^file://" },
-            "ctl": { "type": "string", "minLength": 1 }
+            "ctl": { "type": "string", "minLength": 1 },
+            "card": { "type": "string", "minLength": 1 }
+          }
+        },
+        "signing": {
+          "type": "object",
+          "required": ["alg", "envelope_version", "tool"],
+          "additionalProperties": false,
+          "properties": {
+            "alg": { "const": "ed25519" },
+            "envelope_version": { "type": "integer", "minimum": 2 },
+            "tool": { "type": "string", "minLength": 1 },
+            "key_id_format": { "type": "string", "minLength": 1 }
           }
         },
         "security": { "type": "string", "minLength": 1 }

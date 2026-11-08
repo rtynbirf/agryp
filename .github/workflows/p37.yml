@@ -1,11 +1,17 @@
 name: p37
 
-# Волна ×4 (2026-11-11): П37 — подписанные конверты + A2A AgentCard.
-# Приёмка issue #6 (машинная):
-#   1. unit-тест «битая подпись → отказ» зелёный (tests/test_p37_envelope.py);
-#   2. карточка валидируется схемой A2A (schemas/a2a-agentcard.schema.json);
-#   3. поле endpoint живое (демо строит карту из живого супервизора).
-# Всё std-only: python3 без зависимостей + один файл C (Ст. 1–2).
+# Волна ×6 (2026-11-11): П37 — НАСТОЯЩИЙ ed25519 (RFC 8032) в подписанных
+# конвертах + A2A AgentCard из `agrypctl card`. Приёмка issue #6 (машинная):
+#   1. примитив (vendored orlp/ed25519, zlib) обязан совпадать с векторами
+#      RFC 8032 §7.1 TEST 1/2/3 до последнего байта (+ перекрёстная сверка
+#      с python-cryptography, когда та есть);
+#   2. unit-тест «битая подпись → отказ» зелёный (tests/test_p37*.py:
+#      подделка payload/unit/seq/sig/pub/key_id, чужой ключ, повтор seq,
+#      легаси-wots в ed25519-дверь, мусор, отсутствие примитива — всё отказ);
+#   3. карточка валидируется схемой A2A и строится из живого супервизора
+#      через `agrypctl card` (= `agrypctl status --card`); endpoint живой.
+# Ст. 1–2: ядро не тронуто (Поправка №12 — счёт границы); сборка из
+# локальных файлов, без сети; ldd ed25519tool → только libc.
 
 permissions:
   contents: read
@@ -19,13 +25,19 @@ on:
 
 jobs:
   unit:
-    name: unit — битая подпись → отказ
+    name: unit — ed25519-конверты: битая подпись → отказ
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: unittest (std-only)
+      - name: сборка ядра и примитива (gcc, без сети)
+        run: make agryp ed25519tool
+      - name: ldd ed25519tool — только libc (Ст. 2)
+        run: ldd ./ed25519tool | grep -q libc.so && ! ldd ./ed25519tool | grep -vE 'linux-vdso|libc\.so|ld-linux'
+      - name: unittest — RFC 8032 + fail-closed + карточка по схеме
         run: python3 -m unittest discover -s tests -p 'test_p37*.py' -v
-      - name: CLI самопроверка подписи
+      - name: конституция — счёт границы клетки (Поправка №12)
+        run: python3 tools/check_constitution.py
+      - name: CLI самопроверка подписи + негативная проба
         run: |
           python3 tools/signed_envelope.py keygen --secret demo
           python3 tools/signed_envelope.py sign --secret demo --unit alpha \
@@ -43,17 +55,18 @@ jobs:
           PY
 
   live:
-    name: live — завод юнита решает подпись, карта живая
+    name: live — завод юнита решает ed25519-подпись, карта живая
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: make agryp
-        run: make agryp
-      - name: демо П37 живьём
-        run: bash demo/run_demo_envelope.sh
+      - name: сборка ядра и примитива
+        run: make agryp ed25519tool
+      - name: демо П37 живьём (agrypctl card + ed25519-завод юнита)
+        run: make demo-envelope
       - name: артефакты демо на месте
         run: |
           test -f demo/agentcard.json
+          test -f demo/agentcard-status-card.json
           test -f demo/envelope-transcript.jsonl
           test -f demo/envelope-status-snapshot.jsonl
           head -c 400 demo/agentcard.json

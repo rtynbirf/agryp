@@ -1,0 +1,5 @@
+name        = beta
+exec        = sh demo/envelope_worker.sh
+restart     = always
+budget-sec  = 60
+cooldown-ms = 800
