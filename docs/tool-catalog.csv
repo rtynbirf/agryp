@@ -1,0 +1,2445 @@
+﻿category,tool,description
+Agent/MCP/LLM-инфраструктура,mcp-registry,каталог/обнаружение MCP-серверов
+Agent/MCP/LLM-инфраструктура,OpenAI Agents SDK,"агентный runtime, tools, handoffs, tracing"
+AI/LLM CLI-инструменты,aichat,Универсальный чат с LLM в терминале
+AI/LLM CLI-инструменты,aider,AI-парное программирование (git-интеграция)
+AI/LLM CLI-инструменты,amp,Агентный AI-кодинг от Sourcegraph (ampcode.com)
+AI/LLM CLI-инструменты,claude,Anthropic Claude CLI
+AI/LLM CLI-инструменты,cline,"AI coding agent с доступом к терминалу, файлам, браузеру и MCP"
+AI/LLM CLI-инструменты,codex,OpenAI Codex CLI
+AI/LLM CLI-инструменты,continue,CLI для Continue.dev (AI-ассистент кодинга)
+AI/LLM CLI-инструменты,copilot,GitHub Copilot CLI (агентный кодинг в терминале)
+AI/LLM CLI-инструменты,crush,AI-кодинг-агент для терминала (Charmbracelet)
+AI/LLM CLI-инструменты,cursor-agent,Cursor Agent CLI (агентный кодинг в терминале)
+AI/LLM CLI-инструменты,droid,Factory Droid — AI-кодинг-агент в терминале
+AI/LLM CLI-инструменты,elia,Клавиатурно-ориентированный TUI для LLM (Textual)
+AI/LLM CLI-инструменты,fabric (AI),AI-фреймворк с паттернами промптов (Daniel Miessler; не путать с Python-библиотекой Fabric для SSH)
+AI/LLM CLI-инструменты,garak,LLM vulnerability scanner
+AI/LLM CLI-инструменты,gemini,Google Gemini CLI (открытый AI-агент в терминале)
+AI/LLM CLI-инструменты,gh-copilot,GitHub Copilot в CLI (через gh extension)
+AI/LLM CLI-инструменты,goose,Открытый расширяемый AI-агент (Block)
+AI/LLM CLI-инструменты,gptme,Автономный агент-ассистент в терминале
+AI/LLM CLI-инструменты,Grok CLI,CLI-агент от xAI
+AI/LLM CLI-инструменты,Kilo CLI,CLI-агент от Kilo Code
+AI/LLM CLI-инструменты,kilocode,"~20k stars, объединил функции Roo Code + Cline"
+AI/LLM CLI-инструменты,Kimi CLI,Moonshot AI terminal agent
+AI/LLM CLI-инструменты,llama-bench,Бенчмарк производительности локальных LLM
+AI/LLM CLI-инструменты,llama-cli,CLI-инференс локальных LLM (llama.cpp)
+AI/LLM CLI-инструменты,llama-cpp,"от ggerganov, основа многих локальных инструментов"
+AI/LLM CLI-инструменты,llama-server,OpenAI-совместимый локальный сервер LLM (llama.cpp)
+AI/LLM CLI-инструменты,llamafile,Запуск LLM одним исполняемым файлом (Mozilla)
+AI/LLM CLI-инструменты,llm,Simon Willison's llm (универсальный фронтенд к API)
+AI/LLM CLI-инструменты,llm-cli,универсальный интерфейс к LLM API
+AI/LLM CLI-инструменты,lm-studio,Графический интерфейс для локальных LLM
+AI/LLM CLI-инструменты,localai,"~25k stars, mudler, поддержка CPU/CUDA/ROCm/Metal"
+AI/LLM CLI-инструменты,mcp-cli,Клиент протокола Model Context Protocol — расширение возможностей AI-агентов
+AI/LLM CLI-инструменты,mcp-inspector,"инспекция, тестирование и отладка MCP-серверов"
+AI/LLM CLI-инструменты,mistral-vibe,Терминальный coding agent Mistral
+AI/LLM CLI-инструменты,mods,Charmbracelet's AI в терминале
+AI/LLM CLI-инструменты,ollama,Pull/run/ps/rm моделей локально
+AI/LLM CLI-инструменты,open-interpreter,Интерпретатор с LLM (выполняет код)
+AI/LLM CLI-инструменты,opencode,Открытый AI-кодинг-агент в терминале (sst)
+AI/LLM CLI-инструменты,OpenHands,"Autonomous sandboxed platform (Docker, CI)"
+AI/LLM CLI-инструменты,oterm,TUI-клиент для Ollama и локальных LLM
+AI/LLM CLI-инструменты,Pi,"~54k stars (по данным обзора 2026), Armin Ronacher & Mario Zechner. Менее известен, данные из единственного массового обзора"
+AI/LLM CLI-инструменты,plandex,AI-движок разработки для крупных проектов в терминале
+AI/LLM CLI-инструменты,Qwen Code,Qwen Code — терминальный AI coding agent
+AI/LLM CLI-инструменты,semantic-kernel,SDK и CLI-подход к оркестрации AI-агентов Microsoft
+AI/LLM CLI-инструменты,sgpt,Генерация shell-команд через LLM (shell-gpt)
+AI/LLM CLI-инструменты,shell-gpt,Генерация shell-команд через LLM
+AI/LLM CLI-инструменты,swe-agent,"SWE-agent-v2, академический, sandboxed Docker"
+AI/LLM CLI-инструменты,tabby,Self-hosted AI coding assistant и сервер автодополнения
+AI/LLM CLI-инструменты,terminal-jarvis,CLI-агент с интерфейсом Jarvis
+AI/LLM CLI-инструменты,tgpt,ChatGPT в терминале без API-ключа
+Python-библиотеки,accelerate,Ускорение и распределение PyTorch (Hugging Face)
+Python-библиотеки,agno,Фреймворк AI-агентов (бывш. phidata)
+Python-библиотеки,aio-pika,Асинхронный клиент RabbitMQ
+Python-библиотеки,aiobotocore,AWS SDK (async)
+Python-библиотеки,aiofiles,Асинхронная работа с файлами
+Python-библиотеки,aiogram,Боты для Telegram
+Python-библиотеки,aiohttp,Асинхронный HTTP-клиент и сервер
+Python-библиотеки,aiomysql,Клиент MySQL (async)
+Python-библиотеки,aioquic,Реализация QUIC и HTTP/3
+Python-библиотеки,aioredis,Клиент Redis (async)
+Python-библиотеки,aiosmtplib,Асинхронный SMTP клиент
+Python-библиотеки,aiosqlite,Асинхронный SQLite
+Python-библиотеки,airflow,Оркестрация data pipelines
+Python-библиотеки,albumentations,Быстрая аугментация изображений
+Python-библиотеки,alembic,Миграции для SQLAlchemy
+Python-библиотеки,algoliasearch,Algolia Search API
+Python-библиотеки,alive-progress,Прогресс-бары
+Python-библиотеки,altair,Декларативная визуализация
+Python-библиотеки,annotated-types,Type hints с аннотациями
+Python-библиотеки,ansible,Инфраструктурная автоматизация
+Python-библиотеки,ansible-core,Инфраструктурная автоматизация
+Python-библиотеки,anthropic,Официальный SDK к API LLM
+Python-библиотеки,anyio,Асинхронный фреймворк (основа httpx/starlette)
+Python-библиотеки,apache-libcloud,"Единый API к облакам: VM, storage, DNS, LB"
+Python-библиотеки,apispec,Генерация OpenAPI-спецификаций из кода
+Python-библиотеки,apprise,Отправка уведомлений в 100+ сервисов (единый API)
+Python-библиотеки,apscheduler,Планировщик задач в процессе (cron-подобный)
+Python-библиотеки,argon2-cffi,Хеширование паролей Argon2
+Python-библиотеки,argostranslate,Офлайн нейронный перевод (OpenNMT)
+Python-библиотеки,argparse,Создание CLI
+Python-библиотеки,arq,Асинхронная очередь задач на Redis
+Python-библиотеки,arrow,Человеко-дружелюбные даты
+Python-библиотеки,asana,Таск-трекеры
+Python-библиотеки,astropy,"Астрономия: координаты, время, FITS"
+Python-библиотеки,asyncpg,Клиент PostgreSQL (async)
+Python-библиотеки,asyncpraw,Reddit API
+Python-библиотеки,asyncua,OPC UA
+Python-библиотеки,atlassian-python-api,Jira и Confluence API
+Python-библиотеки,atproto,SDK Bluesky / AT Protocol
+Python-библиотеки,attrs,Классы без шаблонного кода (декларативные)
+Python-библиотеки,austin,Визуализация и sampling-профилировщики
+Python-библиотеки,authlib,"OAuth 1/2, OIDC, JWT-клиенты и серверы"
+Python-библиотеки,autoflake,Удаление неиспользуемых импортов и переменных
+Python-библиотеки,autogen,Мультиагентные разговорные системы (Microsoft)
+Python-библиотеки,autopep8,Форматирование и линтинг
+Python-библиотеки,azure-identity,Microsoft Azure SDK
+Python-библиотеки,azure-storage-blob,Microsoft Azure SDK
+Python-библиотеки,backtrader,Бэктестинг торговых стратегий
+Python-библиотеки,bandit,Линтеры и сканер безопасности
+Python-библиотеки,bcrypt,Хеширование паролей bcrypt
+Python-библиотеки,beanie,Асинхронный ODM MongoDB на pydantic
+Python-библиотеки,beartype,O(1) runtime-проверка типов
+Python-библиотеки,BeautifulSoup,Парсинг HTML
+Python-библиотеки,beautifulsoup4,Парсинг HTML (правильное имя)
+Python-библиотеки,biopython,"Биоинформатика: последовательности, BLAST, PDB"
+Python-библиотеки,black,Форматирование и линтинг
+Python-библиотеки,bleak,"Bluetooth Low Energy (кроссплатформенный, async)"
+Python-библиотеки,blessed,TUI для терминала
+Python-библиотеки,bokeh,Интерактивная визуализация
+Python-библиотеки,boto3,AWS SDK
+Python-библиотеки,botocore,Низкоуровневый AWS SDK
+Python-библиотеки,bottle,Однофайловый WSGI-фреймворк
+Python-библиотеки,bpy,Blender как Python-модуль (headless)
+Python-библиотеки,braintree,Платёжные API
+Python-библиотеки,browser-use,Браузерная автоматизация для AI-агентов
+Python-библиотеки,cachetools,"Кэши (LRU, TTL, LFU)"
+Python-библиотеки,cairosvg,Конвертация SVG в PNG/PDF
+Python-библиотеки,camel,"Multi-agent framework (CAMEL-AI), агентные общества, synthetic data"
+Python-библиотеки,camelot-py,Извлечение таблиц из PDF
+Python-библиотеки,captum,Объяснимость моделей PyTorch
+Python-библиотеки,cassandra-driver,Клиент Cassandra/DataStax
+Python-библиотеки,catboost,Градиентный бустинг
+Python-библиотеки,category_encoders,Кодирование категориальных признаков
+Python-библиотеки,ccxt,Единый API к 100+ криптобиржам
+Python-библиотеки,cdk8s,Infrastructure as Code
+Python-библиотеки,cdktf,Infrastructure as Code
+Python-библиотеки,celery,Distributed task queues
+Python-библиотеки,censys,SDK Censys (данные о хостах и сертификатах)
+Python-библиотеки,certifi,Пакет сертификатов CA (root certificates)
+Python-библиотеки,cffi,C Foreign Function Interface (вызов C код из Python)
+Python-библиотеки,chromadb,Клиент векторных БД
+Python-библиотеки,cirq,Квантовые схемы (Google)
+Python-библиотеки,clearml,ML-трекинг
+Python-библиотеки,click,Создание CLI
+Python-библиотеки,cloudscraper,Обход Cloudflare-антибота
+Python-библиотеки,cohere,"SDK Cohere (embed, rerank, chat)"
+Python-библиотеки,colorama,"Цвета и стили вывода (кроссплатформенно, включая Windows)"
+Python-библиотеки,commitizen,Стандартизация commit-сообщений
+Python-библиотеки,concurrencytest,Тестирование параллелизма
+Python-библиотеки,configparser,Парсинг конфигов (встроенный)
+Python-библиотеки,confluent-kafka,Официальный высокопроизводительный клиент Kafka
+Python-библиотеки,connectorx,Чтение БД с ускорением
+Python-библиотеки,connexion,Spec-first фреймворк из OpenAPI
+Python-библиотеки,control,Теория управления (python-control)
+Python-библиотеки,cookiecutter,Шаблонизация проектов
+Python-библиотеки,copier,Шаблонизация проектов
+Python-библиотеки,coqui-tts,Нейронный TTS (продолжение Mozilla TTS)
+Python-библиотеки,coverage.py,Измерение покрытия кода
+Python-библиотеки,cprofile,Профилирование производительности
+Python-библиотеки,crc32c,CRC32C checksum (быстро)
+Python-библиотеки,crewai,Мульти-агентные фреймворки (библиотека)
+Python-библиотеки,croniter,Парсинг cron-выражений в Python
+Python-библиотеки,cryptography,Криптопримитивы и X.509 (pyca)
+Python-библиотеки,curl_cffi,HTTP с подменой TLS-отпечатков браузеров
+Python-библиотеки,customtkinter,Современный вид Tkinter
+Python-библиотеки,cvxpy,Выпуклая оптимизация
+Python-библиотеки,cyclopts,Современный декларативный CLI-фреймворк
+Python-библиотеки,cython,Компиляция Python-подобного кода в C
+Python-библиотеки,dagster,Оркестрация data pipelines
+Python-библиотеки,daphne,ASGI/HTTP2-сервер (Django Channels)
+Python-библиотеки,darts,Удобное прогнозирование (модели от ARIMA до N-BEATS)
+Python-библиотеки,dash,Быстрые веб-интерфейсы для ML
+Python-библиотеки,dask,Параллельные вычисления над большими данными
+Python-библиотеки,dataclasses-json,Двусторонняя сериализация dataclasses
+Python-библиотеки,datasets,Датасеты и метрики Hugging Face
+Python-библиотеки,datasette,Публикация SQLite как JSON API
+Python-библиотеки,datashader,Растеризация больших объёмов точек на графиках
+Python-библиотеки,dateparser,Даты из естественного языка (мультиязычно)
+Python-библиотеки,db-url,Парсинг DATABASE_URL переменных
+Python-библиотеки,dbm,БД shelve/dbm (встроенный) (модуль stdlib)
+Python-библиотеки,deap,Эволюционные алгоритмы и генетическое программирование
+Python-библиотеки,dearpygui,GPU-ускоренный GUI для инструментов
+Python-библиотеки,deep-translator,Перевод и словари (много провайдеров)
+Python-библиотеки,deepdiff,Глубокое сравнение и поиск изменений объектов
+Python-библиотеки,deepeval,Юнит-тесты для LLM-выходов
+Python-библиотеки,deepface,"Анализ лиц: верификация, возраст, эмоции"
+Python-библиотеки,deepspeed,масштабирование AI-моделей
+Python-библиотеки,demjson,JSON5 парсер
+Python-библиотеки,demucs,Разделение трека на стемы (Meta)
+Python-библиотеки,deptry,Поиск устаревших/неиспользуемых зависимостей
+Python-библиотеки,diagrams,Диаграммы облачной архитектуры как код
+Python-библиотеки,diff-match-patch,Diff и patch операции
+Python-библиотеки,difflib,Сравнение последовательностей (встроенный) (модуль stdlib)
+Python-библиотеки,diffusers,Диффузионные модели: генерация изображений/аудио
+Python-библиотеки,dill,Сохранение функций и лямбда-выражений (pickle++)
+Python-библиотеки,dirtree,Вывод структуры каталогов
+Python-библиотеки,dirty-equals,Читаемые частичные сравнения в тестах
+Python-библиотеки,discord.py,Боты для Discord
+Python-библиотеки,diskcache,Дисковый кэш с SQLite-метаданными
+Python-библиотеки,django,Классический web-фреймворк
+Python-библиотеки,dlib,"Детекция лиц и объектов, landmarks"
+Python-библиотеки,dnspython,DNS-запросы
+Python-библиотеки,docker,Docker SDK
+Python-библиотеки,docker-compose,Docker SDK
+Python-библиотеки,docopt,CLI-парсер прямо из docstring
+Python-библиотеки,docx2txt,Извлечение текста из .doc
+Python-библиотеки,docxtpl,Шаблоны Word через Jinja2
+Python-библиотеки,dopamine-rl,DeepMind Dopamine RL framework
+Python-библиотеки,dotenv-python,Загрузка переменных из .env
+Python-библиотеки,dramatiq,Distributed task queues
+Python-библиотеки,drission,Браузерная автоматизация
+Python-библиотеки,dspy,Программирование LLM-пайплайнов вместо промптов (Stanford)
+Python-библиотеки,dtale,Интерактивный просмотр DataFrame в браузере
+Python-библиотеки,dulwich,Программная работа с Git
+Python-библиотеки,dynaconf,"Многоисточниковая конфигурация (env, toml, vault)"
+Python-библиотеки,ebooklib,Создание и чтение EPUB
+Python-библиотеки,editdistance,Расстояние Левенштейна (быстро)
+Python-библиотеки,elasticsearch-dsl,Клиент Elasticsearch
+Python-библиотеки,email,Работа с email-протоколами
+Python-библиотеки,email-validator,Строгая валидация email-адресов
+Python-библиотеки,emoji,"Данные эмодзи: поиск, замена, демоизации"
+Python-библиотеки,encodings,Встроенные кодировки (модуль stdlib)
+Python-библиотеки,ensurepip,Pip инсталлер (встроенный) (модуль stdlib)
+Python-библиотеки,environs,Управление переменными окружения
+Python-библиотеки,errorhandler,Обработка ошибок с контекстом
+Python-библиотеки,etcd3,etcd v3 клиент
+Python-библиотеки,exchangelib,Microsoft Exchange
+Python-библиотеки,fabric,SSH-автоматизация
+Python-библиотеки,face_recognition,Простое распознавание лиц (на dlib)
+Python-библиотеки,facebook-sdk,Facebook Graph API
+Python-библиотеки,factory_boy,Фабрики тестовых данных
+Python-библиотеки,faiss,Быстрый векторный поиск миллиардов векторов (Meta)
+Python-библиотеки,fake-useragent,Ротация актуальных User-Agent
+Python-библиотеки,faker,Генерация фейковых данных
+Python-библиотеки,fakeredis,Мокирование БД
+Python-библиотеки,falcon,Минималистичный REST-фреймворк
+Python-библиотеки,fastapi,Веб-фреймворк
+Python-библиотеки,fastdiff,Быстрое вычисление diff
+Python-библиотеки,fastdownload,Быстрое скачивание (fastai)
+Python-библиотеки,fastembed,Лёгкие локальные эмбеддинги (ONNX)
+Python-библиотеки,fasteners,Файловые блокировки
+Python-библиотеки,faster-whisper,Whisper в 4 раза быстрее (CTranslate2)
+Python-библиотеки,fastkml,KML парсер (географический)
+Python-библиотеки,fasttext,Классификация текста и эмбеддинги (Meta)
+Python-библиотеки,feature-engine,Библиотека трансформаций признаков
+Python-библиотеки,featuretools,Автоматический feature engineering (DFS)
+Python-библиотеки,feedparser,Парсинг RSS/Atom
+Python-библиотеки,fiftyone,Курирование и оценка датасетов компьютерного зрения
+Python-библиотеки,fiona,Геопространственный анализ
+Python-библиотеки,fire,Создание CLI
+Python-библиотеки,fireworks,Workflow-оркестрация
+Python-библиотеки,flair,"NLP-фреймворк: NER, POS, эмбеддинги (Zalando)"
+Python-библиотеки,flake8,Линтеры и сканер безопасности
+Python-библиотеки,flask,Классический web-фреймворк
+Python-библиотеки,flask-migrate,Миграции БД в Flask (Alembic)
+Python-библиотеки,flask-restful,REST API построение в Flask
+Python-библиотеки,flax,Дифференцируемые вычисления (Google)
+Python-библиотеки,flet,Flutter-подобные интерфейсы на чистом Python
+Python-библиотеки,fn-py,Функциональное программирование в Python
+Python-библиотеки,fonttools,"Работа с шрифтами (.ttf, .otf)"
+Python-библиотеки,forking,Fork функциональность
+Python-библиотеки,fpdf2,Простое создание PDF
+Python-библиотеки,freezegun,Мокирование времени
+Python-библиотеки,frost,Объекты с freeze поддержкой
+Python-библиотеки,frozendict,Неизменяемый словарь
+Python-библиотеки,ftfy,Исправление битого Unicode (mojibake)
+Python-библиотеки,funcy,Прагматичные функциональные утилиты
+Python-библиотеки,furl,Удобный парсинг URL
+Python-библиотеки,future,Совместимость Python 2 и 3 (legacy)
+Python-библиотеки,fuzzywuzzy,Нечёткий поиск строк (fuzzy matching)
+Python-библиотеки,gambit,Решение игр (game theory)
+Python-библиотеки,gamepad,Работа с геймпадом
+Python-библиотеки,gamma,Гамма-функции и специальные функции
+Python-библиотеки,gaphas,Диаграммные инструменты (Dia format)
+Python-библиотеки,gardenpy,Управление садом (IoT проект)
+Python-библиотеки,gatepy,Gate контроль доступа
+Python-библиотеки,gauge,Манометр визуализация
+Python-библиотеки,gaussianblur,Размытие Гаусса (PIL)
+Python-библиотеки,gazpacho,Веб-скреипинг (удобнее BeautifulSoup)
+Python-библиотеки,gdal,Работа с геоспациальными данными (GDAL bindings)
+Python-библиотеки,gdelt,GDELT (Global Database of Events)
+Python-библиотеки,gdiff,Визуальный diff
+Python-библиотеки,gdrive,Google Drive API (неофициальный)
+Python-библиотеки,gensim,"Тематическое моделирование, word2vec"
+Python-библиотеки,geocoder,Геокодирование (множество провайдеров)
+Python-библиотеки,geofence,Геофенсинг
+Python-библиотеки,geograph,Географические графы
+Python-библиотеки,geohash,Кодирование географических координат
+Python-библиотеки,geoip,IP геолокация
+Python-библиотеки,geoip2,MaxMind GeoIP2 API
+Python-библиотеки,geojson,GeoJSON парсинг и валидация
+Python-библиотеки,geopandas,Геопространственный анализ
+Python-библиотеки,geopy,Геокодирование и расчёт расстояний
+Python-библиотеки,geopython,Родной python геопространственный код
+Python-библиотеки,georasters,Растровые географические данные
+Python-библиотеки,geosplit,Разделение географических областей
+Python-библиотеки,gerby,Кешированием модули (?)
+Python-библиотеки,gestate,Формирование состояния
+Python-библиотеки,getch,Получение символа без ввода
+Python-библиотеки,geturl,Получение URL-а
+Python-библиотеки,gevent,Кооперативная многозадачность на greenlet
+Python-библиотеки,gfx,Графика (различные реализации)
+Python-библиотеки,ggplot,Grammar of Graphics (похоже на R ggplot2)
+Python-библиотеки,ghapi,GitHub API
+Python-библиотеки,ghexplorer,Исследователь GitHub
+Python-библиотеки,ghl,GitHub Linguist (определение языка кода)
+Python-библиотеки,ghstars,GitHub звёзды трекер
+Python-библиотеки,ghtoken,GitHub token управление
+Python-библиотеки,ghviz,GitHub визуализация
+Python-библиотеки,giant,Большие объекты (?)
+Python-библиотеки,giantbomb,Giant Bomb (видеоигры база)
+Python-библиотеки,gibberish,Фильтр спама
+Python-библиотеки,gibe,Насмешка / таскание файлов
+Python-библиотеки,giblets,Обрезки данных
+Python-библиотеки,giddy,Геопространственный анализ динамики
+Python-библиотеки,giffer,GIF создание
+Python-библиотеки,gigapixel,Гигапиксельные изображения
+Python-библиотеки,gild,Позолоченные объекты
+Python-библиотеки,giles,Управление библиотеками (GILES)
+Python-библиотеки,gillespie,Алгоритм Гиллеспи (стохастика)
+Python-библиотеки,gitlab,GitLab API
+Python-библиотеки,gitpython,Программная работа с Git
+Python-библиотеки,glfw,OpenGL Window Framework (python-glfw)
+Python-библиотеки,glob2,Расширенный glob с recursive
+Python-библиотеки,glom,Цепочки трансформаций вложенных данных
+Python-библиотеки,gnureadline,GNU readline в Python
+Python-библиотеки,goatools,Gene Ontology анализ
+Python-библиотеки,google-adk,Agent Development Kit для Gemini (Google)
+Python-библиотеки,google-api-python-client,Универсальный Google API client
+Python-библиотеки,google-auth,"Аутентификация Google (OAuth2, service accounts)"
+Python-библиотеки,google-cloud-bigquery,Google Cloud SDK
+Python-библиотеки,google-cloud-storage,Google Cloud SDK
+Python-библиотеки,google-cloud-translate,Google Cloud Translate API
+Python-библиотеки,google-cloud-vision,Google Cloud Vision API (распознавание изображений)
+Python-библиотеки,google-genai,Новый единый SDK Google для Gemini
+Python-библиотеки,google-generativeai,Официальный SDK к API LLM
+Python-библиотеки,google-search-results,Google SerpAPI парсер
+Python-библиотеки,goose3,Извлечение основного содержимого статей
+Python-библиотеки,gpiozero,Raspberry Pi GPIO
+Python-библиотеки,gptcache,Кеширование LLM запросов
+Python-библиотеки,gpustat,Мониторинг NVIDIA GPU
+Python-библиотеки,gradients,Вычисление градиентов
+Python-библиотеки,gradio,Быстрые веб-интерфейсы для ML
+Python-библиотеки,granian,ASGI/WSGI-сервер на Rust
+Python-библиотеки,graph-tool,Обработка больших графов (C++)
+Python-библиотеки,graphql-core,GraphQL implementation
+Python-библиотеки,grapnel,Веб-скрейпинг утилиты
+Python-библиотеки,grappa,Assertion-фреймворк (Python testing)
+Python-библиотеки,grass,GRASS GIS Python bindings
+Python-библиотеки,graviton,Обработка гравитационных данных (?)
+Python-библиотеки,gravy,Подлива к стаканам (?) - не уверен
+Python-библиотеки,great-expectations,Валидация данных
+Python-библиотеки,groq,SDK Groq API (сверхбыстрый инференс)
+Python-библиотеки,grpc,gRPC - высокопроизводительный RPC фреймворк
+Python-библиотеки,grpcio,gRPC Python implementation
+Python-библиотеки,gspread,Работа с Google Sheets
+Python-библиотеки,gtts,TTS через Google Translate
+Python-библиотеки,guardrails,Валидация и исправление выходов LLM
+Python-библиотеки,guidance,Программирование потока генерации LLM (Microsoft)
+Python-библиотеки,gunicorn,WSGI-сервер
+Python-библиотеки,gymnasium,Среды обучения с подкреплением (Farama)
+Python-библиотеки,h11,HTTP/1.1 парсер
+Python-библиотеки,h2,HTTP/2 парсер
+Python-библиотеки,h5py,Работа с HDF5
+Python-библиотеки,haystack,RAG и NLP-пайплайны (deepset)
+Python-библиотеки,helm,Kubernetes SDK
+Python-библиотеки,hnswlib,Приближённый kNN-поиск (HNSW)
+Python-библиотеки,holoviews,Декларативная аннотированная визуализация (HoloViz)
+Python-библиотеки,html2text,Конвертация HTML в Markdown
+Python-библиотеки,html5lib,Парсинг HTML
+Python-библиотеки,httpcore,Низкоуровневый HTTP клиент
+Python-библиотеки,httptools,Парсинг HTTP (на C++)
+Python-библиотеки,httpx,HTTP-запросы (синхронный и асинхронный)
+Python-библиотеки,huey,Лёгкая очередь задач (Redis/SQLite)
+Python-библиотеки,huggingface-hub,Загрузка моделей из HuggingFace Hub
+Python-библиотеки,humanize,"Человеко-читаемые размеры, числа, время"
+Python-библиотеки,hvac,Клиент HashiCorp Vault
+Python-библиотеки,hydra-core,Управление конфигурацией приложений (Meta)
+Python-библиотеки,hypercorn,ASGI-сервер с HTTP/2 и HTTP/3
+Python-библиотеки,hypothesis,Property-based testing
+Python-библиотеки,ib_insync,Асинхронный API Interactive Brokers
+Python-библиотеки,icalendar,Работа с .ics (iCal)
+Python-библиотеки,icecream,Дебаг-печать переменных (ic(var))
+Python-библиотеки,igraph,Анализ графов и сетей
+Python-библиотеки,ijson,Потоковый парсинг больших JSON
+Python-библиотеки,imagehash,Перцептивные хеши изображений
+Python-библиотеки,imageio,Дополнительные инструменты для изображений
+Python-библиотеки,imageio-ffmpeg,Видео-манипуляции
+Python-библиотеки,imagesize,Определение размеров изображений без загрузки
+Python-библиотеки,imap-tools,Удобные обёртки для email
+Python-библиотеки,imaplib,Работа с email-протоколами
+Python-библиотеки,imbalanced-learn,Борьба с дисбалансом классов
+Python-библиотеки,img2pdf,Lossless-склейка изображений в PDF
+Python-библиотеки,impacket,Низкоуровневые сетевые протоколы (Windows)
+Python-библиотеки,importlib-metadata,Метаданные установленных пакетов
+Python-библиотеки,importlib-resources,Доступ к ресурсам пакета
+Python-библиотеки,InquirerPy,Интерактивные CLI-диалоги (async)
+Python-библиотеки,insightface,2D/3D-анализ лиц (SOTA-модели)
+Python-библиотеки,instagrapi,Instagram API
+Python-библиотеки,instaloader,Instagram API
+Python-библиотеки,instructor,Структурированные выходы LLM через Pydantic
+Python-библиотеки,ipaddress,IP-адреса
+Python-библиотеки,ipykernel,IPython-ядро для Jupyter
+Python-библиотеки,ipywidgets,Интерактивные виджеты в ноутбуках
+Python-библиотеки,isodate,Парсинг ISO 8601 дат
+Python-библиотеки,isort,Форматирование и линтинг
+Python-библиотеки,jax,Дифференцируемые вычисления (Google)
+Python-библиотеки,jedi,Статический анализ и автодополнение
+Python-библиотеки,jellyfish,Фонетические алгоритмы и расстояния
+Python-библиотеки,jieba,Сегментация китайского текста
+Python-библиотеки,jinja2,Шаблонизаторы
+Python-библиотеки,jira,Jira и Confluence API
+Python-библиотеки,jmespath,Декларативные запросы к JSON
+Python-библиотеки,joblib,"Параллелизм, кэширование (движок sklearn)"
+Python-библиотеки,jsonlines,Чтение/запись JSONL файлов
+Python-библиотеки,jsonpath,JSON querying
+Python-библиотеки,jsonpath-ng,JSONPath-запросы к JSON
+Python-библиотеки,jsonschema,Парсинг конфигов
+Python-библиотеки,jsonschema-specifications,JSON Schema спецификации
+Python-библиотеки,jupyter,Мета-пакет экосистемы Jupyter
+Python-библиотеки,jupyter-client,Клиент Jupyter kernel
+Python-библиотеки,jupyter-core,Ядро Jupyter
+Python-библиотеки,jupyterlab,Среда JupyterLab
+Python-библиотеки,jupytext,Двусторонняя синхронизация .ipynb и Markdown/скриптов
+Python-библиотеки,kafka-python,Чистый Python клиент Kafka
+Python-библиотеки,kaleido,Статические экспорт графиков Plotly
+Python-библиотеки,keras,TensorFlow
+Python-библиотеки,keyboard,Глобальные хуки клавиатуры
+Python-библиотеки,keyring,Хранение credentials
+Python-библиотеки,keywords,Работа с ключевыми словами Python
+Python-библиотеки,kivy,"Мультиплатформенный GUI (мобильный, тач)"
+Python-библиотеки,kornia,Дифференцируемое CV для PyTorch
+Python-библиотеки,kubernetes,Kubernetes SDK
+Python-библиотеки,kubetest,Тестирование Kubernetes приложений
+Python-библиотеки,lab,Юпитер Lab (альтернативное имя)
+Python-библиотеки,label-studio,Мультиформатное аннотирование данных
+Python-библиотеки,labelme,"Аннотирование изображений (полигоны, маски)"
+Python-библиотеки,lancedb,Встраиваемая векторная БД (columnar)
+Python-библиотеки,langchain,Оркестраторы (библиотека)
+Python-библиотеки,langdetect,Определение языка текста
+Python-библиотеки,langfuse,Трейсинг и наблюдаемость LLM-приложений
+Python-библиотеки,langgraph,Оркестраторы (библиотека)
+Python-библиотеки,langsmith,Отладка LangChain приложений
+Python-библиотеки,lasio,Чтение LAS файлов (скважинные данные)
+Python-библиотеки,latexcodec,LaTeX кодировка
+Python-библиотеки,latexify-py,Превращение Python функций в LaTeX
+Python-библиотеки,lazyxml,Ленивый парсинг XML
+Python-библиотеки,ldap3,Клиент LDAP v3
+Python-библиотеки,ldb,LDB база данных (SAM database from Windows)
+Python-библиотеки,ldplayer,Эмулятор Android
+Python-библиотеки,lease,Управление лизингом (?)
+Python-библиотеки,lebowski,"Ссылка на фильм ""The Big Lebowski"" (?)"
+Python-библиотеки,leech,Скачивание контента (?)
+Python-библиотеки,leek,Лук (овощ) - не Python пакет (?)
+Python-библиотеки,leep,Сон (?)
+Python-библиотеки,legacy,Поддержка legacy кода
+Python-библиотеки,leghorn,Порода курицы (?)
+Python-библиотеки,letta,Агенты с персистентной памятью (бывш. MemGPT)
+Python-библиотеки,levenshtein,Быстрое расстояние Левенштейна
+Python-библиотеки,lhafile,Работа с LHA архивами
+Python-библиотеки,libclang,Python bindings к Clang
+Python-библиотеки,libcst,Трансформация кода с сохранением форматирования (Meta)
+Python-библиотеки,libmagic,Определение типа файла (magic numbers)
+Python-библиотеки,librosa,Аудио-анализ и обработка
+Python-библиотеки,libusb1,USB-устройства
+Python-библиотеки,libzero,Работа с нулевыми значениями (?)
+Python-библиотеки,license,"MIT, Apache и другие лицензии"
+Python-библиотеки,licensename,Определение лицензии проекта
+Python-библиотеки,licenser,Выдающий лицензию (?)
+Python-библиотеки,licenses,Множество лицензий
+Python-библиотеки,licensing,Система лицензирования
+Python-библиотеки,lightgbm,Градиентный бустинг
+Python-библиотеки,lightning,Структурирование PyTorch-исследований (PL)
+Python-библиотеки,lime,Локальные интерпретируемые объяснения
+Python-библиотеки,line_profiler,Профилирование производительности
+Python-библиотеки,litellm,Унифицированный интерфейс к 100+ LLM-провайдерам
+Python-библиотеки,litestar,Современный высокопроизводительный ASGI-фреймворк
+Python-библиотеки,llama-cpp-python,LLaMA-инференс на CPU/GPU (bindings llama.cpp)
+Python-библиотеки,llama-parse,Продвинутый парсинг документов
+Python-библиотеки,llamaindex,"RAG-фреймворк (индексация, retrieval)"
+Python-библиотеки,lm-eval,Бенчмаркинг LLM на академических задачах (EleutherAI)
+Python-библиотеки,lmdb,Lightning Memory-Mapped Database
+Python-библиотеки,logfury,Логирование с стилизацией
+Python-библиотеки,logstash-formatter,Форматирование в Logstash JSON
+Python-библиотеки,loguru,Логирование
+Python-библиотеки,lxml,Парсинг HTML
+Python-библиотеки,lzma,Сжатие LZMA (встроенный в Python 3) (модуль stdlib)
+Python-библиотеки,madmom,Аудио-анализ и обработка
+Python-библиотеки,mail-parser,Удобные обёртки для email
+Python-библиотеки,mailgun,Email-рассылки
+Python-библиотеки,mako,Шаблонизаторы
+Python-библиотеки,mammoth,Конвертация DOCX в HTML
+Python-библиотеки,manim,Математические анимации (движок 3Blue1Brown)
+Python-библиотеки,marimo,reactive Python notebooks
+Python-библиотеки,markdownify,Парсинг и генерация Markdown
+Python-библиотеки,marker-pdf,PDF → Markdown (научные статьи)
+Python-библиотеки,marshmallow,Сериализация и валидация схем
+Python-библиотеки,Mastodon.py,Клиент Mastodon API
+Python-библиотеки,matplotlib,Построение графиков
+Python-библиотеки,matrix-nio,Клиент протокола Matrix
+Python-библиотеки,mechanicalsoup,Stateful-браузер на BeautifulSoup
+Python-библиотеки,mechanize,Stateful браузер
+Python-библиотеки,mediapipe,"Кроссплатформенный ML-перцепшн (Google): позы, лица, руки"
+Python-библиотеки,memory_profiler,Профилирование производительности
+Python-библиотеки,memray,Профилировщик памяти с flamegraphs (Bloomberg)
+Python-библиотеки,mesa,Агентно-ориентированное моделирование
+Python-библиотеки,mido,Чтение и запись MIDI
+Python-библиотеки,mimesis,Генерация фейковых данных
+Python-библиотеки,minio,Клиент S3-совместимых хранилищ MinIO
+Python-библиотеки,missingno,Визуализация пропусков в данных
+Python-библиотеки,mistralai,SDK Mistral AI
+Python-библиотеки,mistune,Парсинг и генерация Markdown
+Python-библиотеки,mlflow,эксперименты и развертывание ML
+Python-библиотеки,mlxtend,"Ассоциативные правила, ансамбли, утилиты"
+Python-библиотеки,modbus-tk,Протокол Modbus
+Python-библиотеки,model_bakery,Фабрики тестовых данных
+Python-библиотеки,modin,Масштабируемый pandas (Ray/Dask)
+Python-библиотеки,monai,Медицинский глубокий ИИ на PyTorch
+Python-библиотеки,mongoengine,ODM поверх pymongo
+Python-библиотеки,mongomock,Мокирование БД
+Python-библиотеки,monkeytype,Автоматический вывод аннотаций типов (Instagram)
+Python-библиотеки,more-itertools,Дополнительные итераторы и рецепты
+Python-библиотеки,moto,Мокирование AWS-сервисов в тестах
+Python-библиотеки,motor,Клиент MongoDB (async)
+Python-библиотеки,moviepy,Видео-манипуляции
+Python-библиотеки,mpmath,Арифметика произвольной точности
+Python-библиотеки,msgpack,Компактная бинарная сериализация
+Python-библиотеки,msgspec,"Быстрая сериализация/валидация (JSON, MessagePack)"
+Python-библиотеки,mss,Сверхбыстрые скриншоты
+Python-библиотеки,mujoco,Физдвижок для робототехники (DeepMind)
+Python-библиотеки,music21,Анализ музыкальных партитур (MIT)
+Python-библиотеки,mutmut,Мутационное тестирование
+Python-библиотеки,mypy,Статический анализ типов
+Python-библиотеки,mypyc,Компиляция типизированного Python в C
+Python-библиотеки,nameko,"Микросервисный фреймворк (RPC, события)"
+Python-библиотеки,nats-py,Асинхронный клиент NATS
+Python-библиотеки,nbconvert,Конвертация ноутбуков в HTML/PDF/скрипты
+Python-библиотеки,nbdev,Разработка библиотек прямо в ноутбуках (fast.ai)
+Python-библиотеки,nbformat,Модель и валидация формата .ipynb
+Python-библиотеки,neptune,ML-эксперименты
+Python-библиотеки,netaddr,IP-адреса
+Python-библиотеки,netCDF4,"Формат netCDF (климатология, океанология)"
+Python-библиотеки,networkx,Анализ графов и сетей
+Python-библиотеки,neuralprophet,Нейросетевой наследник Prophet
+Python-библиотеки,nevergrad,Градиент-free оптимизация (Meta)
+Python-библиотеки,newspaper3k,Извлечение новостей и статей
+Python-библиотеки,nextcord,Боты для Discord
+Python-библиотеки,nibabel,Чтение NIfTI и нейровизуализационных форматов
+Python-библиотеки,nicegui,Веб-GUI из Python-кода в реальном времени
+Python-библиотеки,nilearn,Статистика и ML для нейровизуализации
+Python-библиотеки,nltk,"NLP (токенизация, NER, парсинг)"
+Python-библиотеки,nose2,Тестирование
+Python-библиотеки,notebook,Классический Jupyter Notebook
+Python-библиотеки,notion-client,Notion API
+Python-библиотеки,nougat,PDF → Markdown (научные статьи)
+Python-библиотеки,nox,Тестирование в разных окружениях
+Python-библиотеки,numba,JIT-компиляция Python в машинный код
+Python-библиотеки,numexpr,Быстрые числовые выражения над массивами
+Python-библиотеки,numpy,Основные массивы и линейная алгебра
+Python-библиотеки,oauthlib,Логика OAuth (основа requests-oauthlib)
+Python-библиотеки,odfpy,Чтение и запись OpenDocument (.ods/.odt)
+Python-библиотеки,ollama (client),Клиент локальной Ollama для Python (приватные LLM)
+Python-библиотеки,omegaconf,Иерархические конфиги с интерполяцией
+Python-библиотеки,onnx,Универсальный формат моделей ML
+Python-библиотеки,onnxruntime,Универсальный формат моделей ML
+Python-библиотеки,opcua,OPC UA
+Python-библиотеки,open3d,"Облака точек, меши, регистрация"
+Python-библиотеки,openai,Официальный SDK к API LLM
+Python-библиотеки,openai-agents,OpenAI Agents SDK (агентные рабочие процессы)
+Python-библиотеки,openai-whisper,Распознавание речи Whisper (OpenAI)
+Python-библиотеки,opencv-python,Компьютерное зрение (cv2)
+Python-библиотеки,openpyxl,"Работа с .xlsx, .xls"
+Python-библиотеки,opentelemetry-api,Distributed tracing
+Python-библиотеки,opentelemetry-sdk,Distributed tracing
+Python-библиотеки,optax,Дифференцируемые вычисления (Google)
+Python-библиотеки,orjson,Самый быстрый JSON (Rust)
+Python-библиотеки,ortools,"Линейное/целочисленное программирование, VRP (Google)"
+Python-библиотеки,outlines,Гарантированно структурная генерация LLM
+Python-библиотеки,paho-mqtt,MQTT-клиент
+Python-библиотеки,pandas,DataFrame для анализа данных
+Python-библиотеки,pandas-datareader,"Данные из FRED, World Bank, Stooq"
+Python-библиотеки,pandas-ta,Технические индикаторы для pandas
+Python-библиотеки,pandera,Валидация данных
+Python-библиотеки,panel,Интерактивная визуализация
+Python-библиотеки,papermill,Параметризованное выполнение ноутбуков
+Python-библиотеки,paramiko,SSH-автоматизация
+Python-библиотеки,parsel,XPath/CSS-селекторы (движок Scrapy)
+Python-библиотеки,passlib,Фреймворк хеширования паролей
+Python-библиотеки,patool,Универсальная обёртка над архиваторами
+Python-библиотеки,pdf2image,Низкоуровневый парсинг PDF
+Python-библиотеки,pdfkit,Обёртка над wkhtmltopdf
+Python-библиотеки,pdfplumber,Извлечение текста из PDF
+Python-библиотеки,pedalboard,Аудио-эффекты и обработка (Spotify)
+Python-библиотеки,peewee,Лёгкий выразительный ORM
+Python-библиотеки,peft,Parameter-efficient fine-tuning (LoRA и др.)
+Python-библиотеки,pendulum,Даты и таймзоны без сюрпризов
+Python-библиотеки,pennylane,Квантовое машинное обучение
+Python-библиотеки,pexpect,Управление интерактивными процессами
+Python-библиотеки,pg8000,Чистый Python клиент PostgreSQL
+Python-библиотеки,phonenumbers,Валидация и форматирование телефонов
+Python-библиотеки,pika,Клиент RabbitMQ (AMQP 0-9-1)
+Python-библиотеки,pikepdf,Мощные PDF-манипуляции на базе qpdf
+Python-библиотеки,pillow,Обработка изображений (PIL)
+Python-библиотеки,pinecone,Клиент управляемой векторной БД Pinecone
+Python-библиотеки,pint,Физические единицы измерения и проверки размерностей
+Python-библиотеки,piper-tts,Быстрый локальный TTS для edge-устройств
+Python-библиотеки,plotly,Построение графиков
+Python-библиотеки,plotnine,Статистическая визуализация
+Python-библиотеки,plyer,Кроссплатформенные уведомления и доступ к железу
+Python-библиотеки,pmdarima,Auto-ARIMA поверх statsmodels
+Python-библиотеки,pocketsphinx,Распознавание речи (офлайн)
+Python-библиотеки,polars,DataFrame на Rust (быстрее pandas)
+Python-библиотеки,postmark,Email-рассылки
+Python-библиотеки,praw,Reddit API
+Python-библиотеки,prefect,Оркестрация data pipelines
+Python-библиотеки,pretty_midi,Анализ и синтез MIDI
+Python-библиотеки,prettytable,Таблицы в терминале
+Python-библиотеки,prisma-client-py,Prisma ORM для Python
+Python-библиотеки,prometheus-client,Экспорт метрик для Prometheus
+Python-библиотеки,prompt_toolkit,Интерактивные приглашения ввода (основа IPython/pgcli)
+Python-библиотеки,promptfoo,Тестирование и сравнение промптов и моделей
+Python-библиотеки,prophet,Прогнозирование с сезонностью (Meta)
+Python-библиотеки,psycopg,Современный клиент PostgreSQL (psycopg3)
+Python-библиотеки,psycopg2,Клиент PostgreSQL
+Python-библиотеки,pulp,Линейное программирование
+Python-библиотеки,pulsar-client,Клиент Apache Pulsar
+Python-библиотеки,pulumi,IaC на Python
+Python-библиотеки,py-spy,Визуализация и sampling-профилировщики
+Python-библиотеки,py7zr,Работа с 7z-архивами
+Python-библиотеки,pyannote.audio,"Диаризация спикеров, VAD"
+Python-библиотеки,pyarrow,Колоночный формат данных
+Python-библиотеки,pyaudio,Запись и воспроизведение аудио (PortAudio)
+Python-библиотеки,pyautogui,Автоматизация мыши и клавиатуры
+Python-библиотеки,pybluez,Bluetooth
+Python-библиотеки,pybullet,Физическая симуляция и робототехника
+Python-библиотеки,pycountry,"Данные о странах, языках, валютах (ISO)"
+Python-библиотеки,pycryptodome,"Шифры, хеши, MAC (замена PyCrypto)"
+Python-библиотеки,pydantic,Валидация данных
+Python-библиотеки,pydantic-ai,Типизированные AI-агенты (от создателей Pydantic)
+Python-библиотеки,pydantic-settings,Управление переменными окружения
+Python-библиотеки,pydicom,Чтение и запись DICOM
+Python-библиотеки,pydocstyle,Проверка docstrings по PEP 257
+Python-библиотеки,pydub,Аудио-анализ и обработка
+Python-библиотеки,pyfacebook,Facebook Graph API
+Python-библиотеки,pyfiglet,ASCII-арт баннеры из текста
+Python-библиотеки,pygal,SVG-графики
+Python-библиотеки,pygame,Игры и мультимедиа
+Python-библиотеки,pygit2,Программная работа с Git
+Python-библиотеки,PyGithub,GitHub API
+Python-библиотеки,pyinstrument,Статистический профилировщик с call stack
+Python-библиотеки,pyjwt,Кодирование и проверка JWT
+Python-библиотеки,pylint,Линтеры и сканер безопасности
+Python-библиотеки,pymatgen,"Материаловедение: кристаллы, структуры"
+Python-библиотеки,pymeshlab,Обработка и очистка 3D-мешей
+Python-библиотеки,pymilvus,Клиент векторных БД
+Python-библиотеки,pymisp,Threat intelligence
+Python-библиотеки,pymodbus,Протокол Modbus
+Python-библиотеки,pymongo,Клиент MongoDB
+Python-библиотеки,pymoo,Многокритериальная оптимизация (NSGA-II/III)
+Python-библиотеки,pymupdf,Извлечение текста из PDF
+Python-библиотеки,pymysql,Клиент MySQL
+Python-библиотеки,pynacl,Криптография NaCl/libsodium
+Python-библиотеки,pynput,Глобальный контроль мыши/клавиатуры
+Python-библиотеки,pyomo,Математическое моделирование и оптимизация
+Python-библиотеки,pyotp,TOTP/HOTP для 2FA
+Python-библиотеки,pypdf,Современная работа с PDF (преемник PyPDF2)
+Python-библиотеки,PyPDF2,Извлечение текста из PDF
+Python-библиотеки,PyPortfolioOpt,Оптимизация инвестиционного портфеля
+Python-библиотеки,PyQt6,Привязки Qt6 для GUI
+Python-библиотеки,pyquery,Альтернативные парсеры HTML
+Python-библиотеки,pyramid,Гибкий классический фреймворк
+Python-библиотеки,pyreadstat,Чтение SPSS/SAS/Stata-файлов
+Python-библиотеки,pyright,Статический анализ типов
+Python-библиотеки,pyrogram,Асинхронный Telegram MTProto-клиент
+Python-библиотеки,pyscard,Работа со смарт-картами
+Python-библиотеки,pyserial,Управление COM-портами
+Python-библиотеки,PySide6,Официальные привязки Qt6 (LGPL)
+Python-библиотеки,pysnmp,SNMP
+Python-библиотеки,pyspark,Apache Spark для Python
+Python-библиотеки,pystray,Иконки в системном трее
+Python-библиотеки,pytesseract,Python-обёртка Tesseract OCR
+Python-библиотеки,pytest,Тестирование
+Python-библиотеки,pytest-asyncio,Асинхронные тесты pytest
+Python-библиотеки,pytest-bdd,Gherkin BDD-сценарии
+Python-библиотеки,pytest-cov,Измерение покрытия кода
+Python-библиотеки,pytest-django,Фикстуры и утилиты для Django
+Python-библиотеки,pytest-httpx,Мокирование HTTP в тестах
+Python-библиотеки,pytest-mock,Фикстура mocker (обёртка unittest.mock)
+Python-библиотеки,pytest-playwright,Фикстуры Playwright для pytest
+Python-библиотеки,pytest-xdist,Параллельный запуск тестов
+Python-библиотеки,python-calamine,Очень быстрое чтение Excel (Rust)
+Python-библиотеки,python-can,CAN-шина
+Python-библиотеки,python-dateutil,"Парсинг, арифметика и таймзоны дат"
+Python-библиотеки,python-decouple,Вынос параметров в переменные окружения
+Python-библиотеки,python-doctr,OCR на TensorFlow/PyTorch (Mindee)
+Python-библиотеки,python-docx,Создание и чтение Word
+Python-библиотеки,python-dotenv,Управление переменными окружения
+Python-библиотеки,python-json-logger,Структурированные JSON-логи
+Python-библиотеки,python-nmap,Обёртка для nmap
+Python-библиотеки,python-pptx,Создание презентаций PowerPoint
+Python-библиотеки,python-slugify,Генерация URL-слагов
+Python-библиотеки,python-socketio,Протокол Socket.IO для Python
+Python-библиотеки,python-telegram-bot,Боты для Telegram
+Python-библиотеки,pyttsx3,Офлайн TTS через системные движки
+Python-библиотеки,pytube,Скачивание видео с YouTube
+Python-библиотеки,pytype,Статический анализ типов
+Python-библиотеки,pyupgrade,Автообновление синтаксиса до новой версии Python
+Python-библиотеки,pyusb,USB-устройства
+Python-библиотеки,pyvisa,Управление измерительными приборами (SCPI/GPIB/USB)
+Python-библиотеки,pyvista,3D-визуализация и анализ сеток (VTK)
+Python-библиотеки,pywebview,Десктоп-окно с web-содержимым
+Python-библиотеки,pywin32,"Windows API, COM, службы"
+Python-библиотеки,pywinauto,Автоматизация GUI Windows
+Python-библиотеки,pywinrm,Windows Remote Management (WinRM)
+Python-библиотеки,pyyaml,Парсинг конфигов
+Python-библиотеки,pyzbar,Генерация и чтение QR-кодов
+Python-библиотеки,qdrant-client,Клиент векторных БД
+Python-библиотеки,qiskit,Квантовые вычисления (IBM)
+Python-библиотеки,qrcode,Генерация и чтение QR-кодов
+Python-библиотеки,quantlib,"Количественные финансы (fixed income, опционы)"
+Python-библиотеки,quart,Асинхронный Flask-совместимый фреймворк
+Python-библиотеки,questionary,Интерактивные диалоги-вопросы для CLI
+Python-библиотеки,radon,"Метрики сложности (cyclomatic, maintainability)"
+Python-библиотеки,ragas,Оценка качества RAG-пайплайнов
+Python-библиотеки,rapidfuzz,Быстрое нечёткое сравнение строк (C++)
+Python-библиотеки,rapidocr-onnxruntime,Быстрый OCR на ONNX Runtime
+Python-библиотеки,rarfile,Чтение RAR-архивов
+Python-библиотеки,rasterio,Геопространственный анализ
+Python-библиотеки,ray,"Распределённые вычисления, Ray Tune/Train/Serve"
+Python-библиотеки,rdkit,"Хемоинформатика: молекулы, дескрипторы, реакции"
+Python-библиотеки,recurring-ical-events,Работа с .ics (iCal)
+Python-библиотеки,redis-py,Клиент Redis
+Python-библиотеки,rembg,Удаление фона с изображений
+Python-библиотеки,reportlab,Программное создание PDF
+Python-библиотеки,requests,HTTP-запросы (синхронный)
+Python-библиотеки,requests-cache,Прозрачное кэширование HTTP-запросов
+Python-библиотеки,requests-oauthlib,OAuth-авторизация для requests
+Python-библиотеки,responses,Мокирование HTTP в тестах
+Python-библиотеки,returns,"Функциональное программирование: Result, Maybe, IO"
+Python-библиотеки,rich,TUI для терминала
+Python-библиотеки,robobrowser,Stateful браузер
+Python-библиотеки,rope,Рефакторинг Python-кода
+Python-библиотеки,rpi.gpio,Raspberry Pi GPIO
+Python-библиотеки,rq,Distributed task queues
+Python-библиотеки,ruamel.yaml,YAML с сохранением комментариев и форматирования
+Python-библиотеки,ruff,Форматирование и линтинг
+Python-библиотеки,safetensors,Безопасное быстрое хранение тензоров
+Python-библиотеки,safety,Линтеры и сканер безопасности
+Python-библиотеки,sanic,Быстрый асинхронный веб-фреймворк
+Python-библиотеки,scalene,Профилировщик CPU+GPU+память
+Python-библиотеки,scapy,Сетевые пакеты
+Python-библиотеки,schedule,Простое периодическое выполнение функций
+Python-библиотеки,schemathesis,Фаззинг API по OpenAPI-спецификации
+Python-библиотеки,scikit-image,Дополнительные инструменты для изображений
+Python-библиотеки,scikit-learn,Классическое ML
+Python-библиотеки,scipy,"Научные вычисления (оптимизация, интегралы, сигналы)"
+Python-библиотеки,scrapy,Фреймворк для веб-скрейпинга
+Python-библиотеки,sdv,Генерация синтетических табличных данных
+Python-библиотеки,seaborn,Статистическая визуализация
+Python-библиотеки,segment-anything,"Универсальная сегментация (SAM, Meta)"
+Python-библиотеки,selectolax,Альтернативные парсеры HTML
+Python-библиотеки,selenium,Браузерная автоматизация
+Python-библиотеки,sendgrid,Email-рассылки
+Python-библиотеки,sentence-transformers,Эмбеддинги предложений
+Python-библиотеки,sentencepiece,Самообучаемая токенизация
+Python-библиотеки,sentry-sdk,Мониторинг ошибок
+Python-библиотеки,sglang,Быстрый инференс LLM со структурными выходами
+Python-библиотеки,shap,Объяснимость предсказаний (SHAP values)
+Python-библиотеки,shapely,Геопространственный анализ
+Python-библиотеки,shodan,Shodan API
+Python-библиотеки,SimpleITK,Регистрация и сегментация медицинских изображений
+Python-библиотеки,simpy,Дискретно-событийное моделирование
+Python-библиотеки,sktime,Унифицированный фреймворк временных рядов
+Python-библиотеки,skyfield,Высокоточные эфемериды планет и спутников
+Python-библиотеки,slack-bolt,Приложения для Slack
+Python-библиотеки,slack-sdk,Приложения для Slack
+Python-библиотеки,smbprotocol,Клиент SMB2/3
+Python-библиотеки,smolagents,Агенты (HuggingFace библиотека)
+Python-библиотеки,smtplib,Работа с email-протоколами
+Python-библиотеки,snakeviz,Визуализация и sampling-профилировщики
+Python-библиотеки,snscrape,Скрейпинг постов соцсетей без API
+Python-библиотеки,sounddevice,"Аудио ввод/вывод (PortAudio, numpy-ориентированный)"
+Python-библиотеки,soundfile,Чтение/запись WAV/FLAC (libsndfile)
+Python-библиотеки,spacy,"NLP (токенизация, NER, парсинг)"
+Python-библиотеки,speechbrain,Речевые модели: ASR/TTS/дипфейки (PyTorch)
+Python-библиотеки,speechrecognition,Распознавание речи (офлайн)
+Python-библиотеки,splinter,Единая обёртка над браузерными драйверами
+Python-библиотеки,splunk-sdk,Splunk API
+Python-библиотеки,sqlalchemy,ORM и работа с БД
+Python-библиотеки,sqlite-utils,Утилиты для SQLite
+Python-библиотеки,sqlmodel,ORM на SQLAlchemy + Pydantic (автор FastAPI)
+Python-библиотеки,stable-baselines3,Готовые RL-алгоритмы на PyTorch
+Python-библиотеки,stanza,"NLP (токенизация, NER, парсинг)"
+Python-библиотеки,starlette,ASGI-фреймворк (фундамент FastAPI)
+Python-библиотеки,statsmodels,"Эконометрика, тесты, временные ряды"
+Python-библиотеки,streamlit,Быстрые веб-интерфейсы для ML
+Python-библиотеки,stripe,Платёжные API
+Python-библиотеки,structlog,Логирование
+Python-библиотеки,surya-ocr,OCR и анализ layout на 90+ языках
+Python-библиотеки,svglib,Чтение SVG для ReportLab
+Python-библиотеки,sweetviz,Автоматические EDA-отчёты в HTML
+Python-библиотеки,sympy,Символьная математика (CAS)
+Python-библиотеки,syrupy,Современные snapshot-тесты
+Python-библиотеки,TA-Lib,Классический технический анализ
+Python-библиотеки,tabula-py,Извлечение таблиц из PDF
+Python-библиотеки,tabulate,Табличный вывод данных
+Python-библиотеки,taskiq,Асинхронный distributed task manager
+Python-библиотеки,tavern,Декларативное тестирование API на YAML
+Python-библиотеки,telethon,Telegram-клиент (MTProto)
+Python-библиотеки,tenacity,Повторные попытки с backoff
+Python-библиотеки,tensorflow,TensorFlow
+Python-библиотеки,termcolor,Раскраска текста в терминале
+Python-библиотеки,terraform-python,Infrastructure as Code
+Python-библиотеки,testcontainers,Зависимости тестов в Docker-контейнерах
+Python-библиотеки,textblob,Простой NLP поверх NLTK
+Python-библиотеки,textdistance,Расстояния между строками (30+ алгоритмов)
+Python-библиотеки,textual,TUI для терминала
+Python-библиотеки,thefuzz,Нечёткое сравнение строк (бывш. fuzzywuzzy)
+Python-библиотеки,thehive4py,SOAR-платформа
+Python-библиотеки,tiktoken,Подсчёт токенов для моделей
+Python-библиотеки,time-machine,Мокирование времени
+Python-библиотеки,timm,Коллекция предобученных image-моделей (PyTorch)
+Python-библиотеки,together,SDK Together AI (открытые модели)
+Python-библиотеки,tokenizers,Подсчёт токенов для моделей
+Python-библиотеки,tomli,Парсинг конфигов
+Python-библиотеки,tomlkit,TOML с сохранением стиля (используется poetry)
+Python-библиотеки,toolz,Функциональные утилиты для итераторов и словарей
+Python-библиотеки,torch,PyTorch
+Python-библиотеки,torchaudio,PyTorch audio
+Python-библиотеки,torchmetrics,Метрики для PyTorch
+Python-библиотеки,torchvision,PyTorch vision
+Python-библиотеки,tornado,Классический web-фреймворк
+Python-библиотеки,tortoise-orm,Асинхронный ORM с автогенерацией схем
+Python-библиотеки,tox,Тестирование в разных окружениях
+Python-библиотеки,tqdm,Прогресс-бары
+Python-библиотеки,trafilatura,Извлечение статей и метаданных с веб-страниц
+Python-библиотеки,transformers,Загрузка и использование предобученных LLM (Hugging Face)
+Python-библиотеки,translators,Перевод через Google/Bing/Яндекс и др.
+Python-библиотеки,trello,Таск-трекеры
+Python-библиотеки,trimesh,Загрузка и обработка 3D-мешей
+Python-библиотеки,trio,Асинхронный фреймворк со структурированной конкурентностью
+Python-библиотеки,trl,Обучение с RLHF/DPO трансформеров
+Python-библиотеки,truststore,Использование системного хранилища CA в Python
+Python-библиотеки,tsfresh,Автоматическое извлечение признаков временных рядов
+Python-библиотеки,tweepy,Twitter/X API
+Python-библиотеки,twilio,SMS и голосовые звонки
+Python-библиотеки,twython,Twitter/X API
+Python-библиотеки,txtai,"Эмбеддинг-база, поиск и RAG в одном"
+Python-библиотеки,typeguard,Runtime-проверка типов
+Python-библиотеки,typer,Создание CLI
+Python-библиотеки,typing-extensions,Бэкпорты новых возможностей typing
+Python-библиотеки,ultralytics,"YOLOv8/YOLO11: детекция, сегментация, позы, трекинг"
+Python-библиотеки,undetected-chromedriver,Анти-детект патчинг Selenium
+Python-библиотеки,unidecode,Транслитерация Unicode в ASCII
+Python-библиотеки,unittest,Тестирование
+Python-библиотеки,unstructured,Извлечение текста из любых документов
+Python-библиотеки,unstructured-ingest,Извлечение текста из любых документов
+Python-библиотеки,urllib3,Фундаментальный HTTP-клиент (база requests)
+Python-библиотеки,uvicorn,ASGI-сервер
+Python-библиотеки,uvloop,Быстрая замена event loop asyncio (libuv)
+Python-библиотеки,uwsgi,WSGI-сервер (классика продакшн-деплоя)
+Python-библиотеки,vaex,Out-of-core DataFrame для миллиардов строк
+Python-библиотеки,vcrpy,Мокирование HTTP в тестах
+Python-библиотеки,vectorbt,Векторизованный быстрый бэктестинг
+Python-библиотеки,vega,Декларативная визуализация
+Python-библиотеки,viztracer,Трассировка выполнения с timeline
+Python-библиотеки,vllm,Высокопроизводительный инференс LLM (PagedAttention)
+Python-библиотеки,vobject,Парсинг vCard
+Python-библиотеки,voila,Превращение ноутбуков в интерактивные дашборды
+Python-библиотеки,voluptuous,Валидация данных (конфигурации)
+Python-библиотеки,vonage,SMS и голосовые звонки
+Python-библиотеки,vosk,Офлайн ASR для 20+ языков
+Python-библиотеки,vt-py,VirusTotal API
+Python-библиотеки,vulture,Поиск мёртвого кода
+Python-библиотеки,waitress,Чистый Python WSGI-сервер (кроссплатформенный)
+Python-библиотеки,wand,Привязка ImageMagick для Python
+Python-библиотеки,wandb,ML-трекинг и визуализация
+Python-библиотеки,watchdog,Кроссплатформенный мониторинг файловой системы
+Python-библиотеки,watchfiles,"Быстрый мониторинг файлов (Rust, движок uvicorn --reload)"
+Python-библиотеки,weaviate-client,Клиент векторных БД
+Python-библиотеки,web3,Взаимодействие с Ethereum и смарт-контрактами
+Python-библиотеки,websockets,Библиотека WebSocket-клиентов и серверов
+Python-библиотеки,whisperx,Whisper с выравниванием слов и диаризацией
+Python-библиотеки,wordfreq,Частотности слов в 30+ языках
+Python-библиотеки,wxPython,Нативные GUI-виджеты
+Python-библиотеки,xarray,"N-мерные помеченные массивы (метеорология, океанография)"
+Python-библиотеки,xgboost,Градиентный бустинг
+Python-библиотеки,xhtml2pdf,HTML → PDF
+Python-библиотеки,xlrd,"Работа с .xlsx, .xls"
+Python-библиотеки,xlsxwriter,"Работа с .xlsx, .xls"
+Python-библиотеки,xlwings,Автоматизация Excel (Windows/macOS)
+Python-библиотеки,yapf,Форматировщик кода (Google)
+Python-библиотеки,ydata-profiling,Профилирование датасетов (бывш. pandas-profiling)
+Python-библиотеки,yfinance,Рыночные данные Yahoo Finance
+Python-библиотеки,z3-solver,SMT-решатель (доказательство теорем)
+Python-библиотеки,zarr,Чанкованные сжатые N-мерные массивы
+Автоматизация интерактивных программ,echo,Форматированный вывод
+Автоматизация интерактивных программ,expect,Автоматизация интерактивных программ (TCL)
+Автоматизация интерактивных программ,printf,Форматированный вывод
+Автоматизация интерактивных программ,script,Запись терминальной сессии
+Автоматизация интерактивных программ,scriptreplay,Воспроизведение терминальной сессии
+Автоматизация интерактивных программ,unbuffer,Снятие буферизации stdout (для пайпов)
+Автоматизация интерактивных программ,yes,Автоматический ответ y на все вопросы
+Архиваторы и файловые утилиты,7z,"Работа с .7z, .zip, .rar, .cab, .iso и др."
+Архиваторы и файловые утилиты,ar,Создание статических библиотек (.a)
+Архиваторы и файловые утилиты,arc,Архиватор ARC (редкий формат)
+Архиваторы и файловые утилиты,arj,Архиватор ARJ
+Архиваторы и файловые утилиты,atool,"Универсальная обёртка для архиваторов (aunpack, apack, als)"
+Архиваторы и файловые утилиты,b2sum,Контрольные суммы BLAKE2
+Архиваторы и файловые утилиты,basename,Имя файла без пути
+Архиваторы и файловые утилиты,bat,Улучшенный cat с подсветкой синтаксиса
+Архиваторы и файловые утилиты,broot,Интерактивный браузер директорий с поиском и переходом
+Архиваторы и файловые утилиты,brotli,Сжатие/распаковка .br (алгоритм Google)
+Архиваторы и файловые утилиты,bzip2,Распаковка .bz2
+Архиваторы и файловые утилиты,cksum,Контрольные суммы CRC32
+Архиваторы и файловые утилиты,clifm,"Файловый менеджер, живущий внутри оболочки"
+Архиваторы и файловые утилиты,cmp,Побайтовое сравнение файлов
+Архиваторы и файловые утилиты,cp,Копирование файлов и директорий
+Архиваторы и файловые утилиты,cpio,Архивирование в стиле Unix (initramfs)
+Архиваторы и файловые утилиты,croc,Простая и безопасная передача файлов между машинами
+Архиваторы и файловые утилиты,csplit,Нарезка файла по контексту/регулярке
+Архиваторы и файловые утилиты,dcfldd,Улучшенный dd с хешированием и прогрессом
+Архиваторы и файловые утилиты,dd,Низкоуровневое копирование и конвертация образов
+Архиваторы и файловые утилиты,ddrescue,Восстановление данных с повреждённых носителей
+Архиваторы и файловые утилиты,dirname,Путь без имени файла
+Архиваторы и файловые утилиты,dtrx,Интеллектуальная распаковка с сохранением структуры
+Архиваторы и файловые утилиты,dust,Визуальный du (bar-chart disk usage)
+Архиваторы и файловые утилиты,entr,Запуск команды при изменении файлов
+Архиваторы и файловые утилиты,eza,Современная замена ls с иконками
+Архиваторы и файловые утилиты,f2,Быстрое и безопасное переименование файлов
+Архиваторы и файловые утилиты,fclones,Эффективный поиск и удаление дубликатов файлов
+Архиваторы и файловые утилиты,fd,Быстрый поиск файлов (альтернатива find)
+Архиваторы и файловые утилиты,fdupes,Поиск дубликатов файлов
+Архиваторы и файловые утилиты,find,Поиск файлов по критериям
+Архиваторы и файловые утилиты,fzf,Fuzzy-поиск для интерактивного выбора файлов/строк
+Архиваторы и файловые утилиты,genisoimage,Создание ISO-образов
+Архиваторы и файловые утилиты,gunzip,Распаковка .gz
+Архиваторы и файловые утилиты,gzip,Сжатие/распаковка .gz
+Архиваторы и файловые утилиты,inotifywait,Мониторинг файловых событий Linux
+Архиваторы и файловые утилиты,inotifywatch,Мониторинг файловых событий Linux
+Архиваторы и файловые утилиты,joshuto,Файловый менеджер в стиле Ranger с vi-биндингами
+Архиваторы и файловые утилиты,kondo,Поиск и удаление артефактов сборки
+Архиваторы и файловые утилиты,lf,Быстрый и настраиваемый файловый менеджер
+Архиваторы и файловые утилиты,lha,Архиватор LHA (Amiga/PC-98)
+Архиваторы и файловые утилиты,lla,ls с плагинной системой
+Архиваторы и файловые утилиты,ln,Жёсткие и символические ссылки
+Архиваторы и файловые утилиты,ls,Список файлов в директории
+Архиваторы и файловые утилиты,lsar,Просмотр содержимого архива (спутник unar)
+Архиваторы и файловые утилиты,lsd,LSDeluxe — ls с иконками и цветами
+Архиваторы и файловые утилиты,lz4,Экстремально быстрое сжатие
+Архиваторы и файловые утилиты,lzop,Быстрое сжатие на основе LZO
+Архиваторы и файловые утилиты,magic-wormhole,Безопасная передача файлов по кодовому слову (PAKE)
+Архиваторы и файловые утилиты,mc,Midnight Commander – файловый менеджер с просмотром архивов
+Архиваторы и файловые утилиты,md5sum,Контрольные суммы MD5
+Архиваторы и файловые утилиты,mkdir,Создание директорий
+Архиваторы и файловые утилиты,mktemp,Безопасное создание временных файлов/директорий
+Архиваторы и файловые утилиты,mv,Перемещение/переименование файлов
+Архиваторы и файловые утилиты,ncdu,Интерактивный анализатор дискового пространства
+Архиваторы и файловые утилиты,nnn,Минималистичный и быстрый файловый менеджер
+Архиваторы и файловые утилиты,nomino,Переименование файлов с regex и сортировкой
+Архиваторы и файловые утилиты,ouch,Универсальный compress/decompress
+Архиваторы и файловые утилиты,plocate,Быстрый поиск по индексу ФС (современный locate)
+Архиваторы и файловые утилиты,procs,"Альтернатива ps с цветом, фильтрацией и деревом процессов"
+Архиваторы и файловые утилиты,rar,Проприетарный архиватор WinRAR (создание .rar)
+Архиваторы и файловые утилиты,rclone,"Синхронизация с облачными хранилищами (S3, GDrive, Dropbox)"
+Архиваторы и файловые утилиты,readlink,Чтение значения символической ссылки
+Архиваторы и файловые утилиты,realpath,Канонический абсолютный путь
+Архиваторы и файловые утилиты,rip,Безопасное удаление файлов с подтверждением и предпросмотром (альтернатива rm)
+Архиваторы и файловые утилиты,ripgrep,Рекурсивный поиск текста по файлам (быстрее grep)
+Архиваторы и файловые утилиты,rm,Удаление файлов/директорий
+Архиваторы и файловые утилиты,rsync,Дельта-синхронизация файлов по сети (локально и удалённо)
+Архиваторы и файловые утилиты,s3cmd,Клиент S3-совместимых хранилищ
+Архиваторы и файловые утилиты,s5cmd,Очень быстрый параллельный клиент S3 (Go)
+Архиваторы и файловые утилиты,sha1sum,Контрольные суммы SHA-1
+Архиваторы и файловые утилиты,sha256sum,Контрольные суммы SHA-256
+Архиваторы и файловые утилиты,split,Нарезка файла на части по размеру/строкам
+Архиваторы и файловые утилиты,stat,"Метаданные файлов (размер, права, время)"
+Архиваторы и файловые утилиты,superfile,Современный и красивый TUI-файловый менеджер
+Архиваторы и файловые утилиты,symlinks,Управление символическими ссылками
+Архиваторы и файловые утилиты,syncthing,Децентрализованная непрерывная синхронизация файлов
+Архиваторы и файловые утилиты,tar,"Работа с .tar, .tar.gz, .tgz (создание, распаковка, просмотр)"
+Архиваторы и файловые утилиты,touch,"Создание пустых файлов, обновление временных меток"
+Архиваторы и файловые утилиты,trash-cli,Безопасное удаление с перемещением в корзину
+Архиваторы и файловые утилиты,tre,tree с Git-интеграцией
+Архиваторы и файловые утилиты,tre-command,Дерево каталогов с интеграцией Git и preview
+Архиваторы и файловые утилиты,tree,Визуализация дерева директорий
+Архиваторы и файловые утилиты,unar,"Распаковка архивов (rar, zip, tar, 7z и др.) с автодетектом кодировки"
+Архиваторы и файловые утилиты,unison,Двунаправленная синхронизация файлов
+Архиваторы и файловые утилиты,unrar,Распаковка .rar (бесплатная версия)
+Архиваторы и файловые утилиты,unzip,Распаковка .zip
+Архиваторы и файловые утилиты,watchexec,Запуск команд при изменении файлов (Rust)
+Архиваторы и файловые утилиты,watchman,Файловый watcher от Meta (отслеживание изменений)
+Архиваторы и файловые утилиты,xplr,"Минималистичный, быстрый TUI-файловый менеджер"
+Архиваторы и файловые утилиты,xz,Распаковка .xz
+Архиваторы и файловые утилиты,yazi,Современный файловый менеджер в терминале на Rust с превью
+Архиваторы и файловые утилиты,zoo,Архиватор Zoo
+Архиваторы и файловые утилиты,zstd,Сжатие/распаковка .zst (высокая скорость)
+"Безопасность, криптография и аудит",1password-cli,CLI-доступ к 1Password vaults
+"Безопасность, криптография и аудит",aa-enforce,AppArmor профили
+"Безопасность, криптография и аудит",aa-status,Состояние AppArmor
+"Безопасность, криптография и аудит",acme.sh,Альтернативный ACME-клиент (чистый shell)
+"Безопасность, криптография и аудит",actionlint,Статический анализ workflow GitHub Actions
+"Безопасность, криптография и аудит",aegis,управление доступом
+"Безопасность, криптография и аудит",age,Современное простое шифрование файлов (X25519)
+"Безопасность, криптография и аудит",aircrack-ng,"Аудит Wi-Fi: захват рукопожатий, взлом WEP/WPA"
+"Безопасность, криптография и аудит",amass,Глубокая разведка поддоменов и альтернативных имён (OWASP)
+"Безопасность, криптография и аудит",apparmor_parser,Загрузка и проверка AppArmor-профилей
+"Безопасность, криптография и аудит",apparmor_status,AppArmor профили
+"Безопасность, криптография и аудит",arjun,Поиск скрытых HTTP-параметров
+"Безопасность, криптография и аудит",auditctl,Linux Audit Framework
+"Безопасность, криптография и аудит",ausearch,Linux Audit Framework
+"Безопасность, криптография и аудит",bettercap,"Фреймворк MITM-атак: Wi-Fi, BLE, HID, сети"
+"Безопасность, криптография и аудит",bw,Bitwarden CLI (менеджер паролей)
+"Безопасность, криптография и аудит",cargo-geiger,Поиск unsafe-кода в зависимостях
+"Безопасность, криптография и аудит",certbot,Автоматический выпуск Let's Encrypt
+"Безопасность, криптография и аудит",certipy,Атаки и перечисление Active Directory Certificate Services
+"Безопасность, криптография и аудит",certstrap,Простое создание CA и сертификатов без интерактива
+"Безопасность, криптография и аудит",cewl,Генерация словарей из содержимого сайтов
+"Безопасность, криптография и аудит",cfssl,PKI инфраструктура от Cloudflare
+"Безопасность, криптография и аудит",cfssljson,PKI инфраструктура от Cloudflare
+"Безопасность, криптография и аудит",chkrootkit,Проверка на руткиты
+"Безопасность, криптография и аудит",codeql,semantic security analysis
+"Безопасность, криптография и аудит",crunch,Генератор словарей заданной структуры
+"Безопасность, криптография и аудит",dependabot,dependency updates/security alerts
+"Безопасность, криптография и аудит",detect-secrets,"Поиск секретов в коде (Yelp, enterprise-подход)"
+"Безопасность, криптография и аудит",dirb,Классический брутфорс веб-директорий
+"Безопасность, криптография и аудит",dirsearch,Сканер веб-путей
+"Безопасность, криптография и аудит",dnsrecon,DNS reconnaissance
+"Безопасность, криптография и аудит",dnsx,Многофункциональный DNS-инструментарий (ProjectDiscovery)
+"Безопасность, криптография и аудит",droopescan,Сканер плагинов и тем Drupal
+"Безопасность, криптография и аудит",drush,Управление Drupal из командной строки
+"Безопасность, криптография и аудит",dsniff,"Набор снифферов и MITM-утилит (arpspoof, urlsnarf)"
+"Безопасность, криптография и аудит",enum4linux-ng,Перечисление SMB/Windows-хостов
+"Безопасность, криптография и аудит",ettercap,Классический перехват трафика (MITM)
+"Безопасность, криптография и аудит",fail2ban-client,Управление банами по IP
+"Безопасность, криптография и аудит",feroxbuster,Рекурсивный поиск контента (Rust)
+"Безопасность, криптография и аудит",ffuf,Быстрый веб-фаззер (Go)
+"Безопасность, криптография и аудит",firewall-cmd,CLI firewalld
+"Безопасность, криптография и аудит",firewalld-cmd,Файрвол RHEL/CentOS
+"Безопасность, криптография и аудит",gau,"Сбор известных URL из Common Crawl, Wayback и др."
+"Безопасность, криптография и аудит",gitleaks,Обнаружение секретов в git-истории
+"Безопасность, криптография и аудит",gobuster,"Брутфорс директорий, DNS, виртуальных хостов"
+"Безопасность, криптография и аудит",gopass,Менеджер паролей pass для команд (Go)
+"Безопасность, криптография и аудит",gophish,Платформа моделирования фишинговых кампаний
+"Безопасность, криптография и аудит",gosec,Статический анализ безопасности Go
+"Безопасность, криптография и аудит",gpg,"PGP-подписи, шифрование файлов, доверие"
+"Безопасность, криптография и аудит",gpg2,"PGP-подписи, шифрование файлов, доверие"
+"Безопасность, криптография и аудит",hakrawler,Быстрый веб-краулер для сбора эндпоинтов
+"Безопасность, криптография и аудит",hashcat,Восстановление хешей на GPU
+"Безопасность, криптография и аудит",hashid,Определение типа хеша
+"Безопасность, криптография и аудит",hostapd,Точка доступа Wi-Fi и обмен EAPOL
+"Безопасность, криптография и аудит",hydra,Брутфорс логинов по сети
+"Безопасность, криптография и аудит",in-toto-run,Формирование attestations
+"Безопасность, криптография и аудит",john,John the Ripper — восстановление паролей
+"Безопасность, криптография и аудит",joomscan,Сканер уязвимостей Joomla
+"Безопасность, криптография и аудит",jwt-cli,Декодирование и подпись JWT
+"Безопасность, криптография и аудит",katana,Продвинутый веб-краулер (ProjectDiscovery)
+"Безопасность, криптография и аудит",keepassxc-cli,Работа с базами KeePass без GUI
+"Безопасность, криптография и аудит",kerbrute,Брутфорс и енумерация пользователей Kerberos
+"Безопасность, криптография и аудит",kinit,Получение Kerberos ticket
+"Безопасность, криптография и аудит",kismet,Детектор и сниффер беспроводных сетей
+"Безопасность, криптография и аудит",klist,Просмотр Kerberos tickets
+"Безопасность, криптография и аудит",kubescape,Аудит Kubernetes-конфигурации
+"Безопасность, криптография и аудит",ligolo-ng,Туннелирование и пивоты как VPN (пентест)
+"Безопасность, криптография и аудит",lynis,Аудит безопасности системы
+"Безопасность, криптография и аудит",macchanger,Подмена MAC-адреса
+"Безопасность, криптография и аудит",massdns,массовый DNS resolution
+"Безопасность, криптография и аудит",medusa,Модульный брутфорс сетевых сервисов
+"Безопасность, криптография и аудит",metasploit-framework,Penetration testing (msfconsole)
+"Безопасность, криптография и аудит",minisign,Простое подписание файлов (ed25519)
+"Безопасность, криптография и аудит",mkcert,Локальные доверенные TLS-сертификаты для разработки
+"Безопасность, криптография и аудит",msfconsole,Penetration testing
+"Безопасность, криптография и аудит",naabu,Быстрый сканер портов (ProjectDiscovery)
+"Безопасность, криптография и аудит",name-that-hash,Определение типа хеша с выводом в JSON
+"Безопасность, криптография и аудит",ncrack,Брутфорс сетевой аутентификации (семейство nmap)
+"Безопасность, криптография и аудит",netexec,Универсальный инструмент сетевого пентеста (бывш. CrackMapExec)
+"Безопасность, криптография и аудит",nikto,Сканер уязвимостей веб-серверов
+"Безопасность, криптография и аудит",nuclei,Сканер уязвимостей на основе шаблонов (ProjectDiscovery)
+"Безопасность, криптография и аудит",op,1Password CLI
+"Безопасность, криптография и аудит",openbao,open-source secrets management
+"Безопасность, криптография и аудит",openssl,"Сертификаты X.509, TLS-тесты, шифрование"
+"Безопасность, криптография и аудит",osv-scanner,Сканер уязвимостей зависимостей по базе OSV (Google)
+"Безопасность, криптография и аудит",pass,Минималистичный менеджер паролей на GPG + git
+"Безопасность, криптография и аудит",patator,Мультипоточный брутфорс с модулями протоколов
+"Безопасность, криптография и аудит",pip-audit,Аудит уязвимостей установленных Python-пакетов (PyPA)
+"Безопасность, криптография и аудит",proxychains,Прогон любого приложения через цепочку прокси
+"Безопасность, криптография и аудит",rage,Реализация age на Rust
+"Безопасность, криптография и аудит",reaver,Атака на WPS (Pixie Dust)
+"Безопасность, криптография и аудит",recon-ng,Модульный фреймворк веб-разведки (OSINT)
+"Безопасность, криптография и аудит",rekor-cli,Прозрачный журнал подписей
+"Безопасность, криптография и аудит",responder,Отравление LLMNR/NBT-NS/mDNS в локальной сети
+"Безопасность, криптография и аудит",ripsecrets,Поиск секретов в файлах и Git-истории
+"Безопасность, криптография и аудит",rkhunter,Проверка на руткиты
+"Безопасность, криптография и аудит",secretlint,Проверка секретов в репозиториях
+"Безопасность, криптография и аудит",semanage,SELinux политики
+"Безопасность, криптография и аудит",semgrep,Статический анализ кода с семантическим поиском
+"Безопасность, криптография и аудит",sestatus,SELinux политики
+"Безопасность, криптография и аудит",sigstore,инфраструктура доверенной подписи
+"Безопасность, криптография и аудит",sliver,Открытый фреймворк C2 (adversary emulation)
+"Безопасность, криптография и аудит",slsa-verifier,Проверка SLSA provenance
+"Безопасность, криптография и аудит",sops,"Шифрование YAML, JSON, ENV и других конфигураций"
+"Безопасность, криптография и аудит",sqlmap,Автоматический SQL-инъекции сканер
+"Безопасность, криптография и аудит",ssh-add,Управление SSH-ключами в памяти
+"Безопасность, криптография и аудит",ssh-agent,Управление SSH-ключами в памяти
+"Безопасность, криптография и аудит",ssh-keygen,"Генерация SSH-ключей (RSA, ED25519)"
+"Безопасность, криптография и аудит",step,Smallstep PKI (мини-CA)
+"Безопасность, криптография и аудит",step-ca,Smallstep PKI (мини-CA)
+"Безопасность, криптография и аудит",step-cli,PKI/certificates/identity automation
+"Безопасность, криптография и аудит",subfinder,Пассивный поиск поддоменов (ProjectDiscovery)
+"Безопасность, криптография и аудит",testssl.sh,TLS/SSL audit
+"Безопасность, криптография и аудит",tfsec,Terraform security scanning
+"Безопасность, криптография и аудит",theHarvester,"OSINT: сбор e-mail, поддоменов, имён из открытых источников"
+"Безопасность, криптография и аудит",tpm2-tools,Работа с TPM 2.0
+"Безопасность, криптография и аудит",trufflehog,Поиск секретов и ключей в репозиториях (400+ детекторов)
+"Безопасность, криптография и аудит",vault,Управление секретами и шифрование (HashiCorp)
+"Безопасность, криптография и аудит",wafw00f,Определение и фингерпринт WAF
+"Безопасность, криптография и аудит",wavemon,Мониторинг Wi-Fi (TUI)
+"Безопасность, криптография и аудит",waybackurls,Извлечение URL из Wayback Machine
+"Безопасность, криптография и аудит",wfuzz,Классический веб-фаззер
+"Безопасность, криптография и аудит",whatweb,Фингерпринт веб-технологий
+"Безопасность, криптография и аудит",wifite,Автоматизация атак на Wi-Fi
+"Безопасность, криптография и аудит",wp-cli,Управление WordPress из командной строки
+"Безопасность, криптография и аудит",wpscan,Сканер уязвимостей WordPress
+"Безопасность, криптография и аудит",yara,Язык правил и поиск вредоносных паттернов (VirusTotal)
+"Безопасность, криптография и аудит",ykman,Управление YubiKey
+"Безопасность, криптография и аудит",zaproxy,OWASP ZAP — прокси и сканер веб-уязвимостей (headless)
+"Безопасность, криптография и аудит",zgrab2,application-layer network scanner
+"Безопасность, криптография и аудит",zizmor,security audit GitHub Actions
+Браузерная и веб-автоматизация,chromedriver,Chrome WebDriver
+Браузерная и веб-автоматизация,chromium,headless/browser runtime
+Браузерная и веб-автоматизация,firefox,browser automation target
+Браузерная и веб-автоматизация,geckodriver,Firefox WebDriver
+Браузерная и веб-автоматизация,wappalyzer,technology fingerprinting
+Браузерная и веб-автоматизация,web-ext,Firefox extension development
+"Брокеры сообщений, очереди и потоковая обработка",beanstalkd,Простая очередь задач
+"Брокеры сообщений, очереди и потоковая обработка",kafka-configs,Изменение конфигурации топиков
+"Брокеры сообщений, очереди и потоковая обработка",kafka-console-consumer,Чтение топиков Kafka
+"Брокеры сообщений, очереди и потоковая обработка",kafka-console-producer,Запись в топик Kafka
+"Брокеры сообщений, очереди и потоковая обработка",kafka-topics,"Управление топиками (create, delete, describe)"
+"Брокеры сообщений, очереди и потоковая обработка",kcat,Универсальный Kafka consumer/producer (ранее kafkacat)
+"Брокеры сообщений, очереди и потоковая обработка",mosquitto_pub,MQTT публикация
+"Брокеры сообщений, очереди и потоковая обработка",mosquitto_sub,MQTT подписка
+"Брокеры сообщений, очереди и потоковая обработка",mqtt-cli,Универсальный MQTT клиент
+"Брокеры сообщений, очереди и потоковая обработка",nats,"Универсальный CLI-клиент NATS (pub/sub, KV, Object Store)"
+"Брокеры сообщений, очереди и потоковая обработка",nats-server,Сервер NATS (лёгкий messaging)
+"Брокеры сообщений, очереди и потоковая обработка",nsq,NSQ очередь сообщений
+"Брокеры сообщений, очереди и потоковая обработка",nsq_pub,NSQ очередь сообщений
+"Брокеры сообщений, очереди и потоковая обработка",nsq_tail,NSQ очередь сообщений
+"Брокеры сообщений, очереди и потоковая обработка",pulsar-admin,Apache Pulsar CLI
+"Брокеры сообщений, очереди и потоковая обработка",rabbitmqadmin,REST-API клиент для RabbitMQ
+"Брокеры сообщений, очереди и потоковая обработка",rabbitmqctl,Управление нодой RabbitMQ
+"Брокеры сообщений, очереди и потоковая обработка",rpk,CLI Redpanda (Kafka-совместимый брокер)
+Встраиваемые системы и электроника,arduino-cli,Сборка и загрузка скетчей Arduino
+Встраиваемые системы и электроника,avrdude,Прошивка микроконтроллеров AVR
+Встраиваемые системы и электроника,dfu-util,Загрузка прошивок по USB DFU
+Встраиваемые системы и электроника,esptool,Прошивка ESP8266/ESP32 (Espressif)
+Встраиваемые системы и электроника,flashrom,Чтение/запись флеш-памяти BIOS/UEFI
+Встраиваемые системы и электроника,openfpgaloader,Прошивка FPGA множества семейств
+Встраиваемые системы и электроника,openocd,Отладка и прошивка через JTAG/SWD
+Встраиваемые системы и электроника,picotool,Управление RP2040/RP2350 (Raspberry Pi Pico)
+Встраиваемые системы и электроника,platformio,Кроссплатформенная сборка embedded-проектов (pio)
+Встраиваемые системы и электроника,probe-rs,Современная отладка микроконтроллеров (Rust)
+Встраиваемые системы и электроника,sigrok-cli,Работа с логическими анализаторами и осциллографами
+Встраиваемые системы и электроника,st-flash,Прошивка STM32 (stlink-tools)
+Встраиваемые системы и электроника,west,Мультиинструмент проекта Zephyr RTOS
+Диаграммы и графики (CLI),asymptote,Векторная графика для технических иллюстраций
+Диаграммы и графики (CLI),blockdiag,Блочные диаграммы из простого текста
+Диаграммы и графики (CLI),d2,Современный декларативный язык диаграмм (Terrastruct)
+Диаграммы и графики (CLI),ditaa,ASCII-схемы в PNG
+Диаграммы и графики (CLI),gnuplot,Классические научные графики и функции
+Диаграммы и графики (CLI),graphviz,"Графы по описанию на DOT (dot, neato, circo)"
+Диаграммы и графики (CLI),mermaid-cli,diagrams from text
+Диаграммы и графики (CLI),mmdc,Mermaid-диаграммы в PNG/SVG/PDF (mermaid-cli)
+Диаграммы и графики (CLI),pikchr,Язык диаграмм для документации (SQLite)
+Диаграммы и графики (CLI),plantuml,UML-диаграммы из текстового описания
+Диаграммы и графики (CLI),svgbob,ASCII-арт в SVG
+"Диски, файловые системы и разметка",badblocks,Поиск повреждённых блоков
+"Диски, файловые системы и разметка",blkid,UUID блочных устройств
+"Диски, файловые системы и разметка",btrfs,"Файловая система Btrfs (снапшоты, сжатие)"
+"Диски, файловые системы и разметка",cfdisk,Интерактивная разметка дисков (curses)
+"Диски, файловые системы и разметка",chattr,Атрибуты ext-файлов
+"Диски, файловые системы и разметка",cryptsetup,Шифрование разделов LUKS/dm-crypt
+"Диски, файловые системы и разметка",df,Свободное место
+"Диски, файловые системы и разметка",dmsetup,Низкоуровневое управление device-mapper
+"Диски, файловые системы и разметка",du,Размер директорий
+"Диски, файловые системы и разметка",dua,Анализ дискового пространства с быстрым интерактивным интерфейсом
+"Диски, файловые системы и разметка",duf,Альтернатива df — читаемый вывод с цветом и сортировкой
+"Диски, файловые системы и разметка",e2fsck,Проверка и исправление ФС
+"Диски, файловые системы и разметка",fdisk,Разметка дисков (MBR/GPT)
+"Диски, файловые системы и разметка",filefrag,Анализ фрагментации файлов
+"Диски, файловые системы и разметка",fsck,Проверка и исправление ФС
+"Диски, файловые системы и разметка",fstrim,TRIM для SSD
+"Диски, файловые системы и разметка",gdisk,Разметка дисков (MBR/GPT)
+"Диски, файловые системы и разметка",gdu,Быстрый disk usage analyzer на Go
+"Диски, файловые системы и разметка",gocryptfs,Шифрованная ФС поверх каталога (FUSE)
+"Диски, файловые системы и разметка",hdparm,Низкоуровневые параметры дисков
+"Диски, файловые системы и разметка",losetup,Управление loop-устройствами
+"Диски, файловые системы и разметка",lsattr,Просмотр ext-атрибутов
+"Диски, файловые системы и разметка",lsblk,Дерево блочных устройств
+"Диски, файловые системы и разметка",lvm,Управление LVM (pvcreate/vgcreate/lvcreate)
+"Диски, файловые системы и разметка",mdadm,Управление программным RAID
+"Диски, файловые системы и разметка",mkfs.ext4,Создание файловых систем
+"Диски, файловые системы и разметка",mkfs.vfat,Создание файловых систем
+"Диски, файловые системы и разметка",mkfs.xfs,Создание файловых систем
+"Диски, файловые системы и разметка",mount,Монтирование/размонтирование ФС
+"Диски, файловые системы и разметка",nvme,Управление NVMe-накопителями
+"Диски, файловые системы и разметка",parted,Разметка дисков (MBR/GPT)
+"Диски, файловые системы и разметка",partprobe,Обновление таблицы разделов ядра
+"Диски, файловые системы и разметка",partx,Уведомление ядра об изменении таблицы разделов
+"Диски, файловые системы и разметка",resize2fs,Изменение размера ФС online
+"Диски, файловые системы и разметка",sdparm,Низкоуровневые параметры дисков
+"Диски, файловые системы и разметка",sfdisk,Скриптовое разбиение дисков (MBR/GPT)
+"Диски, файловые системы и разметка",sgdisk,Скриптовая разметка GPT (семейство gdisk)
+"Диски, файловые системы и разметка",smartctl,S.M.A.R.T. диагностика дисков
+"Диски, файловые системы и разметка",sync,Принудительная запись буферов на диск
+"Диски, файловые системы и разметка",tune2fs,Параметры ext2/3/4
+"Диски, файловые системы и разметка",udevadm,Управление событиями устройств (udev)
+"Диски, файловые системы и разметка",umount,Монтирование/размонтирование ФС
+"Диски, файловые системы и разметка",wipefs,Стирание сигнатур ФС/RAID с устройства
+"Диски, файловые системы и разметка",xfs_growfs,Изменение размера ФС online
+"Диски, файловые системы и разметка",xfs_repair,Проверка и исправление ФС
+"Диски, файловые системы и разметка",zfs,"ZFS: пулы, снапшоты, сжатие, RAID-Z"
+"Диски, файловые системы и разметка",zpool,Управление ZFS pools
+Документы и OCR,a2ps,Anything to PostScript
+Документы и OCR,abiword,Лёгкий текстовый процессор с конвертацией
+Документы и OCR,antiword,Извлечение текста из .doc (Word 97-2003)
+Документы и OCR,asciidoc,Классический AsciiDoc
+Документы и OCR,asciidoctor,Процессор AsciiDoc
+Документы и OCR,aspell,Проверка орфографии
+Документы и OCR,biber,Управление библиографией LaTeX
+Документы и OCR,bibtex,Управление библиографией LaTeX
+Документы и OCR,calamari,OCR на TensorFlow
+Документы и OCR,catdoc,Извлечение текста из старых MS Office
+Документы и OCR,catppt,Извлечение текста из старых MS Office
+Документы и OCR,cmark,CommonMark парсер
+Документы и OCR,cmark-gfm,GitHub Flavored Markdown парсер
+Документы и OCR,comparepdf,Визуальное сравнение PDF
+Документы и OCR,cpdf,Манипуляции с PDF-страницами
+Документы и OCR,cuneiform,"OCR (русский, английский, многоязычный)"
+Документы и OCR,dblatex,Конвертация DocBook в PDF через LaTeX
+Документы и OCR,decktape,HTML-презентации → PDF
+Документы и OCR,diff-pdf,Визуальное сравнение PDF
+Документы и OCR,djvused,OCR и манипуляции с DjVu
+Документы и OCR,djvutxt,OCR и манипуляции с DjVu
+Документы и OCR,docusaurus,documentation platform
+Документы и OCR,docutils,Библиотека для reStructuredText (есть CLI)
+Документы и OCR,doxygen,Генерация документации из исходного кода
+Документы и OCR,doxywizard,Генерация документации из исходного кода
+Документы и OCR,easyocr,OCR на PyTorch (80+ языков)
+Документы и OCR,enscript,Текст → PostScript
+Документы и OCR,fop,XSL-FO → PDF (Apache FOP)
+Документы и OCR,ghostscript,Интерпретатор PostScript/PDF (gs): конвертация и оптимизация
+Документы и OCR,gocr,GNU OCR
+Документы и OCR,godoc,Генератор документации для Go
+Документы и OCR,grip,Просмотр Markdown в терминале
+Документы и OCR,groff,Классическая Unix вёрстка (man pages)
+Документы и OCR,help2man,Генерация man-страниц из --help
+Документы и OCR,hugo,static publishing
+Документы и OCR,hunspell,Проверка орфографии (словари LibreOffice/Firefox)
+Документы и OCR,javadoc,Генератор документации для Java
+Документы и OCR,kraken,OCR для исторических документов
+Документы и OCR,kramdown,Ruby-библиотека для Markdown (CLI)
+Документы и OCR,latexdiff,Визуальная разница версий LaTeX-документов
+Документы и OCR,latexindent,Форматирование LaTeX-кода
+Документы и OCR,latexmk,Автоматизация сборки LaTeX
+Документы и OCR,libreoffice,Headless-режим для конвертации офисных документов
+Документы и OCR,lowdown,Парсер CommonMark
+Документы и OCR,lualatex,Компилятор LaTeX
+Документы и OCR,mandoc,Современный процессор man-страниц
+Документы и OCR,markdown,Парсер Markdown (CLI)
+Документы и OCR,marp,Markdown → презентации (HTML/PPTX/PDF)
+Документы и OCR,mdv,Просмотр Markdown в терминале
+Документы и OCR,mkdocs,documentation sites
+Документы и OCR,mockoon,API дизайн и мокирование
+Документы и OCR,multimarkdown,Компилятор Markdown с расширениями
+Документы и OCR,mutool,Универсальный PDF-инструментарий (MuPDF)
+Документы и OCR,nroff,Классическая Unix вёрстка (man pages)
+Документы и OCR,ocrmypdf,OCR + оптимизация PDF (обёртка над tesseract)
+Документы и OCR,ocropus,OCR для исторических документов
+Документы и OCR,olefile,"Анализ OLE-структур (макровирусы, метаданные)"
+Документы и OCR,oletools,"Анализ OLE-структур (макровирусы, метаданные)"
+Документы и OCR,openapi-generator,Генерация клиентов/серверов из OpenAPI
+Документы и OCR,paddleocr,"OCR от Baidu (китайский, английский, многоязычный)"
+Документы и OCR,pandoc,"Конвертер между форматами (Markdown, HTML, DOCX, PDF, LaTeX)"
+Документы и OCR,paps,Текст → PostScript
+Документы и OCR,pdf-parser.py,Форензика Office-документов (из oletools)
+Документы и OCR,pdf2ps,Конвертация PDF → PostScript
+Документы и OCR,pdf2svg,PDF → SVG
+Документы и OCR,pdfarranger,Перестановка страниц PDF (headless)
+Документы и OCR,pdflatex,Компилятор LaTeX
+Документы и OCR,pdfminer.six,Низкоуровневый парсинг PDF (CLI)
+Документы и OCR,pdfseparate,Разделение PDF на страницы (poppler)
+Документы и OCR,pdftk,"Манипуляции с PDF (merge, split, rotate)"
+Документы и OCR,pdftocairo,Конвертация PDF в изображения/HTML (poppler)
+Документы и OCR,pdftohtml,Конвертация PDF в изображения/HTML (poppler)
+Документы и OCR,pdftoppm,Конвертация PDF в изображения/HTML (poppler)
+Документы и OCR,pdftotext,Извлечение текста из PDF (poppler)
+Документы и OCR,pdfunite,Объединение PDF (poppler)
+Документы и OCR,playwright,Генерация PDF из HTML через headless браузер (CLI)
+Документы и OCR,pod2html,Perl POD → HTML
+Документы и OCR,pod2man,Perl POD → man
+Документы и OCR,prince,Коммерческий HTML/XML → PDF
+Документы и OCR,prism,Mock-сервер из OpenAPI
+Документы и OCR,ps2ascii,PostScript → текст
+Документы и OCR,ps2pdf,Конвертация PostScript → PDF
+Документы и OCR,puppeteer,Headless Chrome для PDF (CLI)
+Документы и OCR,pydoc,Генератор документации для Python
+Документы и OCR,qpdf,Структурные манипуляции с PDF
+Документы и OCR,quarto,Публикация из Markdown/Jupyter в PDF/HTML/Word
+Документы и OCR,redoc-cli,Рендеринг OpenAPI спецификаций
+Документы и OCR,redocly,Рендеринг OpenAPI спецификаций
+Документы и OCR,reveal-md,Markdown → Reveal.js презентации
+Документы и OCR,ronn,Markdown → man-страница
+Документы и OCR,rst2html,reStructuredText конвертер
+Документы и OCR,rst2man,reStructuredText конвертер
+Документы и OCR,rst2pdf,reStructuredText конвертер
+Документы и OCR,rtfobj.py,Форензика Office-документов (из oletools)
+Документы и OCR,rustdoc,Генератор документации для Rust
+Документы и OCR,scdoc,Простой формат для man-страниц
+Документы и OCR,soffice,Алиас libreoffice
+Документы и OCR,spectral,Линтер OpenAPI
+Документы и OCR,sphinx,technical documentation
+Документы и OCR,stapler,Манипуляции с PDF-страницами (Python)
+Документы и OCR,stoplight,API design и mocking
+Документы и OCR,swagger-codegen,Генерация клиентов/серверов из Swagger
+Документы и OCR,tesseract,OCR (распознавание текста на изображениях) + языковые пакеты
+Документы и OCR,texlive,"Система вёрстки LaTeX (pdflatex, xelatex, etc.)"
+Документы и OCR,troff,Классическая Unix вёрстка (man pages)
+Документы и OCR,typst,"Современная вёрстка LaTeX-уровня (Rust, мгновенная компиляция)"
+Документы и OCR,unoconv,Конвертация офисных документов через LibreOffice
+Документы и OCR,unoconv2,Конвертация офисных документов через LibreOffice
+Документы и OCR,vale,Линтер прозы и стиля документации
+Документы и OCR,weasyprint,HTML → PDF (CLI)
+Документы и OCR,wkhtmltopdf,"HTML → PDF (старый, но работает)"
+Документы и OCR,wvWare,Парсер .doc (Word 97-2003)
+Документы и OCR,xelatex,Компилятор LaTeX
+Документы и OCR,xls2csv,Извлечение данных из .xls
+Документы и OCR,zipdump.py,Форензика Office-документов (из oletools)
+Интерпретаторы и компиляторы,abcl,Common Lisp на JVM
+Интерпретаторы и компиляторы,bash,"Shell-интерпретатор (скрипты, пайпы)"
+Интерпретаторы и компиляторы,bun,"JavaScript/TypeScript runtime, bundler, package manager"
+Интерпретаторы и компиляторы,cargo,Менеджер пакетов Rust и билд-система
+Интерпретаторы и компиляторы,chapel,Язык параллельного программирования от Cray
+Интерпретаторы и компиляторы,chicken,Компилятор Scheme в C
+Интерпретаторы и компиляторы,clang,Компилятор C/C++/Objective-C на инфраструктуре LLVM
+Интерпретаторы и компиляторы,clisp,Интерпретатор Common Lisp
+Интерпретаторы и компиляторы,clojure,Lisp на JVM
+Интерпретаторы и компиляторы,crystal,Ruby-подобный компилируемый язык
+Интерпретаторы и компиляторы,csc,Компилятор C# (Roslyn)
+Интерпретаторы и компиляторы,dart,Язык от Google (Flutter)
+Интерпретаторы и компиляторы,deno,Современный runtime TypeScript/JavaScript (безопасный)
+Интерпретаторы и компиляторы,dotnet,"Runtime .NET (C#, F#, VB.NET)"
+Интерпретаторы и компиляторы,ecl,Встраиваемый Common Lisp
+Интерпретаторы и компиляторы,elixir,Язык на BEAM (Erlang VM)
+Интерпретаторы и компиляторы,emcc,Компиляция C/C++ в WebAssembly (Emscripten)
+Интерпретаторы и компиляторы,erlang,Runtime Erlang
+Интерпретаторы и компиляторы,factor,Компилируемый стековый язык
+Интерпретаторы и компиляторы,fennel,"Lisp-синтаксис, транслируемый в Lua"
+Интерпретаторы и компиляторы,flutter,CLI для сборки мобильных/desktop/web приложений
+Интерпретаторы и компиляторы,fsharpc,Компилятор F#
+Интерпретаторы и компиляторы,fsharpi,Интерпретатор F#
+Интерпретаторы и компиляторы,gap,Система вычислительной дискретной алгебры
+Интерпретаторы и компиляторы,gawk,Версия awk от GNU
+Интерпретаторы и компиляторы,gcc,Компилятор GNU для C/C++/Fortran/Go
+Интерпретаторы и компиляторы,gforth,Реализация языка Forth
+Интерпретаторы и компиляторы,ghc,Glasgow Haskell Compiler
+Интерпретаторы и компиляторы,gnu-apl,Интерпретатор APL
+Интерпретаторы и компиляторы,go,Компилятор и runtime Go
+Интерпретаторы и компиляторы,groovy,Динамический JVM-язык
+Интерпретаторы и компиляторы,gst,GNU Smalltalk интерпретатор
+Интерпретаторы и компиляторы,guile,Интерпретатор Scheme (GNU)
+Интерпретаторы и компиляторы,hare,Системный язык с безопасным управлением памятью
+Интерпретаторы и компиляторы,haxe,Компилятор языка Haxe (кроссплатформенный)
+Интерпретаторы и компиляторы,include-what-you-use,Анализ include-зависимостей
+Интерпретаторы и компиляторы,io,Интерпретатор языка Io (акторная модель)
+Интерпретаторы и компиляторы,ipython,Интерактивный Python
+Интерпретаторы и компиляторы,j,Язык программирования J (из семейства APL)
+Интерпретаторы и компиляторы,jai,Экспериментальный игровой язык (CLI)
+Интерпретаторы и компиляторы,janet,Язык для встраивания с компилятором в байт-код
+Интерпретаторы и компиляторы,java,JVM runtime
+Интерпретаторы и компиляторы,javac,Компилятор Java
+Интерпретаторы и компиляторы,julia,Математические и научные вычисления
+Интерпретаторы и компиляторы,k,Язык K (из семейства APL)
+Интерпретаторы и компиляторы,kotlin,"Kotlin/JVM, Kotlin/Native, Kotlin/JS"
+Интерпретаторы и компиляторы,lean,Формальная верификация (Lean 4)
+Интерпретаторы и компиляторы,lua,Легковстраиваемый скриптовый язык
+Интерпретаторы и компиляторы,luajit,Just-in-time компилятор Lua
+Интерпретаторы и компиляторы,mathematica,Wolfram Language (научные вычисления)
+Интерпретаторы и компиляторы,matlab,Инженерные и научные вычисления
+Интерпретаторы и компиляторы,mawk,Альтернативная реализация awk
+Интерпретаторы и компиляторы,maxima,Компьютерная алгебра (CAS)
+Интерпретаторы и компиляторы,mix,Сборщик Elixir
+Интерпретаторы и компиляторы,mono,Кроссплатформенный runtime .NET (C#/F#)
+Интерпретаторы и компиляторы,newlisp,Легковесный интерпретатор Lisp
+Интерпретаторы и компиляторы,nim,Системный язык с Python-подобным синтаксисом
+Интерпретаторы и компиляторы,nimble,Менеджер пакетов Nim
+Интерпретаторы и компиляторы,node,JavaScript runtime (Node.js)
+Интерпретаторы и компиляторы,nvcc,Компилятор CUDA (NVIDIA)
+Интерпретаторы и компиляторы,ocaml,OCaml runtime
+Интерпретаторы и компиляторы,octave,Open-source альтернатива MATLAB
+Интерпретаторы и компиляторы,odin,"Язык, альтернатива C, простой синтаксис"
+Интерпретаторы и компиляторы,opam,Менеджер пакетов OCaml
+Интерпретаторы и компиляторы,perl,"Скриптовый язык (обработка текста, системное администрирование)"
+Интерпретаторы и компиляторы,php,Интерпретатор PHP (CLI)
+Интерпретаторы и компиляторы,picolisp,Минималистичный Lisp
+Интерпретаторы и компиляторы,prolog,Логическое программирование
+Интерпретаторы и компиляторы,python3,Главный интерпретатор Python
+Интерпретаторы и компиляторы,q,Язык запросов для временных рядов (kdb+)
+Интерпретаторы и компиляторы,racket,Среда для языков на основе Scheme
+Интерпретаторы и компиляторы,reason,"Синтаксис на основе OCaml, транслируемый в JS"
+Интерпретаторы и компиляторы,Rscript,Статистический анализ R
+Интерпретаторы и компиляторы,ruby,Интерпретатор Ruby
+Интерпретаторы и компиляторы,rustc,Компилятор Rust
+Интерпретаторы и компиляторы,sage,Математическая система на базе Python
+Интерпретаторы и компиляторы,sbcl,Steel Bank Common Lisp (компилятор)
+Интерпретаторы и компиляторы,scala,Функциональный JVM-язык
+Интерпретаторы и компиляторы,scalac,Компилятор Scala
+Интерпретаторы и компиляторы,self,Среда исполнения языка Self
+Интерпретаторы и компиляторы,sh,"Shell-интерпретатор (скрипты, пайпы)"
+Интерпретаторы и компиляторы,sml,Стандартный ML (SML/NJ)
+Интерпретаторы и компиляторы,swift,Язык Apple (доступен на Linux)
+Интерпретаторы и компиляторы,swipl,SWI-Prolog интерпретатор
+Интерпретаторы и компиляторы,tcc,Tiny C Compiler — сверхбыстрая компиляция C
+Интерпретаторы и компиляторы,tcl,"Tool Command Language (скриптование, GUI)"
+Интерпретаторы и компиляторы,tk,GUI toolkit для Tcl
+Интерпретаторы и компиляторы,ts-node,Выполнение TypeScript без предварительной компиляции
+Интерпретаторы и компиляторы,v,Простой компилируемый язык (vlang)
+Интерпретаторы и компиляторы,wasmer,Runtime WebAssembly (WASI)
+Интерпретаторы и компиляторы,wasmtime,Runtime WebAssembly (WASI)
+Интерпретаторы и компиляторы,wolframscript,Wolfram Language (научные вычисления)
+Интерпретаторы и компиляторы,zig,Язык системного программирования
+Клиенты баз данных,algolia,CLI для Algolia search-as-a-service
+Клиенты баз данных,arangosh,Клиент ArangoDB (multi-model)
+Клиенты баз данных,atlas,Декларативные миграции схемы как код (Ariga)
+Клиенты баз данных,bq,CLI Google BigQuery
+Клиенты баз данных,clickhouse-client,Клиент ClickHouse (OLAP)
+Клиенты баз данных,cockroach,CLI для CockroachDB (distributed SQL)
+Клиенты баз данных,cqlsh,CQL shell для Cassandra / ScyllaDB
+Клиенты баз данных,cypher-shell,Клиент для Neo4j (графовая БД)
+Клиенты баз данных,databricks-cli,"Управление Databricks (кластеры, jobs, DBFS)"
+Клиенты баз данных,db2,CLI для IBM DB2
+Клиенты баз данных,dbeaver,универсальный GUI database client
+Клиенты баз данных,dbmate,Лёгкий инструмент миграций
+Клиенты баз данных,dolt,Git для данных (версионированная SQL БД)
+Клиенты баз данных,duckdb,Встраиваемая аналитическая СУБД (SQL over CSV/Parquet) (CLI)
+Клиенты баз данных,elasticsearch,Клиент Elasticsearch (esql)
+Клиенты баз данных,faasdb,serverless БД
+Клиенты баз данных,fauna-shell,Клиент FaunaDB
+Клиенты баз данных,firebase-cli,"CLI для Firebase (Firestore, Auth, Storage)"
+Клиенты баз данных,flyway,Инструмент миграций БД (универсальный)
+Клиенты баз данных,graphdb-console,CLI для GraphDB (RDF)
+Клиенты баз данных,gremlin-console,Клиент для графовых запросов Apache TinkerPop
+Клиенты баз данных,influx,CLI для InfluxDB (time-series)
+Клиенты баз данных,iredis,Клиент Redis с автодополнением и подсветкой
+Клиенты баз данных,isql,Универсальный ODBC-клиент
+Клиенты баз данных,kdb+,Клиент для финансовой time-series БД (q)
+Клиенты баз данных,knex,CLI для миграций (Node.js)
+Клиенты баз данных,liquibase,Универсальный инструмент миграций
+Клиенты баз данных,litecli,Клиент SQLite с автодополнением
+Клиенты баз данных,litestream,Репликация SQLite в реальном времени
+Клиенты баз данных,meilisearch-cli,Клиент для поискового движка Meilisearch
+Клиенты баз данных,memcached-tool,Утилиты для Memcached
+Клиенты баз данных,migrate,Миграции БД (golang-migrate)
+Клиенты баз данных,mongosh,Клиент MongoDB
+Клиенты баз данных,mssql-cli,Клиент MS SQL Server с автодополнением
+Клиенты баз данных,mycli,Клиент MySQL с автодополнением
+Клиенты баз данных,mysql,Клиент MySQL
+Клиенты баз данных,mysql-workbench,GUI для MySQL (headless скриптинг)
+Клиенты баз данных,neonctl,CLI для Neon (serverless PostgreSQL)
+Клиенты баз данных,opensearch-cli,Клиент OpenSearch (форк Elasticsearch)
+Клиенты баз данных,orientdb-console,CLI для OrientDB
+Клиенты баз данных,pg_repack,online PostgreSQL table reorganization
+Клиенты баз данных,pg_top,Мониторинг процессов PostgreSQL (top-стиль)
+Клиенты баз данных,pgadmin4,GUI для PostgreSQL (скриптовый режим)
+Клиенты баз данных,pgbackrest,Резервное копирование и восстановление PostgreSQL
+Клиенты баз данных,pgbadger,Анализатор логов PostgreSQL
+Клиенты баз данных,pgbench,Нагрузочное тестирование PostgreSQL
+Клиенты баз данных,pgbouncer,PostgreSQL connection pooling
+Клиенты баз данных,pgcenter,Администрирование и диагностика PostgreSQL (TUI)
+Клиенты баз данных,pgcli,Клиент PostgreSQL с автодополнением и подсветкой
+Клиенты баз данных,pgmodeler,Генерация и визуализация схемы PostgreSQL
+Клиенты баз данных,planetscale,CLI для PlanetScale (Vitess-based)
+Клиенты баз данных,prisma,ORM + миграции + Studio
+Клиенты баз данных,psql,Клиент PostgreSQL
+Клиенты баз данных,questdb,CLI для QuestDB (time-series)
+Клиенты баз данных,redis-cli,Клиент Redis
+Клиенты баз данных,rqlite,Distributed SQLite (Raft)
+Клиенты баз данных,schemaspy,Генерация ER-диаграмм из БД
+Клиенты баз данных,scylla-cli,Клиент ScyllaDB (альтернатива Cassandra)
+Клиенты баз данных,searchd,Клиент Sphinx Search (full-text)
+Клиенты баз данных,sequelize-cli,CLI для миграций (Node.js)
+Клиенты баз данных,snowsql,CLI Snowflake
+Клиенты баз данных,solr-cli,Клиент Apache Solr
+Клиенты баз данных,sqitch,Миграции БД без фреймворков (VCS-ориентированные)
+Клиенты баз данных,sqlcipher,Шифрованная SQLite
+Клиенты баз данных,sqlcmd,CLI для Microsoft SQL Server
+Клиенты баз данных,sqlite3,Клиент SQLite (встроенная БД)
+Клиенты баз данных,sqlplus,CLI для Oracle Database
+Клиенты баз данных,sqsh,Интерактивный клиент для Sybase (и MS SQL)
+Клиенты баз данных,studio3t,GUI для MongoDB (headless скриптинг)
+Клиенты баз данных,supabase-cli,CLI для Supabase (PostgreSQL платформа)
+Клиенты баз данных,tarantool,in-memory БД
+Клиенты баз данных,tbls,Генерация документации схемы БД
+Клиенты баз данных,timescaledb,CLI для TimescaleDB (PostgreSQL + time-series)
+Клиенты баз данных,trino,"CLI Trino (распределённые SQL-запросы, бывш. Presto)"
+Клиенты баз данных,turso,CLI для Turso (SQLite на edge)
+Клиенты баз данных,typeorm,CLI для миграций (Node.js)
+Клиенты баз данных,typesense-server,CLI для Typesense (self-hosted поиск)
+Клиенты баз данных,usql,Универсальный CLI к десяткам СУБД (аналог psql для всего)
+Клиенты баз данных,victoria-metrics,CLI для VictoriaMetrics (time-series)
+Клиенты баз данных,vmctl,CLI для VictoriaMetrics (time-series)
+Клиенты баз данных,yugabytedb,"Клиент YugabyteDB (distributed SQL) (ysqlsh, ycqlsh)"
+"Контейнеризация, оркестрация и виртуализация",argocd,GitOps-доставка в Kubernetes (Argo CD CLI)
+"Контейнеризация, оркестрация и виртуализация",buildah,Сборка OCI-образов без демона
+"Контейнеризация, оркестрация и виртуализация",buildkit,Современный билд-движок (buildctl)
+"Контейнеризация, оркестрация и виртуализация",chroot,Изменение root filesystem
+"Контейнеризация, оркестрация и виртуализация",cilium,networking/security/observability Kubernetes
+"Контейнеризация, оркестрация и виртуализация",colima,Контейнерные рантаймы на macOS/Linux ( Lima-подход)
+"Контейнеризация, оркестрация и виртуализация",conftest,Тестирование конфигураций политиками Rego/OPA
+"Контейнеризация, оркестрация и виртуализация",containerd,container runtime
+"Контейнеризация, оркестрация и виртуализация",cosign,Подписание и проверка контейнеров (Sigstore)
+"Контейнеризация, оркестрация и виртуализация",crane,Манипуляции образами в registry без Docker (go-containerregistry)
+"Контейнеризация, оркестрация и виртуализация",crictl,Отладка CRI (container runtime interface)
+"Контейнеризация, оркестрация и виртуализация",ctr,CLI для containerd
+"Контейнеризация, оркестрация и виртуализация",dive,Анализ слоёв Docker-образа
+"Контейнеризация, оркестрация и виртуализация",firecracker,Микровиртуалки для serverless (AWS Lambda/Fargate)
+"Контейнеризация, оркестрация и виртуализация",flux,GitOps-инструментарий (Flux CD)
+"Контейнеризация, оркестрация и виртуализация",grype,Сканер уязвимостей контейнерных образов (Anchore)
+"Контейнеризация, оркестрация и виртуализация",hadolint,Линтер Dockerfile
+"Контейнеризация, оркестрация и виртуализация",helmfile,Декларативное управление набором Helm-релизов
+"Контейнеризация, оркестрация и виртуализация",incus,Системные контейнеры (LXD-форк)
+"Контейнеризация, оркестрация и виртуализация",k3d,Лёгкие кластеры k3s в Docker
+"Контейнеризация, оркестрация и виртуализация",k3s,Облегчённый Kubernetes (Rancher)
+"Контейнеризация, оркестрация и виртуализация",k9s,TUI-управление кластерами Kubernetes
+"Контейнеризация, оркестрация и виртуализация",kaniko,Сборка образов в Kubernetes без Docker-демона
+"Контейнеризация, оркестрация и виртуализация",kata-containers,виртуализованные контейнеры
+"Контейнеризация, оркестрация и виртуализация",kind,Kubernetes-in-Docker для локальных кластеров
+"Контейнеризация, оркестрация и виртуализация",ko,Быстрая сборка образов из Go-кода
+"Контейнеризация, оркестрация и виртуализация",kompose,Конвертация docker-compose в Kubernetes
+"Контейнеризация, оркестрация и виртуализация",krew,Менеджер плагинов kubectl
+"Контейнеризация, оркестрация и виртуализация",kube-bench,Проверка соответствия кластера CIS Benchmark
+"Контейнеризация, оркестрация и виртуализация",kube-hunter,Поиск уязвимостей в Kubernetes
+"Контейнеризация, оркестрация и виртуализация",kubectl,Управление Kubernetes-кластером
+"Контейнеризация, оркестрация и виртуализация",kubectx,Быстрое переключение контекстов kubectl
+"Контейнеризация, оркестрация и виртуализация",kubens,Быстрое переключение namespace (спутник kubectx)
+"Контейнеризация, оркестрация и виртуализация",kustomize,Шаблононезависимая кастомизация YAML-манифестов
+"Контейнеризация, оркестрация и виртуализация",kyverno,Менеджер политик Kubernetes (Kubernetes-native)
+"Контейнеризация, оркестрация и виртуализация",lima,Linux-виртуалки на macOS (под капотом colima)
+"Контейнеризация, оркестрация и виртуализация",lxc,Системные контейнеры
+"Контейнеризация, оркестрация и виртуализация",minikube,Локальный Kubernetes (множество драйверов)
+"Контейнеризация, оркестрация и виртуализация",nerdctl,Docker-подобный CLI для containerd
+"Контейнеризация, оркестрация и виртуализация",nomad,HashiCorp workload orchestrator
+"Контейнеризация, оркестрация и виртуализация",nsenter,Подключение к namespaces процесса
+"Контейнеризация, оркестрация и виртуализация",opa,Движок политик как код (Open Policy Agent)
+"Контейнеризация, оркестрация и виртуализация",oras,OCI Registry as Storage — произвольные артефакты в registry
+"Контейнеризация, оркестрация и виртуализация",pack,Сборка образов через Cloud Native Buildpacks
+"Контейнеризация, оркестрация и виртуализация",packer,Сборка образов машин для множества платформ (HashiCorp)
+"Контейнеризация, оркестрация и виртуализация",podman,Rootless-альтернатива Docker
+"Контейнеризация, оркестрация и виртуализация",qemu-img,Создание/конвертация образов дисков VM
+"Контейнеризация, оркестрация и виртуализация",regctl,registry/image management
+"Контейнеризация, оркестрация и виртуализация",runc-debug,отладка container runtime
+"Контейнеризация, оркестрация и виртуализация",runv,альтернативный container runtime
+"Контейнеризация, оркестрация и виртуализация",skaffold,Цикл build-push-deploy для Kubernetes (Google)
+"Контейнеризация, оркестрация и виртуализация",skopeo,Копирование образов между registry (без демона)
+"Контейнеризация, оркестрация и виртуализация",stern,Хвост логов нескольких подов/контейнеров сразу
+"Контейнеризация, оркестрация и виртуализация",syft,Генерация SBOM (спутник grype)
+"Контейнеризация, оркестрация и виртуализация",systemd-nspawn,Лёгкие системные контейнеры
+"Контейнеризация, оркестрация и виртуализация",talosctl,Управление Talos Linux
+"Контейнеризация, оркестрация и виртуализация",tilt,Локальная разработка микросервисов в Kubernetes
+"Контейнеризация, оркестрация и виртуализация",toolbox,Контейнерные development environments
+"Контейнеризация, оркестрация и виртуализация",trivy,"Сканер уязвимостей образов, IaC, репозиториев"
+"Контейнеризация, оркестрация и виртуализация",unshare,Linux namespaces
+"Контейнеризация, оркестрация и виртуализация",vboxmanage,Управление VirtualBox headless
+"Контейнеризация, оркестрация и виртуализация",velero,"Бэкап, восстановление и миграция кластеров Kubernetes"
+"Контейнеризация, оркестрация и виртуализация",virsh,Управление KVM/QEMU виртуалками
+"Мониторинг, метрики и логирование",alertmanager,Маршрутизация и дедупликация алертов
+"Мониторинг, метрики и логирование",alloy,Единый агент сборки метрик/логов/трейсов (Grafana)
+"Мониторинг, метрики и логирование",collectd,Классический сборщик системной статистики
+"Мониторинг, метрики и логирование",filebeat,Shipper логов (Elastic)
+"Мониторинг, метрики и логирование",fluent-bit,Лёгкий сборщик и маршрутизатор логов
+"Мониторинг, метрики и логирование",grafana-cli,управление дашбордами
+"Мониторинг, метрики и логирование",iotop,Дисковый I/O по процессам
+"Мониторинг, метрики и логирование",loki,Горизонтально масштабируемое лог-хранилище (Grafana)
+"Мониторинг, метрики и логирование",monit,Мониторинг и автоматический ремонт процессов/файлов
+"Мониторинг, метрики и логирование",netdata,Мониторинг в реальном времени с автодетектом сервисов
+"Мониторинг, метрики и логирование",node_exporter,Экспортёр метрик хоста для Prometheus
+"Мониторинг, метрики и логирование",perfetto,tracing/performance analysis
+"Мониторинг, метрики и логирование",prometheus,Сбор и запрос метрик (TSDB)
+"Мониторинг, метрики и логирование",prometheus-operator,управление мониторингом в K8s
+"Мониторинг, метрики и логирование",promtail,Сбор логов и отправка в Loki
+"Мониторинг, метрики и логирование",promtool,CLI администрирования Prometheus и проверка правил
+"Мониторинг, метрики и логирование",telegraf,Агент сбора метрик (InfluxDB)
+"Мониторинг, метрики и логирование",vector,Высокопроизводительный пайплайн логов/метрик (Rust)
+"Мониторинг, метрики и логирование",zabbix-agent2,Агент мониторинга Zabbix (Go)
+"Мониторинг, метрики и логирование",zabbix_get,Опрос Zabbix-агентов из CLI
+Мультимедиа,aacgain,Нормализация громкости AAC (ReplayGain)
+Мультимедиа,abcde,Риппинг CD-дисков
+Мультимедиа,aomenc,AV1 кодек от Alliance for Open Media
+Мультимедиа,atomicparsley,Редактирование метаданных MP4/M4A
+Мультимедиа,av1an,кодировщик AV1
+Мультимедиа,avifdec,Конвертация в/из AVIF
+Мультимедиа,avifenc,Конвертация в/из AVIF
+Мультимедиа,beets,Менеджер музыкальной библиотеки с автотегированием
+Мультимедиа,blender,3D-рендеринг и обработка (headless режим)
+Мультимедиа,cdparanoia,Риппинг аудио-CD
+Мультимедиа,cjpeg,Кодирование JPEG (из libjpeg-turbo)
+Мультимедиа,cjxl,JPEG XL формат
+Мультимедиа,cmus,Музыкальный плеер для терминала
+Мультимедиа,cwebp,Конвертация в WebP
+Мультимедиа,darktable-cli,Обработка RAW-фотографий
+Мультимедиа,dav1d,декодер AV1
+Мультимедиа,djxl,JPEG XL формат
+Мультимедиа,dwebp,Декодирование WebP
+Мультимедиа,espeak-ng,TTS
+Мультимедиа,exiftool,Чтение/запись метаданных (500+ форматов)
+Мультимедиа,exiv2,Манипуляции EXIF-метаданными
+Мультимедиа,eyeD3,Редактирование ID3-тегов MP3
+Мультимедиа,faac,Кодирование AAC
+Мультимедиа,faad,Декодирование AAC
+Мультимедиа,ffmpeg,"Конвертация, нарезка, извлечение кадров, изменение кодеков"
+Мультимедиа,ffplay,Проигрыватель на базе FFmpeg
+Мультимедиа,ffprobe,Анализ медиа-файлов
+Мультимедиа,ffprobe-json,анализ медиа в JSON
+Мультимедиа,flac,Кодирование FLAC
+Мультимедиа,flameshot,Скриншоты с аннотированием (CLI-режим)
+Мультимедиа,gallery-dl,Скачивание изображений с 1000+ сайтов
+Мультимедиа,gifsicle,Оптимизация и манипуляции GIF
+Мультимедиа,graphicsmagick,Форк ImageMagick (быстрее в некоторых операциях)
+Мультимедиа,grim,Скриншоты для Wayland
+Мультимедиа,handbrake-cli,"Конвертация видео (H.264, H.265, AV1)"
+Мультимедиа,id3v2,Редактирование ID3-тегов MP3
+Мультимедиа,imagemagick,"Командная строка для работы с изображениями (convert, mogrify, identify)"
+Мультимедиа,inkscape,Векторная графика SVG (headless)
+Мультимедиа,jpegoptim,Оптимизация JPEG
+Мультимедиа,jxl,JPEG XL формат
+Мультимедиа,kid3-cli,Редактирование тегов аудиофайлов
+Мультимедиа,lame,Кодирование MP3
+Мультимедиа,liquidsoap,Язык и сервер для потокового аудио (радио)
+Мультимедиа,mac,Monkey's Audio (APE lossless)
+Мультимедиа,maim,Скриншоты с выбором области
+Мультимедиа,mediainfo,Подробная техническая информация о медиа
+Мультимедиа,metaflac,Редактирование метаданных FLAC
+Мультимедиа,mkvextract,Работа с Matroska (.mkv) (mkvtoolnix)
+Мультимедиа,mkvmerge,Работа с Matroska (.mkv) (mkvtoolnix)
+Мультимедиа,moviepy-cli,обработка видео из CLI
+Мультимедиа,mp3gain,Нормализация громкости MP3 (без перекодирования)
+Мультимедиа,mp3split,Разделение MP3 по времени
+Мультимедиа,mp3wrap,Объединение MP3 без перекодирования
+Мультимедиа,mp4box,Манипуляции с MP4-контейнерами (GPAC)
+Мультимедиа,mpc,Клиент управления MPD
+Мультимедиа,mpd,Сервер-демон воспроизведения музыки
+Мультимедиа,mplayer,Классический медиаплеер
+Мультимедиа,mpv,Медиаплеер с богатым CLI и scriptable API
+Мультимедиа,obs-cli,Управление OBS Studio
+Мультимедиа,obs-websocket,Управление OBS Studio
+Мультимедиа,oggdec,Ogg Vorbis декодирование
+Мультимедиа,oggenc,Ogg Vorbis кодирование
+Мультимедиа,optipng,Оптимизация PNG
+Мультимедиа,opusdec,Opus кодек (лучший для голоса)
+Мультимедиа,opusenc,Opus кодек (лучший для голоса)
+Мультимедиа,piper,локальный text-to-speech
+Мультимедиа,playerctl,Управление MPRIA-плеерами (play/pause/next)
+Мультимедиа,pngcrush,Оптимизация PNG
+Мультимедиа,pngquant,Сжатие PNG
+Мультимедиа,potrace,Растр → вектор (bitmap tracing)
+Мультимедиа,rav1e,Кодировщик AV1 на Rust
+Мультимедиа,rawtherapee-cli,Обработка RAW-фотографий
+Мультимедиа,scrot,Скриншоты из командной строки
+Мультимедиа,shntool,Работа с lossless аудио (cue+flac/wav)
+Мультимедиа,slurp,"Выбор области экрана (Wayland, спутник grim)"
+Мультимедиа,sox,Обработка аудио
+Мультимедиа,speexdec,Speex кодек
+Мультимедиа,speexenc,Speex кодек
+Мультимедиа,streamlink,"Извлечение потоков из Twitch, YouTube Live"
+Мультимедиа,svt-av1,Кодировщик AV1 от Intel
+Мультимедиа,twolame,Кодирование MP2
+Мультимедиа,v4l2-ctl,Управление веб-камерами и захватом видео (v4l-utils)
+Мультимедиа,vips,Обработка изображений с низким потреблением памяти
+Мультимедиа,vipsthumbnail,Обработка изображений с низким потреблением памяти
+Мультимедиа,vlc,Медиаплеер и конвертер (headless через cvlc)
+Мультимедиа,vorbiscomment,Редактирование комментариев Ogg Vorbis
+Мультимедиа,vpxdec,VP8/VP9 кодек от Google
+Мультимедиа,vpxenc,VP8/VP9 кодек от Google
+Мультимедиа,wavpack,WavPack (lossless с хорошим сжатием)
+Мультимедиа,webp,Конвертация в/из WebP
+Мультимедиа,wf-recorder,Запись экрана на Wayland
+Мультимедиа,whisper,speech-to-text
+Мультимедиа,whisper.cpp,native/local Whisper inference
+Мультимедиа,wvunpack,WavPack (lossless с хорошим сжатием)
+Мультимедиа,x264,Кодировщик H.264
+Мультимедиа,x265,Кодировщик H.265
+Мультимедиа,xorriso,Создание и запись ISO/образов (cdrecord-наследник)
+Мультимедиа,yt-dlp,Скачивание видео с YouTube и 1000+ сайтов
+"Облака, IaC и платформы",aliyun,Alibaba Cloud CLI
+"Облака, IaC и платформы",ansible-playbook,Конфигурация хостов по SSH
+"Облака, IaC и платформы",atlantis,Автоматизация terraform plan/apply через pull-запросы
+"Облака, IaC и платформы",aws,"AWS CLI (EC2, S3, Lambda, IAM, CloudFormation)"
+"Облака, IaC и платформы",az,Microsoft Azure CLI
+"Облака, IaC и платформы",checkov,"Сканер безопасности IaC (Terraform, K8s, CloudFormation)"
+"Облака, IaC и платформы",doctl,DigitalOcean CLI
+"Облака, IaC и платформы",exo,Exoscale CLI
+"Облака, IaC и платформы",flyctl,Fly.io (edge-deploy приложений)
+"Облака, IaC и платформы",gcloud,Google Cloud SDK
+"Облака, IaC и платформы",hcloud,Hetzner Cloud CLI
+"Облака, IaC и платформы",heroku,Heroku CLI
+"Облака, IaC и платформы",ibmcloud,IBM Cloud CLI
+"Облака, IaC и платформы",infracost,Оценка стоимости облака из Terraform-кода
+"Облака, IaC и платформы",linode-cli,Linode/Akamai CLI
+"Облака, IaC и платформы",netlify,Деплой и управление проектами Netlify
+"Облака, IaC и платформы",oci,Oracle Cloud Infrastructure CLI
+"Облака, IaC и платформы",railway,Деплой приложений на Railway
+"Облака, IaC и платформы",scaleway-cli,Scaleway CLI
+"Облака, IaC и платформы",serverless,Framework для AWS Lambda
+"Облака, IaC и платформы",tencentcloud-cli,Tencent Cloud CLI
+"Облака, IaC и платформы",terraform,IaC: провайдеры для 300+ облаков
+"Облака, IaC и платформы",terraform-docs,Генерация документации из модулей Terraform
+"Облака, IaC и платформы",terragrunt,Обёртка над Terraform: DRY-конфигурация и удалённые состояния
+"Облака, IaC и платформы",tflint,Линтер конфигураций Terraform
+"Облака, IaC и платформы",tofu,OpenTofu — открытый форк Terraform (Linux Foundation)
+"Облака, IaC и платформы",up,Upbound / Crossplane (управление облаками через K8s)
+"Облака, IaC и платформы",vagrant,Локальное поднятие VM для тестов
+"Облака, IaC и платформы",vercel,Деплой frontend/Vercel Functions
+"Облака, IaC и платформы",vultr-cli,Управление инфраструктурой Vultr
+"Облака, IaC и платформы",wrangler,CLI Cloudflare Workers/Pages/R2/D1
+Оболочки (shell) и расширения CLI,atuin,Синхронизация и SQL-поиск по истории команд
+Оболочки (shell) и расширения CLI,dash (shell),Быстрый POSIX shell (Debian /bin/sh)
+Оболочки (shell) и расширения CLI,direnv,Переменные окружения по директории (.envrc)
+Оболочки (shell) и расширения CLI,elvish,Экспрессивная оболочка с конвейерами структурных данных
+Оболочки (shell) и расширения CLI,fish,Дружелюбная оболочка с автопредложениями
+Оболочки (shell) и расширения CLI,fzf-tab,Интеллектуальное автодополнение в терминале
+Оболочки (shell) и расширения CLI,Ghostty,Быстрый кроссплатформенный терминал на Rust с аппаратным ускорением
+Оболочки (shell) и расширения CLI,hstr,Интерактивный просмотр истории bash/zsh
+Оболочки (shell) и расширения CLI,ksh,KornShell
+Оболочки (shell) и расширения CLI,mcfly,Умный поиск истории команд на нейросети
+Оболочки (shell) и расширения CLI,nushell,Структурированная оболочка: данные как таблицы
+Оболочки (shell) и расширения CLI,osh,Oil shell — совместимый bash с строгими режимами
+Оболочки (shell) и расширения CLI,pay-respects,Быстрая альтернатива thefuck (Rust)
+Оболочки (shell) и расширения CLI,pwsh,"PowerShell (кроссплатформенный, объектные пайпы)"
+Оболочки (shell) и расширения CLI,skim,"Fuzzy-поиск (Rust, альтернатива fzf)"
+Оболочки (shell) и расширения CLI,starship,Быстрое кастомизируемое приглашение командной строки
+Оболочки (shell) и расширения CLI,tcsh,C shell с дополнениями
+Оболочки (shell) и расширения CLI,thefuck,Автоисправление ошибочных команд
+Оболочки (shell) и расширения CLI,warp,"Современный терминал с AI-интеграцией, разделением и облачной синхронизацией"
+Оболочки (shell) и расширения CLI,Warp CLI,AI-терминал с встроенной командной строкой
+Оболочки (shell) и расширения CLI,xonsh,Оболочка на Python (Python + shell)
+Оболочки (shell) и расширения CLI,zoxide,Умная смена директорий (современный z/autojump)
+Оболочки (shell) и расширения CLI,zsh,Мощная оболочка (macOS по умолчанию)
+Обработка текста и структурированных данных,ack,"Программистский поиск по коду, уважает .gitignore по умолчанию"
+Обработка текста и структурированных данных,awk,Мощный язык обработки текста (колоночные данные)
+Обработка текста и структурированных данных,carapace,Умное контекстно-зависимое автодополнение
+Обработка текста и структурированных данных,cheat,Локальные редактируемые cheatsheets
+Обработка текста и структурированных данных,choose,Выборка столбцов с регулярными выражениями
+Обработка текста и структурированных данных,cjson,Проверка и форматирование JSON
+Обработка текста и структурированных данных,column,Форматирование данных в таблицы
+Обработка текста и структурированных данных,comm,Сравнение отсортированных файлов построчно
+Обработка текста и структурированных данных,csvgrep,Набор инструментов для CSV (csvkit)
+Обработка текста и структурированных данных,csvkit,"Набор инструментов для CSV (stat, sort, join, etc.)"
+Обработка текста и структурированных данных,csvsql,SQL-запросы прямо к CSV-файлам
+Обработка текста и структурированных данных,csvtool,Ещё один обработчик CSV (OCaml)
+Обработка текста и структурированных данных,cut,Вырезание колонок (столбцов)
+Обработка текста и структурированных данных,dasel,"Универсальный селектор данных (JSON, YAML, TOML, XML, CSV)"
+Обработка текста и структурированных данных,datamash,"Статистика по текстовым файлам (sum, mean, median)"
+Обработка текста и структурированных данных,diff,Сравнение файлов
+Обработка текста и структурированных данных,dos2unix,Конвертация окончаний строк
+Обработка текста и структурированных данных,enca,Автоопределение кодировки
+Обработка текста и структурированных данных,fselect,Поиск файлов с SQL-подобными запросами
+Обработка текста и структурированных данных,fx,Интерактивный просмотр JSON (JavaScript)
+Обработка текста и структурированных данных,grep,Поиск по регулярным выражениям
+Обработка текста и структурированных данных,grit,"AI-индексирование кодовой базы, поиск по смыслу а не по тексту"
+Обработка текста и структурированных данных,gron,"Преобразует JSON в плоский, grep-дружественный формат"
+Обработка текста и структурированных данных,hjson,Конвертер между HJSON и JSON
+Обработка текста и структурированных данных,htmlq,jq для HTML (CSS-селекторы)
+Обработка текста и структурированных данных,hurl,Тестирование HTTP-запросов с декларативным синтаксисом
+Обработка текста и структурированных данных,iconv,Транскодирование текста
+Обработка текста и структурированных данных,ifne,"Выполняет команду, если stdin не пуст (moreutils)"
+Обработка текста и структурированных данных,jd,Сравнение JSON-структур
+Обработка текста и структурированных данных,jid,Интерактивный просмотр JSON с фильтрацией
+Обработка текста и структурированных данных,jless,Пейджер для JSON с подсветкой
+Обработка текста и структурированных данных,jo,Генерация JSON из shell
+Обработка текста и структурированных данных,join,Объединение строк из двух файлов по общему полю
+Обработка текста и структурированных данных,jq,Парсинг и преобразование JSON
+Обработка текста и структурированных данных,json-diff,Сравнение JSON-структур
+Обработка текста и структурированных данных,json-merge-patch,Операции RFC 7386
+Обработка текста и структурированных данных,json-patch,Операции RFC 6902
+Обработка текста и структурированных данных,jsonlint,Валидация JSON-файлов
+Обработка текста и структурированных данных,look,Бинарный поиск в отсортированном файле
+Обработка текста и структурированных данных,miller,"Швейцарский нож для CSV, TSV, JSON (mlr)"
+Обработка текста и структурированных данных,navi,Интерактивные шпаргалки команд с параметрами
+Обработка текста и структурированных данных,nq,jq для 1Password (и других)
+Обработка текста и структурированных данных,numfmt,Форматирование чисел (GNU coreutils)
+Обработка текста и структурированных данных,parallel,Параллельное выполнение команд
+Обработка текста и структурированных данных,paste,Объединение строк из нескольких файлов
+Обработка текста и структурированных данных,patch,Применение патчей (diff)
+Обработка текста и структурированных данных,ptx,Пермутированный индекс (KWIC)
+Обработка текста и структурированных данных,pup,CSS-селекторы для HTML в терминале
+Обработка текста и структурированных данных,recode,Конвертация между кодировками
+Обработка текста и структурированных данных,rev,Переворачивание строк
+Обработка текста и структурированных данных,ripgrep-all,"Расширение ripgrep — поиск не только в тексте, но и в PDF, архивах, офисных документах"
+Обработка текста и структурированных данных,sd,Интуитивная замена sed (проще синтаксис)
+Обработка текста и структурированных данных,sed,"Потоковое редактирование текста (замены, фильтрация)"
+Обработка текста и структурированных данных,shellcheck,Линтинг shell-скриптов
+Обработка текста и структурированных данных,shfmt,Форматирование shell-скриптов
+Обработка текста и структурированных данных,shuf,Перемешивание строк
+Обработка текста и структурированных данных,sort,Сортировка строк
+Обработка текста и структурированных данных,sponge,Перезапись файла «на месте» в пайпе (moreutils)
+Обработка текста и структурированных данных,tac,Обратный cat
+Обработка текста и структурированных данных,tealdeer,Быстрый Rust-клиент справочника команд
+Обработка текста и структурированных данных,tldr,Упрощённые man-страницы с примерами
+Обработка текста и структурированных данных,tomll,Валидация TOML
+Обработка текста и структурированных данных,tomlq,jq-подобный инструмент для TOML
+Обработка текста и структурированных данных,tr,"Преобразование символов (замена, удаление)"
+Обработка текста и структурированных данных,ts,Добавляет временные метки к строкам (moreutils)
+Обработка текста и структурированных данных,tsort,Топологическая сортировка
+Обработка текста и структурированных данных,tsv-utils,Высокопроизводительная обработка TSV от eBay
+Обработка текста и структурированных данных,uchardet,Автоопределение кодировки
+Обработка текста и структурированных данных,uniq,Удаление повторяющихся строк (в отсортированном файле)
+Обработка текста и структурированных данных,unix2dos,Конвертация окончаний строк
+Обработка текста и структурированных данных,vidir,Редактирование списка файлов в редакторе (moreutils)
+Обработка текста и структурированных данных,vipe,Вставляет редактор в пайплайн (moreutils)
+Обработка текста и структурированных данных,wc,"Подсчёт строк, слов, байт"
+Обработка текста и структурированных данных,wdiff,Построчное сравнение с подсветкой слов
+Обработка текста и структурированных данных,xargs,Построение команд из stdin
+Обработка текста и структурированных данных,xidel,Обработка XML из командной строки
+Обработка текста и структурированных данных,xmlstarlet,XML shell
+Обработка текста и структурированных данных,xmltk,Обработка XML из командной строки
+Обработка текста и структурированных данных,xq,jq для XML
+Обработка текста и структурированных данных,xsv,Ultra-fast CSV обработка на Rust
+Обработка текста и структурированных данных,yamlfmt,Форматирование YAML
+Обработка текста и структурированных данных,yamllint,Линтер YAML
+Обработка текста и структурированных данных,yj,"Конвертер между JSON, YAML, TOML, XML, HCL"
+Обработка текста и структурированных данных,yq,Парсинг и преобразование YAML
+"Отладка, профилирование и реверс-инжиниринг",bcc,"Инструменты eBPF-трассировки (execsnoop, biolatency и др.)"
+"Отладка, профилирование и реверс-инжиниринг",bpftool,Инспекция и управление eBPF-программами и картами
+"Отладка, профилирование и реверс-инжиниринг",bpftrace,Высокоуровневая трассировка ядра на eBPF
+"Отладка, профилирование и реверс-инжиниринг",cachegrind,Профилирование кэша и вызовов (Valgrind)
+"Отладка, профилирование и реверс-инжиниринг",callgrind,Профилирование кэша и вызовов (Valgrind)
+"Отладка, профилирование и реверс-инжиниринг",datefudge,Сдвиг времени для тестируемых процессов
+"Отладка, профилирование и реверс-инжиниринг",faketime,Подмена системного времени для процесса (libfaketime)
+"Отладка, профилирование и реверс-инжиниринг",file,Определение типа файла по магическим байтам
+"Отладка, профилирование и реверс-инжиниринг",ftrace,Kernel tracing
+"Отладка, профилирование и реверс-инжиниринг",gdb,Отладчик C/C++/Rust/Go
+"Отладка, профилирование и реверс-инжиниринг",ghidra,Фреймворк реверс-инжиниринга с headless-режимом (NSA)
+"Отладка, профилирование и реверс-инжиниринг",heaptrack,Профилирование кучи (Qt)
+"Отладка, профилирование и реверс-инжиниринг",hexdump,Hex-дамп произвольных файлов
+"Отладка, профилирование и реверс-инжиниринг",ldconfig,Обновление кэша shared libraries
+"Отладка, профилирование и реверс-инжиниринг",ldd,Список shared libraries бинаря
+"Отладка, профилирование и реверс-инжиниринг",lldb,Отладчик от LLVM
+"Отладка, профилирование и реверс-инжиниринг",ltrace,Трассировка библиотечных вызовов
+"Отладка, профилирование и реверс-инжиниринг",nm,Символы в объектном файле
+"Отладка, профилирование и реверс-инжиниринг",objdump,Дизассемблирование и заголовки ELF
+"Отладка, профилирование и реверс-инжиниринг",od,Hex-дамп произвольных файлов
+"Отладка, профилирование и реверс-инжиниринг",perf,Профилирование ядра и пользовательского кода
+"Отладка, профилирование и реверс-инжиниринг",radare2,UNIX-подобный фреймворк реверс-инжиниринга
+"Отладка, профилирование и реверс-инжиниринг",readelf,Дизассемблирование и заголовки ELF
+"Отладка, профилирование и реверс-инжиниринг",rizin,"Форк/развитие radare2 (форензика, отладка, дизасм)"
+"Отладка, профилирование и реверс-инжиниринг",strace,Трассировка системных вызовов процесса
+"Отладка, профилирование и реверс-инжиниринг",strings,Извлечение строк из бинарника
+"Отладка, профилирование и реверс-инжиниринг",trace-cmd,Внешний интерфейс к ftrace (ядро Linux)
+"Отладка, профилирование и реверс-инжиниринг",valgrind,Поиск утечек памяти и гонок
+"Отладка, профилирование и реверс-инжиниринг",xxd,Hex-дамп произвольных файлов
+Пакетные менеджеры,ant,Java build tool
+Пакетные менеджеры,apk,Пакетный менеджер Alpine Linux
+Пакетные менеджеры,apt,Debian/Ubuntu
+Пакетные менеджеры,apt-get,Debian/Ubuntu
+Пакетные менеджеры,asdf,Универсальный менеджер версий для множества языков
+Пакетные менеджеры,boot,Менеджеры для Clojure
+Пакетные менеджеры,brew,Алиас homebrew
+Пакетные менеджеры,bundle,Менеджер зависимостей Ruby
+Пакетные менеджеры,bundler-audit,Аудит уязвимостей Ruby-гемов (patch-level)
+Пакетные менеджеры,cabal,Менеджер пакетов Haskell
+Пакетные менеджеры,cargo-audit,Аудит уязвимостей в зависимостях Rust
+Пакетные менеджеры,cargo-deny,"Проверка лицензий, дубликатов и уязвимостей Rust"
+Пакетные менеджеры,choco,Chocolatey — пакетный менеджер Windows
+Пакетные менеджеры,cocoapods,Менеджер зависимостей для iOS/macOS
+Пакетные менеджеры,codespell,поиск опечаток в исходниках и документации
+Пакетные менеджеры,comma,Запуск инструментов из nixpkgs без глобальной установки
+Пакетные менеджеры,composer,Менеджер зависимостей PHP
+Пакетные менеджеры,conan,Менеджер пакетов C++
+Пакетные менеджеры,conda,Менеджер окружений для data science (кросс-языковой)
+Пакетные менеджеры,cpan,Менеджер пакетов Perl
+Пакетные менеджеры,cpanm,Менеджер пакетов Perl
+Пакетные менеджеры,dnf,RHEL/CentOS/Fedora
+Пакетные менеджеры,dpkg,Debian/Ubuntu
+Пакетные менеджеры,dub,Менеджер пакетов для D языка
+Пакетные менеджеры,emerge,Пакетный менеджер Portage (Gentoo)
+Пакетные менеджеры,eslint,статический анализ JavaScript/TypeScript
+Пакетные менеджеры,flatpak,Универсальные пакеты Linux
+Пакетные менеджеры,fnm,Менеджеры версий для конкретных языков
+Пакетные менеджеры,fpm,Сборка пакетов deb/rpm/... из файлов и директорий
+Пакетные менеджеры,gem,Менеджер пакетов Ruby
+Пакетные менеджеры,go get,Менеджер модулей Go
+Пакетные менеджеры,go install,Менеджер модулей Go
+Пакетные менеджеры,go mod,Менеджер модулей Go
+Пакетные менеджеры,goenv,Менеджеры версий для конкретных языков
+Пакетные менеджеры,gradle,Java build tool
+Пакетные менеджеры,guix,GNU Guix (альтернатива Nix)
+Пакетные менеджеры,hatch,Современный менеджер Python
+Пакетные менеджеры,hex,Менеджер для Elixir
+Пакетные менеджеры,homebrew,macOS package manager (brew)
+Пакетные менеджеры,hunter,C++ package manager (CMake)
+Пакетные менеджеры,leiningen,Менеджеры для Clojure
+Пакетные менеджеры,luarocks,Менеджер пакетов Lua
+Пакетные менеджеры,lychee,проверка битых ссылок
+Пакетные менеджеры,macports,Пакетный менеджер macOS
+Пакетные менеджеры,mamba,Менеджер окружений для data science (кросс-языковой)
+Пакетные менеджеры,markdownlint-cli2,structural Markdown lint
+Пакетные менеджеры,maven,Java build tool (mvn)
+Пакетные менеджеры,micromamba,Менеджер окружений для data science (кросс-языковой)
+Пакетные менеджеры,mise,"Менеджер версий dev-инструментов, env и задач (бывш. rtx)"
+Пакетные менеджеры,mvn,Алиас maven
+Пакетные менеджеры,nala,Современный фронтенд apt
+Пакетные менеджеры,nfpm,Сборка deb/rpm/APK без конфигов (Go)
+Пакетные менеджеры,nix,Воспроизводимые сборки (NixOS)
+Пакетные менеджеры,nix-env,Воспроизводимые сборки (NixOS)
+Пакетные менеджеры,nix-shell,Воспроизводимые сборки (NixOS)
+Пакетные менеджеры,npm,Менеджеры пакетов JavaScript
+Пакетные менеджеры,npx,Запуск Node-пакетов без установки
+Пакетные менеджеры,nuget,.NET package manager
+Пакетные менеджеры,nvm,Менеджеры версий для конкретных языков
+Пакетные менеджеры,oxlint,быстрый JS/TS linter
+Пакетные менеджеры,pacman,Arch Linux
+Пакетные менеджеры,paket,Менеджер зависимостей для .NET (альтернатива NuGet)
+Пакетные менеджеры,paru,Arch Linux
+Пакетные менеджеры,pdm,Менеджер проектов Python по современным PEP
+Пакетные менеджеры,pear,PHP extensions
+Пакетные менеджеры,pecl,PHP extensions
+Пакетные менеджеры,pip,Python package managers
+Пакетные менеджеры,pip-tools,Python package managers
+Пакетные менеджеры,pipenv,Управление зависимостями и окружениями Python
+Пакетные менеджеры,pipx,Python package managers
+Пакетные менеджеры,pixi,Системный пакетный менеджер на conda-экосистеме (Rust)
+Пакетные менеджеры,pkg,Пакетный менеджер FreeBSD
+Пакетные менеджеры,pnpm,Менеджеры пакетов JavaScript
+Пакетные менеджеры,poetry,"Современный Python (зависимости, сборка)"
+Пакетные менеджеры,prettier,форматирование кода/данных
+Пакетные менеджеры,pub,Dart/Flutter package manager
+Пакетные менеджеры,pyenv,Менеджеры версий для конкретных языков
+Пакетные менеджеры,pyrefly,статический анализ/type checking Python
+Пакетные менеджеры,rbenv,Менеджеры версий для конкретных языков
+Пакетные менеджеры,rebar3,Менеджер для Erlang
+Пакетные менеджеры,renovate,Автоматическое обновление зависимостей
+Пакетные менеджеры,rpm,RHEL/CentOS/Fedora
+Пакетные менеджеры,rug,openSUSE
+Пакетные менеджеры,rustup,Установщик и менеджер версий Rust
+Пакетные менеджеры,rye,Python (от создателя Flask)
+Пакетные менеджеры,sbt,Scala build tool
+Пакетные менеджеры,scoop,Пакетный менеджер Windows для CLI-инструментов
+Пакетные менеджеры,snap,Универсальные пакеты Linux
+Пакетные менеджеры,spack,Менеджер пакетов для HPC (суперкомпьютеры)
+Пакетные менеджеры,stack,Менеджер пакетов Haskell (альтернатива cabal)
+Пакетные менеджеры,swift package,Swift Package Manager
+Пакетные менеджеры,tools.deps,Менеджеры для Clojure
+Пакетные менеджеры,ty,быстрый type checker Python
+Пакетные менеджеры,uv,"Сверхбыстрый менеджер пакетов и проектов Python (Astral, Rust)"
+Пакетные менеджеры,uvx,Одноразовый запуск Python CLI в изолированной среде
+Пакетные менеджеры,vcpkg,C++ библиотечный менеджер от Microsoft
+Пакетные менеджеры,verdaccio,приватный npm-репозиторий
+Пакетные менеджеры,vfox,Универсальный менеджер версий на Go
+Пакетные менеджеры,virtualenv,Классические виртуальные окружения Python
+Пакетные менеджеры,winget,Официальный пакетный менеджер Windows
+Пакетные менеджеры,xbps,Пакетный менеджер Void Linux
+Пакетные менеджеры,yarn,Менеджеры пакетов JavaScript
+Пакетные менеджеры,yay,Arch Linux
+Пакетные менеджеры,yum,RHEL/CentOS/Fedora
+Пакетные менеджеры,zig fetch,Менеджер пакетов Zig
+Пакетные менеджеры,zypper,openSUSE
+Простой текстовый учёт и заметки,beancount,Учёт двойной записью на Python
+Простой текстовый учёт и заметки,cointop,Курс криптовалют в терминале (TUI)
+Простой текстовый учёт и заметки,fava,Веб-интерфейс для beancount
+Простой текстовый учёт и заметки,hledger,Дружелюбный аналог ledger (Haskell)
+Простой текстовый учёт и заметки,ledger,Двойная запись в текстовом файле
+Простой текстовый учёт и заметки,nb,Заметки и база знаний с git-синхронизацией
+Простой текстовый учёт и заметки,taskwarrior,Менеджер задач из командной строки
+Простой текстовый учёт и заметки,ticker,Тикеры акций и криптовалют в терминале
+Простой текстовый учёт и заметки,timewarrior,Учёт времени (спутник taskwarrior)
+Простой текстовый учёт и заметки,vit,TUI-интерфейс к taskwarrior
+Простой текстовый учёт и заметки,zk,Zettelkasten-заметки в терминале
+Резервное копирование и снапшоты,borg,Дедуплицирующий бэкап с шифрованием и сжатием
+Резервное копирование и снапшоты,borgmatic,Декларативная обёртка над borg (YAML-конфиги)
+Резервное копирование и снапшоты,btrbk,Бэкап и репликация снапшотов btrfs
+Резервное копирование и снапшоты,dar,Disk Archive: бэкап с инкрементами и шифрованием
+Резервное копирование и снапшоты,duplicity,Инкрементальный бэкап с GPG на любые хранилища
+Резервное копирование и снапшоты,fsarchiver,Сохранение/восстановление ФС с содержимым
+Резервное копирование и снапшоты,kopia,"Бэкап с шифрованием, дедупликацией и версионированием"
+Резервное копирование и снапшоты,partclone,Клонирование разделов (умный копировщик занятых блоков)
+Резервное копирование и снапшоты,rdiff-backup,Инкрементальный бэкап с reverse-diff
+Резервное копирование и снапшоты,restic,Быстрый безопасный бэкап с дедупликацией (Go)
+Резервное копирование и снапшоты,rsnapshot,Снапшоты на rsync + hardlinks
+Резервное копирование и снапшоты,snapper,Управление снапшотами btrfs/LVM
+Резервное копирование и снапшоты,timeshift,Системные снапшоты (восстановление ОС)
+Резервное копирование и снапшоты,wal-g,backup PostgreSQL/other DB
+"Сборка, CI/CD и тестирование",ab,Простое HTTP-бенчмаркинг (Apache Bench)
+"Сборка, CI/CD и тестирование",act,Локальный запуск GitHub Actions
+"Сборка, CI/CD и тестирование",argo-workflows,workflow engine
+"Сборка, CI/CD и тестирование",artillery,Нагрузочное тестирование
+"Сборка, CI/CD и тестирование",ast-grep,Структурный поиск и rewrite по AST
+"Сборка, CI/CD и тестирование",autoconf,GNU build system
+"Сборка, CI/CD и тестирование",automake,GNU build system
+"Сборка, CI/CD и тестирование",bazel,Монорепо-сборка (Google стиль)
+"Сборка, CI/CD и тестирование",bazelisk,управление версиями Bazel
+"Сборка, CI/CD и тестирование",bombardier,Быстрый HTTP load-тест (Go)
+"Сборка, CI/CD и тестирование",browserslist,browser compatibility targeting
+"Сборка, CI/CD и тестирование",buck2,Монорепо-сборка (Meta стиль)
+"Сборка, CI/CD и тестирование",cargo-nextest,Быстрый и удобный runner тестов Rust
+"Сборка, CI/CD и тестирование",ccache,Кэш компиляции для gcc/clang
+"Сборка, CI/CD и тестирование",clang-format,Автоформатирование C/C++/JS (LLVM)
+"Сборка, CI/CD и тестирование",clang-tidy,Статический анализ и автофиксы C/C++
+"Сборка, CI/CD и тестирование",clangd,Language Server для C/C++ (LLVM)
+"Сборка, CI/CD и тестирование",cmake,Кроссплатформенная сборка C++
+"Сборка, CI/CD и тестирование",comby,Структурный поиск и преобразование кода
+"Сборка, CI/CD и тестирование",cppcheck,Статический анализ C/C++
+"Сборка, CI/CD и тестирование",dagger,CI/CD-пайплайны как код (программируемые)
+"Сборка, CI/CD и тестирование",distcc,Распределённая компиляция C/C++
+"Сборка, CI/CD и тестирование",dprint,Высокопроизводительный formatter на Rust
+"Сборка, CI/CD и тестирование",drone,CI/CD сервер
+"Сборка, CI/CD и тестирование",earthly,Повторяемые сборки и CI в контейнерах (Earthly)
+"Сборка, CI/CD и тестирование",fio,Бенчмарк дисковых подсистем и I/O
+"Сборка, CI/CD и тестирование",gatling,"Нагрузочное тестирование (Scala-DSL, CLI-раннер)"
+"Сборка, CI/CD и тестирование",gitbatch,Управление несколькими Git-репозиториями в одном месте
+"Сборка, CI/CD и тестирование",gitlab-ci,инструменты CI/CD
+"Сборка, CI/CD и тестирование",gitlab-runner,Локальный раннер GitLab CI
+"Сборка, CI/CD и тестирование",golangci-lint,Агрегатор Go linters
+"Сборка, CI/CD и тестирование",hey,HTTP load generator на Go
+"Сборка, CI/CD и тестирование",hyperfine,Точное бенчмаркирование CLI-команд
+"Сборка, CI/CD и тестирование",ioping,Замер латентности диска
+"Сборка, CI/CD и тестирование",jmeter,"Нагрузочное и функциональное тестирование (Apache, CLI)"
+"Сборка, CI/CD и тестирование",just,Удобный раннер команд для проектов (casey/just)
+"Сборка, CI/CD и тестирование",k6,Нагрузочное тестирование
+"Сборка, CI/CD и тестирование",locust,Нагрузочное тестирование Python
+"Сборка, CI/CD и тестирование",mage,Раннер задач на чистом Go
+"Сборка, CI/CD и тестирование",make,Классические Makefile
+"Сборка, CI/CD и тестирование",mask,"Раннер задач, определённых в Markdown"
+"Сборка, CI/CD и тестирование",meson,"Современная сборка (GNOME, systemd)"
+"Сборка, CI/CD и тестирование",mold,Сверхбыстрый линкер (современная альтернатива ld/gold)
+"Сборка, CI/CD и тестирование",newman,CLI для коллекций Postman
+"Сборка, CI/CD и тестирование",ninja,"Современная сборка (GNOME, systemd)"
+"Сборка, CI/CD и тестирование",oha,HTTP load-генератор с TUI (Rust)
+"Сборка, CI/CD и тестирование",pact,Contract testing
+"Сборка, CI/CD и тестирование",pants,Сборка и тестирование монорепозиториев (Python/Go/JS/Java)
+"Сборка, CI/CD и тестирование",sccache,Кэш компиляции с облачным хранением (Mozilla)
+"Сборка, CI/CD и тестирование",scons,Альтернативные билд-системы
+"Сборка, CI/CD и тестирование",siege,Классический HTTP load-тест
+"Сборка, CI/CD и тестирование",staticcheck,Статический анализ Go
+"Сборка, CI/CD и тестирование",stress,Простая нагрузка на CPU/память/диск
+"Сборка, CI/CD и тестирование",stress-ng,Расширенный стресс-тест системных подсистем
+"Сборка, CI/CD и тестирование",sysbench,Бенчмарк CPU/памяти/БД/файловых систем
+"Сборка, CI/CD и тестирование",task,Современный Makefile-альтернатива на YAML (go-task)
+"Сборка, CI/CD и тестирование",tekton,Kubernetes-native pipelines
+"Сборка, CI/CD и тестирование",vegeta,HTTP load testing
+"Сборка, CI/CD и тестирование",waf,Альтернативные билд-системы
+"Сборка, CI/CD и тестирование",wrk,HTTP benchmarking
+"Сборка, CI/CD и тестирование",wrk2,HTTP benchmarking
+Сетевые инструменты,apache,"Веб-сервер Apache HTTP (httpd, apachectl)"
+Сетевые инструменты,aria2c,"Многопоточное скачивание (HTTP, FTP, BitTorrent)"
+Сетевые инструменты,arp,Управление ARP-кэшем
+Сетевые инструменты,arp-scan,Сканирование локальной сети по ARP
+Сетевые инструменты,autossh,Автоматический перезапуск SSH-туннелей
+Сетевые инструменты,axel,Лёгкий акселератор загрузок
+Сетевые инструменты,bind9,"Классический DNS-сервер (named, rndc)"
+Сетевые инструменты,bmon,Мониторинг полосы с графиками
+Сетевые инструменты,bore,Минималистичные публичные туннели к localhost
+Сетевые инструменты,bridge-utils,Настройка сетевых мостов
+Сетевые инструменты,caddy,Reverse proxy с автоматическим TLS
+Сетевые инструменты,calicoctl,управление сетевыми политиками в K8s
+Сетевые инструменты,capinfos,Статистика pcap-файлов (Wireshark)
+Сетевые инструменты,consul,Service discovery и распределённая конфигурация
+Сетевые инструменты,coredns,Расширяемый DNS-сервер (DNS Kubernetes)
+Сетевые инструменты,crowdsec,Краудсорс-защита от брутфорса (современный fail2ban)
+Сетевые инструменты,curl,"Отправка HTTP-запросов, работа с API"
+Сетевые инструменты,curlie,curl с эргономикой httpie
+Сетевые инструменты,dig,DNS-запросы (полная информация)
+Сетевые инструменты,dnsmasq,Лёгкий DNS/DHCP/TFTP (локальные сети)
+Сетевые инструменты,dog,"Современный DNS-клиент, альтернатива dig с JSON-выводом"
+Сетевые инструменты,doggo,Современный DNS-клиент с DoH/DoT (Rust)
+Сетевые инструменты,drill,DNS-запросы (утилита из ldns)
+Сетевые инструменты,editcap,Разделение/фильтрация pcap (Wireshark)
+Сетевые инструменты,envoy,Service proxy для облачных сред
+Сетевые инструменты,etcd,Распределённое хранилище ключ-значение
+Сетевые инструменты,ethtool,Настройка сетевых карт
+Сетевые инструменты,evans,Интерактивный gRPC-клиент
+Сетевые инструменты,falco,Runtime-безопасность: аномалии в syscall (CNCF)
+Сетевые инструменты,gost,Мультипротокольные прокси и туннели (GO Simple Tunnel)
+Сетевые инструменты,gping,Пинг с графиком в реальном времени
+Сетевые инструменты,haproxy,Load balancer и reverse proxy
+Сетевые инструменты,headscale,Self-hosted координатор для Tailscale
+Сетевые инструменты,host,Простой DNS-запрос (альтернатива dig)
+Сетевые инструменты,hping3,Генератор произвольных TCP/IP-пакетов
+Сетевые инструменты,httpie,Человеко-читаемый HTTP-клиент
+Сетевые инструменты,httping,Ping по HTTP/HTTPS с временем ответа
+Сетевые инструменты,httpstat,Визуализация статистики HTTP-запроса (curl-обёртка)
+Сетевые инструменты,iftop,Трафик по соединениям интерфейса (TUI)
+Сетевые инструменты,ip,"Универсальная утилита для интерфейсов, маршрутов, туннелей (iproute2)"
+Сетевые инструменты,ipcalc,Расчёт подсетей IPv4/IPv6
+Сетевые инструменты,iperf3,Измерение пропускной способности сети
+Сетевые инструменты,ipfs,Distributed Web: IPFS-нода и CLI (kubo)
+Сетевые инструменты,ipset,Управление наборами IP для iptables
+Сетевые инструменты,iptables,Фильтрация пакетов (firewall)
+Сетевые инструменты,iptraf,Мониторинг трафика (TUI)
+Сетевые инструменты,ipv6calc,Расчёты и конвертация IPv6-адресов
+Сетевые инструменты,knot,Высокопроизводительный авторитативный DNS
+Сетевые инструменты,ldapsearch,Поиск по LDAP (OpenLDAP)
+Сетевые инструменты,lighttpd,Лёгкий высокопроизводительный веб-сервер
+Сетевые инструменты,linkerd,service mesh
+Сетевые инструменты,lsof,Список открытых файлов и сокетов
+Сетевые инструменты,masscan,Асинхронный сканер портов (очень быстрый)
+Сетевые инструменты,mergecap,Слияние pcap-файлов (Wireshark)
+Сетевые инструменты,mitmproxy,Интерактивный HTTPS-прокси для отладки (CLI/TUI/веб)
+Сетевые инструменты,mktorrent,Создание .torrent-файлов
+Сетевые инструменты,mole,Простое создание SSH-туннелей
+Сетевые инструменты,mosh,Мобильный SSH с устойчивостью к переключению сетей
+Сетевые инструменты,mount.cifs,Монтирование SMB shares
+Сетевые инструменты,mtr,Traceroute + ping в реальном времени
+Сетевые инструменты,nc,«Швейцарский армейский нож» для TCP/UDP (netcat)
+Сетевые инструменты,ncat,"Улучшенная версия netcat (SSL, прокси)"
+Сетевые инструменты,nebula,Масштабируемая overlay-сеть (Slack)
+Сетевые инструменты,netbird,Открытая mesh-VPN платформа (WireGuard)
+Сетевые инструменты,nethogs,Сетевой трафик по процессам
+Сетевые инструменты,netstat,Просмотр сетевых соединений
+Сетевые инструменты,networkctl,Диагностика systemd-networkd
+Сетевые инструменты,nftables,Фильтрация пакетов (firewall)
+Сетевые инструменты,nginx,Веб-сервер и reverse proxy
+Сетевые инструменты,ngrep,grep для сетевого трафика
+Сетевые инструменты,nload,Графики трафика интерфейса (TUI)
+Сетевые инструменты,nmap,Сканер портов и сетевой разведки
+Сетевые инструменты,nmcli,CLI NetworkManager
+Сетевые инструменты,nmtui,TUI NetworkManager
+Сетевые инструменты,nslookup,DNS-запросы (простой)
+Сетевые инструменты,ntopng,Анализ трафика в реальном времени (веб-UI)
+Сетевые инструменты,nuttcp,Измерение пропускной способности
+Сетевые инструменты,openvpn,VPN-клиент/сервер
+Сетевые инструменты,osquery,SQL-запросы к состоянию системы (безопасность)
+Сетевые инструменты,paping,TCP-пинг с измерением задержки
+Сетевые инструменты,ping,Проверка доступности хостов (ICMP)
+Сетевые инструменты,posting,Терминальный HTTP API-клиент с коллекциями
+Сетевые инструменты,privoxy,Прокси с фильтрацией контента
+Сетевые инструменты,Railway CLI,Deploy backends
+Сетевые инструменты,rathole,"Быстрые туннели/реверс-прокси (Rust, frp-альтернатива)"
+Сетевые инструменты,resolvectl,Управление и диагностика systemd-resolved
+Сетевые инструменты,route,Просмотр/изменение таблиц маршрутизации
+Сетевые инструменты,rpcinfo,Диагностика RPC
+Сетевые инструменты,rtorrent,BitTorrent-клиент для терминала
+Сетевые инструменты,s1h,SSH + SCP + менеджер паролей в одном CLI
+Сетевые инструменты,scp,Копирование файлов по SSH
+Сетевые инструменты,sish,SSH-based туннели к localhost (self-hosted ngrok)
+Сетевые инструменты,smbclient,Клиент SMB/CIFS (Samba)
+Сетевые инструменты,snort,Классический IDS/IPS
+Сетевые инструменты,socat,Мультиплексор потоков (мощнее netcat)
+Сетевые инструменты,speedtest-cli,Замер скорости интернета (Ookla/CLI)
+Сетевые инструменты,squid,Кэширующий прокси-сервер
+Сетевые инструменты,ss,Просмотр сетевых соединений (альтернатива netstat)
+Сетевые инструменты,ssh,Удалённое подключение (Secure Shell)
+Сетевые инструменты,sshfs,Монтирование удалённых директорий через SSH
+Сетевые инструменты,Stripe CLI,Payments + webhooks (agent-ready)
+Сетевые инструменты,strongswan,IPsec VPN
+Сетевые инструменты,stunnel,SSL-обёртка для любого TCP-соединения
+Сетевые инструменты,suricata,Сетевой IDS/IPS и NSM-движок
+Сетевые инструменты,tailscale,Mesh-VPN на WireGuard с нулевой настройкой
+Сетевые инструменты,tc,"Traffic control (QoS, шейпинг) (iproute2)"
+Сетевые инструменты,tcpdump,Захват и анализ пакетов
+Сетевые инструменты,tcpflow,Извлечение TCP-потоков в файлы
+Сетевые инструменты,tcping,Ping через TCP-порты
+Сетевые инструменты,tcptraceroute,Traceroute через TCP (обходит ICMP-блокировки)
+Сетевые инструменты,tcptrack,Отслеживание TCP-соединений
+Сетевые инструменты,termshark,TUI-версия Wireshark (tshark)
+Сетевые инструменты,tinc,Mesh-VPN классической школы
+Сетевые инструменты,tinyproxy,Лёгкий HTTP/HTTPS-прокси
+Сетевые инструменты,tor,Анонимная сеть Tor
+Сетевые инструменты,torsocks,Прогон приложений через Tor
+Сетевые инструменты,traceroute,Трассировка маршрута
+Сетевые инструменты,traefik,Современный reverse proxy для микросервисов
+Сетевые инструменты,traefik-mesh,современный service mesh
+Сетевые инструменты,trafficserver,Кэширующий прокси Apache Traffic Server
+Сетевые инструменты,transmission-cli,BitTorrent-клиент (CLI)
+Сетевые инструменты,trippy,Современный комбайн mtr/traceroute (Rust)
+Сетевые инструменты,tshark,CLI-версия Wireshark (анализ трафика)
+Сетевые инструменты,ufw,Фильтрация пакетов (firewall)
+Сетевые инструменты,unbound,Валидирующий рекурсивный DNS-резолвер
+Сетевые инструменты,varnish,"HTTP-ускоритель и кэш (varnishd, varnishadm)"
+Сетевые инструменты,vnstat,Сбор статистики по сетевым интерфейсам
+Сетевые инструменты,wakeonlan,Включение компьютеров по сети (Wake-on-LAN)
+Сетевые инструменты,websocat,WebSocket/stdio bridge
+Сетевые инструменты,wget,Скачивание файлов по URL
+Сетевые инструменты,wget2,Улучшенная версия wget с HTTP/2
+Сетевые инструменты,whois,Запрос информации о домене
+Сетевые инструменты,wireguard,Современный VPN с высокой производительностью
+Сетевые инструменты,wireshark,"Анализ трафика (GUI, есть CLI)"
+Сетевые инструменты,wstunnel,Туннелирование трафика через WebSocket/HTTP2
+Сетевые инструменты,xh,"Дружелюбный HTTP-клиент (Rust, httpie-совместимый)"
+Сетевые инструменты,zeek,Платформа сетевой безопасности-аналитики (бывш. Bro)
+Сетевые инструменты,zerotier,Виртуальные сети уровня L2/L3
+Сетевые инструменты,zmap,Интернет-сканер (сканирование всего интернета за 45 мин)
+Сетевые инструменты,zookeeper,Координация распределённых систем
+Системное администрирование и процессы,at,Одноразовые отложенные задачи
+Системное администрирование и процессы,atop,Мониторинг системных ресурсов с историей
+Системное администрирование и процессы,atq,Одноразовые отложенные задачи
+Системное администрирование и процессы,atrm,Одноразовые отложенные задачи
+Системное администрирование и процессы,bc,Калькулятор произвольной точности
+Системное администрирование и процессы,bottom,"Кроссплатформенный монитор ресурсов (btm, Rust)"
+Системное администрирование и процессы,btop,Красивый монитор ресурсов (CPU/RAM/сеть/диски)
+Системное администрирование и процессы,cal,Календарь в терминале
+Системное администрирование и процессы,chronic,"Запускает команду тихо, если она успешна"
+Системное администрирование и процессы,chrony,Синхронизация времени NTP (chronyc)
+Системное администрирование и процессы,circus,Менеджер процессов и сокетов (Python)
+Системное администрирование и процессы,combine,Объединение строк из двух файлов с булевыми операциями
+Системное администрирование и процессы,cpulimit,Ограничение CPU-потребления процесса
+Системное администрирование и процессы,crontab,Пользовательский планировщик задач
+Системное администрирование и процессы,date,Вывод/установка даты и времени
+Системное администрирование и процессы,dc,RPN-калькулятор
+Системное администрирование и процессы,disown,"Запуск в фоне, независимый от терминала"
+Системное администрирование и процессы,dmesg,"Сообщения ядра (OOM, USB, драйверы)"
+Системное администрирование и процессы,dmidecode,"Данные DMI/SMBIOS (BIOS, железо)"
+Системное администрирование и процессы,dstat,Комбинированная статистика ресурсов (универсальная замена vmstat/iostat)
+Системное администрирование и процессы,env,Переменные окружения
+Системное администрирование и процессы,errno,Поиск описаний ошибок по номеру errno
+Системное администрирование и процессы,fastfetch,Быстрый вывод информации о системе (neofetch-наследник)
+Системное администрирование и процессы,foreman,Классический менеджер Procfile
+Системное администрирование и процессы,free,RAM и swap статистика
+Системное администрирование и процессы,fuser,"Процессы, использующие файл/сокет"
+Системное администрирование и процессы,getent,Запрос NSS-баз
+Системное администрирование и процессы,glances,Мониторинг в реальном времени на Python (CLI)
+Системное администрирование и процессы,groups,Группы пользователя
+Системное администрирование и процессы,hivemind,Менеджер Procfile (Go)
+Системное администрирование и процессы,honcho,Менеджер Procfile-приложений (Python)
+Системное администрирование и процессы,hostctl,Управление файлом /etc/hosts
+Системное администрирование и процессы,hostname,Имя хоста
+Системное администрирование и процессы,htop,Интерактивный просмотр процессов (улучшенный top)
+Системное администрирование и процессы,hwinfo,Детальная информация об оборудовании
+Системное администрирование и процессы,id,Текущий пользователь и права
+Системное администрирование и процессы,ifdata,Получение информации о сетевом интерфейсе
+Системное администрирование и процессы,insmod,Модули ядра
+Системное администрирование и процессы,inxi,Сводная информация о системе и железе
+Системное администрирование и процессы,iostat,"RAM, swap, CPU, I/O статистика"
+Системное администрирование и процессы,ipcs,Информация о System V IPC
+Системное администрирование и процессы,journalctl,"Чтение системных логов (фильтры по unit, время, приоритет)"
+Системное администрирование и процессы,kill,Отправка сигналов процессам
+Системное администрирование и процессы,killall,Отправка сигналов процессам по имени
+Системное администрирование и процессы,logger,Запись сообщений в syslog из скриптов
+Системное администрирование и процессы,loginctl,Управление user sessions и logind
+Системное администрирование и процессы,logrotate,"Ротация, сжатие и отправка логов"
+Системное администрирование и процессы,lscpu,Сведения о процессоре
+Системное администрирование и процессы,lshw,Полная информация об оборудовании
+Системное администрирование и процессы,lsmod,Модули ядра
+Системное администрирование и процессы,lspci,Список PCI-устройств
+Системное администрирование и процессы,lstopo,Топология железа (hwloc)
+Системное администрирование и процессы,lsusb,Список USB-устройств
+Системное администрирование и процессы,mispipe,Связывает две команды с проверкой ошибок
+Системное администрирование и процессы,modprobe,Модули ядра
+Системное администрирование и процессы,mpstat,"RAM, swap, CPU, I/O статистика"
+Системное администрирование и процессы,neofetch,Отображение информации о системе с ASCII-артом
+Системное администрирование и процессы,nice,Приоритеты процессов
+Системное администрирование и процессы,nmon,Монитор производительности (IBM)
+Системное администрирование и процессы,nodemon,Автоперезапуск Node-процессов при изменениях
+Системное администрирование и процессы,nohup,"Запуск в фоне, независимый от терминала"
+Системное администрирование и процессы,nproc,Число доступных процессорных ядер
+Системное администрирование и процессы,ntp,Классический демон NTP
+Системное администрирование и процессы,numactl,Управление политиками NUMA
+Системное администрирование и процессы,overmind,Менеджер Procfile на tmux
+Системное администрирование и процессы,pgrep,Поиск процессов по имени/регулярке
+Системное администрирование и процессы,pidstat,Статистика процессов (sysstat)
+Системное администрирование и процессы,pkill,Убийство процессов по имени/регулярке
+Системное администрирование и процессы,pm2,Менеджер процессов Node.js с кластеризацией
+Системное администрирование и процессы,pmap,Карта памяти процесса
+Системное администрирование и процессы,powertop,Анализ энергопотребления (Intel)
+Системное администрирование и процессы,printenv,Переменные окружения
+Системное администрирование и процессы,process-compose,Оркестрация процессов с зависимостями и TUI
+Системное администрирование и процессы,ps,"Снимок процессов (aux, -eo pid,ppid,cmd)"
+Системное администрирование и процессы,renice,Приоритеты процессов
+Системное администрирование и процессы,rmmod,Модули ядра
+Системное администрирование и процессы,rsyslogd,Высокопроизводительный syslog-сервер
+Системное администрирование и процессы,runit,Простой init и супервизор (runsvdir)
+Системное администрирование и процессы,s-tui,TUI стресс-тест и мониторинг CPU/температур
+Системное администрирование и процессы,s6,Иерархия супервизоров процессов (s6-svscan)
+Системное администрирование и процессы,sar,Сбор и отчёт по активности системы (sysstat)
+Системное администрирование и процессы,sensors,Температуры и напряжения (lm-sensors)
+Системное администрирование и процессы,seq,Генерация последовательностей чисел
+Системное администрирование и процессы,slabtop,Статистика kernel slab-кэшей
+Системное администрирование и процессы,sleep,Пауза в скриптах
+Системное администрирование и процессы,supervisord,Управление демонами и процессами (supervisorctl)
+Системное администрирование и процессы,sysctl,"Runtime-параметры ядра (vm.swappiness, net.core.*)"
+Системное администрирование и процессы,syslog-ng,Сбор и маршрутизация логов
+Системное администрирование и процессы,systemctl,Управление systemd-сервисами (start/stop/status/enable)
+Системное администрирование и процессы,systemd-analyze,"Анализ загрузки, зависимостей и времени запуска systemd"
+Системное администрирование и процессы,taskset,Привязка процессов к ядрам CPU
+Системное администрирование и процессы,time,Замер времени выполнения команды (GNU time)
+Системное администрирование и процессы,timeout,Принудительное ограничение времени выполнения
+Системное администрирование и процессы,top,Классический просмотр процессов
+Системное администрирование и процессы,tsx,Прямой запуск TypeScript для Node (esbuild)
+Системное администрирование и процессы,uname,Информация о ядре
+Системное администрирование и процессы,units,Конвертация физических единиц
+Системное администрирование и процессы,uptime,Аптайм
+Системное администрирование и процессы,vmstat,"RAM, swap, CPU, I/O статистика"
+Системное администрирование и процессы,wall,Сообщение всем пользователям системы
+Системное администрирование и процессы,watch,Периодический запуск команды с выводом
+Системное администрирование и процессы,whereis,"Поиск бинарников, исходников и man-страниц"
+Системное администрирование и процессы,which,Поиск исполняемого файла в PATH
+Системное администрирование и процессы,whoami,Текущий пользователь
+Системы контроля версий,bb,Алиас bitbucket
+Системы контроля версий,bfg,Быстрая очистка репозитория от секретов и мусора
+Системы контроля версий,bitbucket,Bitbucket CLI (bb)
+Системы контроля версий,bzr,Распределённая VCS от Canonical (Bazaar)
+Системы контроля версий,cargo-release,Релизы Rust crate'ов
+Системы контроля версий,changesets,Монорепо versioning (JavaScript)
+Системы контроля версий,chezmoi,Управление dotfiles
+Системы контроля версий,cocogitto,Conventional Commits и автоматические релизы
+Системы контроля версий,commitlint,Линтинг commit-сообщений
+Системы контроля версий,cvs,Concurrent Versions System (legacy)
+Системы контроля версий,darcs,Patch-oriented VCS (Haskell)
+Системы контроля версий,delta,Улучшенный просмотр диффов с синтаксической подсветкой и выравниванием
+Системы контроля версий,diff-so-fancy,Улучшенное оформление diff
+Системы контроля версий,difftastic,"Структурный diff, понимающий синтаксис"
+Системы контроля версий,fork,GUI-клиент для Git (headless-режим)
+Системы контроля версий,fossil,VCS + bug tracker + wiki
+Системы контроля версий,gh,"GitHub CLI (issues, PR, codespaces, copilot)"
+Системы контроля версий,ghq,Управление локальными копиями удалённых репозиториев
+Системы контроля версий,git,Основная распределённая VCS
+Системы контроля версий,git-absorb,Автоматические fixup-коммиты
+Системы контроля версий,git-appraise,"Code review, встроенный в Git (Google)"
+Системы контроля версий,git-bug,Распределённый баг-трекер в Git
+Системы контроля версий,git-chglog,Генерация CHANGELOG из коммитов
+Системы контроля версий,git-cliff,Генерация CHANGELOG из коммитов
+Системы контроля версий,git-crypt,Шифрование секретов в Git
+Системы контроля версий,git-cvs,Интеграция с CVS
+Системы контроля версий,git-delta,Подсветка и постраничный просмотр git diff
+Системы контроля версий,git-extras,"60+ полезных Git-команд (git-ignore, git-changelog)"
+Системы контроля версий,git-fast-import,Импорт в Git
+Системы контроля версий,git-filter-repo,Мощная перезапись истории Git
+Системы контроля версий,git-flow,Расширение ветвления по модели git-flow
+Системы контроля версий,git-lfs,Large File Storage для Git
+Системы контроля версий,git-machete,Управление стеками веток (stacked PR)
+Системы контроля версий,git-open,Открытие GitHub/GitLab repository в браузере
+Системы контроля версий,git-revise,Переписывание коммитов без переключения веток
+Системы контроля версий,git-secret,Шифрование секретов в Git
+Системы контроля версий,git-sim,Визуализация Git-операций
+Системы контроля версий,git-standup,Отчёт по недавней активности разработчика
+Системы контроля версий,git-submodule,Управление вложенными репозиториями
+Системы контроля версий,git-subrepo,Управление вложенными репозиториями
+Системы контроля версий,git-subtree,Управление вложенными репозиториями
+Системы контроля версий,git-svn,Интеграция с SVN
+Системы контроля версий,git-town,Высокоуровневое управление Git-ветками и release workflow
+Системы контроля версий,gitea,Gitea CLI (tea)
+Системы контроля версий,gitkraken,GUI-клиент (headless скриптинг)
+Системы контроля версий,gitui,TUI для Git (Rust)
+Системы контроля версий,glab,GitLab CLI
+Системы контроля версий,goreleaser,Релизы Go-приложений
+Системы контроля версий,hg,Алиас mercurial
+Системы контроля версий,homeshick,Управление dotfiles
+Системы контроля версий,hub,Предшественник gh (устаревает)
+Системы контроля версий,husky,Git hooks для Node.js проектов
+Системы контроля версий,jj,Jujutsu — Git-совместимая VCS нового поколения
+Системы контроля версий,lazygit,"TUI для Git (Go, удобный)"
+Системы контроля версий,lefthook,Быстрые git-хуки для любого стека (Go)
+Системы контроля версий,lerna,Монорепо менеджмент
+Системы контроля версий,lint-staged,Линтинг только изменённых файлов (Node.js)
+Системы контроля версий,mani,Управление несколькими Git-репозиториями
+Системы контроля версий,mercurial,"Распределённая VCS (Facebook, Mozilla) (hg)"
+Системы контроля версий,nx,Монорепо менеджмент
+Системы контроля версий,pijul,Математически обоснованная VCS
+Системы контроля версий,pre-commit,Git hooks framework (CLI)
+Системы контроля версий,radicle,Децентрализованная P2P-коллаборация поверх git
+Системы контроля версий,release-it,Интерактивный релизный инструмент
+Системы контроля версий,repo,Google-инструмент для управления множеством Git-репо
+Системы контроля версий,semantic-release,Автоматическая семантическая версионность
+Системы контроля версий,sl,Sapling — масштабируемая VCS от Meta (клиент sl)
+Системы контроля версий,sourcetree,GUI-клиент (headless скриптинг)
+Системы контроля версий,standard-version,Альтернатива semantic-release
+Системы контроля версий,stow,Управление dotfiles
+Системы контроля версий,svn,Apache Subversion
+Системы контроля версий,tea,Алиас gitea
+Системы контроля версий,tig,Интерактивный TUI для Git
+Системы контроля версий,transcrypt,Прозрачное шифрование файлов в Git
+Системы контроля версий,turborepo,Монорепо менеджмент
+Системы контроля версий,vcsh,VCS для $HOME (dotfiles)
+Системы контроля версий,yadm,Управление dotfiles
+Текстовые редакторы (CLI),ed,Прародитель всех редакторов (POSIX)
+Текстовые редакторы (CLI),emacs,Редактор/среда с server-mode (emacsclient)
+Текстовые редакторы (CLI),helix,Модальный редактор с LSP и tree-sitter из коробки
+Текстовые редакторы (CLI),kakoune,Редактор с моделью selection-first
+Текстовые редакторы (CLI),micro,Понятный модульный редактор с хоткеями GUI
+Текстовые редакторы (CLI),nano,Простой редактор по умолчанию
+Текстовые редакторы (CLI),neovim,Модернизированный Vim с Lua и LSP
+Текстовые редакторы (CLI),vim,Классический модальный редактор
+Терминальные мультиплексоры и управление сеансами,abduco,Альтернатива dtach + dvtm
+Терминальные мультиплексоры и управление сеансами,Alacritty,GPU-accelerated терминалы (если нужны эмуляторы)
+Терминальные мультиплексоры и управление сеансами,byobu,Фронтенд к screen/tmux с горячими клавишами
+Терминальные мультиплексоры и управление сеансами,dtach,Лёгкая отсоединяемая сессия без окон
+Терминальные мультиплексоры и управление сеансами,Rio,GPU-accelerated терминалы (если нужны эмуляторы)
+Терминальные мультиплексоры и управление сеансами,screen,Классический мультиплексор
+Терминальные мультиплексоры и управление сеансами,tmux,"Современный мультиплексор (панели, окна, сессии)"
+Терминальные мультиплексоры и управление сеансами,wezterm,GPU-терминал с мультиплексором и SSH-клиентом
+Терминальные мультиплексоры и управление сеансами,zellij,Мультиплексор на Rust с layout-файлами
+"Управление пользователями, правами и ACL",chage,Пароли и сроки действия
+"Управление пользователями, правами и ACL",chgrp,Права доступа к файлам
+"Управление пользователями, правами и ACL",chmod,Права доступа к файлам
+"Управление пользователями, правами и ACL",chown,Права доступа к файлам
+"Управление пользователями, правами и ACL",getcap,Просмотр file capabilities
+"Управление пользователями, правами и ACL",getfacl,POSIX Access Control Lists
+"Управление пользователями, правами и ACL",getfattr,Расширенные атрибуты файлов
+"Управление пользователями, правами и ACL",groupadd,Управление группами
+"Управление пользователями, правами и ACL",groupdel,Управление группами
+"Управление пользователями, правами и ACL",groupmod,Управление группами
+"Управление пользователями, правами и ACL",last,История входов
+"Управление пользователями, правами и ACL",lastlog,История входов
+"Управление пользователями, правами и ACL",namei,Разбор пути и разрешений по компонентам
+"Управление пользователями, правами и ACL",passwd,Пароли и сроки действия
+"Управление пользователями, правами и ACL",setcap,Linux file capabilities
+"Управление пользователями, правами и ACL",setfacl,POSIX Access Control Lists
+"Управление пользователями, правами и ACL",setfattr,Расширенные атрибуты файлов
+"Управление пользователями, правами и ACL",su,Смена пользователя
+"Управление пользователями, правами и ACL",sudo,Выполнение от имени root
+"Управление пользователями, правами и ACL",useradd,Управление пользователями
+"Управление пользователями, правами и ACL",userdel,Управление пользователями
+"Управление пользователями, правами и ACL",usermod,Управление пользователями
+"Управление пользователями, правами и ACL",visudo,Безопасное редактирование sudoers
+"Управление пользователями, правами и ACL",w,Активные пользователи
+"Управление пользователями, правами и ACL",who,Активные пользователи
+Управление удалёнными машинами,chisel,TCP/UDP туннели over HTTP
+Управление удалёнными машинами,cloudflared,Туннели Cloudflare (zero-trust)
+Управление удалёнными машинами,clusterssh,Одновременный SSH на кластер
+Управление удалёнными машинами,cssh,Одновременный SSH на кластер (clusterssh)
+Управление удалёнными машинами,eternal-terminal,"SSH-сессии, устойчивые к разрывам сети (et)"
+Управление удалёнными машинами,frp,Быстрый реверс-прокси туннель (frpc/frps)
+Управление удалёнными машинами,frpc,Быстрый реверс-прокси туннель
+Управление удалёнными машинами,frps,Быстрый реверс-прокси туннель
+Управление удалёнными машинами,ngrok,Публичные туннели к localhost
+Управление удалёнными машинами,parallel-ssh,Параллельный SSH на множество хостов
+Управление удалёнными машинами,pdsh,Parallel distributed shell
+Управление удалёнными машинами,pssh,Параллельный SSH на множество хостов
+Управление удалёнными машинами,sshx,Коллаборативный терминал в браузере
+Управление удалёнными машинами,teleport,Zero-trust доступ к SSH/K8s/БД с аудитом
+Управление удалёнными машинами,tmate,Мгновенный shared terminal over SSH
+Управление удалёнными машинами,upterm,Мгновенное шаринг-подключение к терминальной сессии
+Форензика и восстановление данных,binwalk,Анализ и извлечение встроенных образов прошивок
+Форензика и восстановление данных,bulk_extractor,Массовое извлечение артефактов из образов
+Форензика и восстановление данных,foremost,Карвинг файлов по заголовкам
+Форензика и восстановление данных,photorec,Восстановление файлов по сигнатурам (спутник testdisk)
+Форензика и восстановление данных,plaso,Супертаёмлайн из артефактов системы (log2timeline)
+Форензика и восстановление данных,scalpel,Быстрый файловый карвер
+Форензика и восстановление данных,sleuthkit,"Форензика файловых систем (fls, icat, mmls)"
+Форензика и восстановление данных,testdisk,Восстановление разделов и загрузочных записей
+Форензика и восстановление данных,volatility3,Форензика дампов оперативной памяти
+Электронная почта (CLI),aerc,Эффективный почтовый TUI для разработчиков
+Электронная почта (CLI),fetchmail,Забор почты по POP3/IMAP
+Электронная почта (CLI),himalaya,Email-клиент на основе CLI (Rust)
+Электронная почта (CLI),mailx,Отправка почты из скриптов (s-nail)
+Электронная почта (CLI),mbsync,Двусторонняя синхронизация IMAP (isync)
+Электронная почта (CLI),msmtp,Лёгкий SMTP-клиент для отправки
+Электронная почта (CLI),mutt,Классический почтовый клиент
+Электронная почта (CLI),neomutt,Активно развиваемый форк mutt
+Электронная почта (CLI),notmuch,Молниеносный индекс и поиск почты
+Электронная почта (CLI),offlineimap,Синхронизация IMAP в локальный maildir
+Электронная почта (CLI),sendmail,Классический интерфейс отправки почты
+Электронная почта (CLI),swaks,Швейцарский нож для тестирования SMTP
