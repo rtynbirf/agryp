@@ -1,0 +1,36 @@
+name: ci
+
+# CI клетки agryp (волна 2026-11-08, W-AUD-12): сборка C и сверка стенограмм витков.
+# Этика LFS: один файл C, только libc, ноль зависимостей — сборка честная, без кэшей.
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build — gcc -Wall -Wextra -std=c99
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: make agryp
+        run: make agryp
+      - name: бинарь существует и исполняем
+        run: |
+          test -x ./agryp
+          file ./agryp
+
+  audit:
+    name: audit — сверка стенограмм витков (транскрипты из репо)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: make audit
+        run: make audit
+      - name: make audit-ctl
+        run: make audit-ctl
