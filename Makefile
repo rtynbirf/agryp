@@ -64,3 +64,6 @@ clean:
 	rm -f agryp
 
 .PHONY: demo demo-ctl demo-finish demo-reload demo-jail demo-stream demo-jail-host audit audit-ctl audit-finish audit-reload audit-jail audit-stream audit-jail-host bridge-test bench bench-stdiobus clean
+
+catalog-guard:
+	python3 tools/catalog_guard.py
