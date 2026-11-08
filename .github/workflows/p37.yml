@@ -25,7 +25,7 @@ on:
 
 jobs:
   unit:
-    name: unit — ed25519-конверты: битая подпись → отказ
+    name: "unit — ed25519-конверты: битая подпись → отказ"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -55,7 +55,7 @@ jobs:
           PY
 
   live:
-    name: live — завод юнита решает ed25519-подпись, карта живая
+    name: "live — завод юнита решает ed25519-подпись, карта живая"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
