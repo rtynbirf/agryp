@@ -1,0 +1,51 @@
+# HELP agryp_up_ms Жизнь супервизора, мс
+# TYPE agryp_up_ms gauge
+agryp_up_ms 4009
+# HELP agryp_units Юнитов в каталоге
+# TYPE agryp_units gauge
+agryp_units 2
+# HELP agryp_orphans_total Усыновлённые сироты (subreaper)
+# TYPE agryp_orphans_total counter
+agryp_orphans_total 0
+# HELP agryp_reloads_total Перезагрузок каталога (SIGHUP)
+# TYPE agryp_reloads_total counter
+agryp_reloads_total 0
+# HELP agryp_rotations_total Ротаций журнала с пломбой
+# TYPE agryp_rotations_total counter
+agryp_rotations_total 0
+# HELP agryp_attempts_total Попыток юнита
+# TYPE agryp_attempts_total counter
+# HELP agryp_exits_ok_total Чистых выходов (code 0)
+# TYPE agryp_exits_ok_total counter
+# HELP agryp_exits_fail_total Неудачных выходов
+# TYPE agryp_exits_fail_total counter
+# HELP agryp_budget_kills_total Казней по бюджету времени
+# TYPE agryp_budget_kills_total counter
+# HELP agryp_token_kills_total Казней по токен-бюджету
+# TYPE agryp_token_kills_total counter
+# HELP agryp_tokens_total Токенов съедено за всё время
+# TYPE agryp_tokens_total counter
+# HELP agryp_restarts_total Перезапусков (выход из попытки в cooldown)
+# TYPE agryp_restarts_total counter
+# HELP agryp_fail_streak Смертей подряд (лестница Ст. 8)
+# TYPE agryp_fail_streak gauge
+# HELP agryp_ctl_down Политика заморожена файлом .down
+# TYPE agryp_ctl_down gauge
+agryp_attempts_total{unit="crashy"} 2
+agryp_exits_ok_total{unit="crashy"} 0
+agryp_exits_fail_total{unit="crashy"} 1
+agryp_budget_kills_total{unit="crashy"} 0
+agryp_token_kills_total{unit="crashy"} 0
+agryp_tokens_total{unit="crashy"} 0
+agryp_restarts_total{unit="crashy"} 1
+agryp_fail_streak{unit="crashy"} 1
+agryp_ctl_down{unit="crashy"} 0
+agryp_attempts_total{unit="hello"} 1
+agryp_exits_ok_total{unit="hello"} 0
+agryp_exits_fail_total{unit="hello"} 0
+agryp_budget_kills_total{unit="hello"} 0
+agryp_token_kills_total{unit="hello"} 0
+agryp_tokens_total{unit="hello"} 2000
+agryp_restarts_total{unit="hello"} 0
+agryp_fail_streak{unit="hello"} 0
+agryp_ctl_down{unit="hello"} 0

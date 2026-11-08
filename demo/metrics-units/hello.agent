@@ -1,0 +1,8 @@
+# Бессмертный сервис: перезапускается при любой смерти.
+# Две валюты бюджета: время 25 с и токены 5000 — токены дороже, усыпят по ним.
+name         = hello
+exec         = bash demo/hello_agent.sh
+restart      = always
+budget-sec   = 25
+token-budget = 5000
+cooldown-ms  = 1000

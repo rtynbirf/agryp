@@ -22,6 +22,24 @@ demo-jail: agryp
 demo-stream: agryp
 	bash demo/run_demo_stream.sh
 
+# Виток 10: счётная правда ядра — метрики .prom, журнал-ротация с пломбой,
+# сигнатуры договоров. Приёмки Т06 (предложение «метрики как .prom»).
+demo-metrics: agryp
+	bash demo/run_demo_metrics.sh
+
+demo-rotate: agryp
+	bash demo/run_demo_rotate.sh
+
+demo-sign: agryp
+	bash demo/run_demo_sign.sh
+
+journal-audit:
+	sh tools/journal_audit.sh demo/rotate-units
+
+# Контракт каталога (П-04/T04): 2444 позиции — счёт заперт CI (tools/catalog_guard.py)
+catalog-guard:
+	python3 tools/catalog_guard.py
+
 # Виток 9 (ЦУ 011): jail-приёмка границы Ст. 9 — сироты 0 за клеткой
 # (userns-обёртка среды; ядро не менялось).
 demo-jail-host: agryp
@@ -63,7 +81,4 @@ audit-jail-host:
 clean:
 	rm -f agryp
 
-.PHONY: demo demo-ctl demo-finish demo-reload demo-jail demo-stream demo-jail-host audit audit-ctl audit-finish audit-reload audit-jail audit-stream audit-jail-host bridge-test bench bench-stdiobus clean
-
-catalog-guard:
-	python3 tools/catalog_guard.py
+.PHONY: demo demo-ctl demo-finish demo-reload demo-jail demo-stream demo-jail-host demo-metrics demo-rotate demo-sign journal-audit audit audit-ctl audit-finish audit-reload audit-jail audit-stream audit-jail-host bridge-test bench bench-stdiobus clean

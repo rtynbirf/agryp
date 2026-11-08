@@ -1,15 +1,17 @@
-{"ts":"2026-11-07T18:41:21Z","up_ms":0,"event":"boot","units":2,"dir":"demo/jail-units"}
-{"ts":"2026-11-07T18:41:21Z","up_ms":0,"event":"subreaper","on":true}
-{"ts":"2026-11-07T18:41:21Z","up_ms":0,"unit":"jailed","event":"jail-skip","reason":"clone","errno":1}
-{"ts":"2026-11-07T18:41:21Z","up_ms":1,"unit":"jailed","event":"spawn","pid":25045,"attempt":1,"budget_sec":0,"jailed":0}
-{"ts":"2026-11-07T18:41:21Z","up_ms":1,"unit":"plain","event":"spawn","pid":25046,"attempt":1,"budget_sec":0,"jailed":0}
-[] старт, pid=25046; работаю 4 с
-[] старт, pid=25045; работаю 4 с
-{"ts":"2026-11-07T18:41:24Z","up_ms":3002,"event":"shutdown","reason":"signal"}
-{"ts":"2026-11-07T18:41:24Z","up_ms":3002,"unit":"jailed","event":"exit","by_signal":15,"ok":false}
-{"ts":"2026-11-07T18:41:24Z","up_ms":3002,"unit":"plain","event":"exit","by_signal":15,"ok":false}
-{"ts":"2026-11-07T18:41:24Z","up_ms":3002,"event":"reap-orphan","pid":25048,"code":-1}
-{"ts":"2026-11-07T18:41:24Z","up_ms":3002,"event":"reap-orphan","pid":25047,"code":-1}
-{"ts":"2026-11-07T18:41:24Z","up_ms":3002,"unit":"jailed","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
-{"ts":"2026-11-07T18:41:24Z","up_ms":3002,"unit":"plain","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
-{"ts":"2026-11-07T18:41:24Z","up_ms":3002,"event":"uptime-ms","value":3002}
+{"ts":"2026-11-08T12:48:54Z","up_ms":0,"event":"boot","units":2,"dir":"demo/jail-units","rotate_bytes":262144}
+{"ts":"2026-11-08T12:48:54Z","up_ms":0,"unit":"jailed","event":"unit-sign","old":null,"new":"a7c75318b7a4c1b72eb8bff5d1eafe8b293e5a46414a772970e6bad8d42e48ca","mtime":1794140845}
+{"ts":"2026-11-08T12:48:54Z","up_ms":0,"unit":"plain","event":"unit-sign","old":null,"new":"17624265cdc13224732c0b05653ed093dbd36a5b1ebe30844834792ea608aee5","mtime":1794140845}
+{"ts":"2026-11-08T12:48:54Z","up_ms":0,"event":"subreaper","on":true}
+{"ts":"2026-11-08T12:48:54Z","up_ms":0,"unit":"jailed","event":"jail-skip","reason":"clone","errno":1}
+{"ts":"2026-11-08T12:48:54Z","up_ms":0,"unit":"jailed","event":"spawn","pid":2881,"attempt":1,"budget_sec":0,"jailed":0}
+{"ts":"2026-11-08T12:48:54Z","up_ms":0,"unit":"plain","event":"spawn","pid":2882,"attempt":1,"budget_sec":0,"jailed":0}
+[] старт, pid=2881; работаю 4 с
+[] старт, pid=2882; работаю 4 с
+{"ts":"2026-11-08T12:48:57Z","up_ms":3001,"event":"shutdown","reason":"signal"}
+{"ts":"2026-11-08T12:48:57Z","up_ms":3051,"unit":"jailed","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-08T12:48:57Z","up_ms":3051,"unit":"plain","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-08T12:48:57Z","up_ms":3051,"event":"reap-orphan","pid":2883,"code":-1}
+{"ts":"2026-11-08T12:48:57Z","up_ms":3051,"event":"reap-orphan","pid":2884,"code":-1}
+{"ts":"2026-11-08T12:48:57Z","up_ms":3051,"unit":"jailed","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-08T12:48:57Z","up_ms":3051,"unit":"plain","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-08T12:48:57Z","up_ms":3051,"event":"uptime-ms","value":3051}

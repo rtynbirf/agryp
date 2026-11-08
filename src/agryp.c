@@ -41,6 +41,8 @@
 #define BACKOFF_CAP_MS 30000 /* потолок лестницы перезапуска (Ст. 8) */
 #define CRASH_LIMIT    5     /* подряд своих смертей → терминальный failed (Ст. 8) */
 #define FINISH_MS 5000   /* потолок жизни finish-хука: упор — вслух (Ст. 11, Виток 6) */
+#define ROTATE_BYTES  262144 /* Виток 10: потолок журнала до ротации (может --rotate-bytes) */
+#define ROTATE_KEEP   3      /* Виток 10: сколько отрезанных хвостов хранить */
 
 typedef enum { R_ALWAYS = 0, R_ON_FAILURE = 1, R_NO = 2 } restart_t;
 typedef enum { U_STOPPED = 0, U_RUNNING = 1, U_COOLDOWN = 2 } state_t;
@@ -77,6 +79,8 @@ typedef struct {
     long long ctl_since_ms;  /* с каких пор жив .down: TERM не убил за GRACE_MS — казнь (Виток 6) */
     int       retired;       /* файл юнита удалён из каталога — жизни больше нет (Виток 6) */
     long long run_started_ms; /* старт текущей попытки: «проработал» меряем от неё */
+    char      sign[65];      /* Виток 10: сигнатура договора — sha256 байт *.agent */
+    long long sign_mtime;    /* Виток 10: mtime договора на момент подписи */
 } unit_t;
 
 static unit_t g_units[MAX_UNITS];
@@ -90,6 +94,141 @@ static char g_ctl_dir[1152];  /* agrypctl: файлы-договоры вмес�
 static char g_dropped[8][NAME_LEN]; /* Виток 6: ctl-drop не шумит — реестр последних 8 имён */
 static int  g_ndropped = 0;
 static long long g_t0;
+/* Виток 10: двойная летопись (stdout + файл) и метрики файлом (Ст. 13) */
+static char g_journal_path[1152];
+static char g_metrics_path[1152];
+static FILE *g_journal;
+static long long g_journal_bytes;
+static long long g_rotate_bytes = ROTATE_BYTES;
+static long long g_orphans;   /* усыновлённые сироты (subreaper) */
+static long long g_reloads;   /* перезагрузок каталога (SIGHUP) */
+static long long g_rotations; /* ротаций журнала */
+
+/* ---------- sha256: пломбы Витка 10 (ротация журнала, сигнатуры договоров) ---------- */
+
+/* Компактная самодостаточная реализация (FIPS 180-4). Ноль зависимостей: Ст. 1. */
+typedef struct {
+    unsigned int h[8];
+    unsigned long long len;
+    unsigned char buf[64];
+    size_t n;
+} sha256_ctx;
+
+static unsigned int ror32(unsigned int x, int r)
+{
+    return (x >> r) | (x << (32 - r));
+}
+
+static void sha256_block(sha256_ctx *c, const unsigned char *p)
+{
+    static const unsigned int K[64] = {
+        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1,
+        0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
+        0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786,
+        0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+        0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147,
+        0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13,
+        0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b,
+        0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+        0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a,
+        0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
+        0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+    };
+    unsigned int w[64], a, b, cc, d, e, f, g, h;
+    int i;
+
+    for (i = 0; i < 16; i++)
+        w[i] = ((unsigned int)p[4 * i] << 24) | ((unsigned int)p[4 * i + 1] << 16) |
+               ((unsigned int)p[4 * i + 2] << 8) | (unsigned int)p[4 * i + 3];
+    for (i = 16; i < 64; i++) {
+        unsigned int s0 = ror32(w[i - 15], 7) ^ ror32(w[i - 15], 18) ^ (w[i - 15] >> 3);
+        unsigned int s1 = ror32(w[i - 2], 17) ^ ror32(w[i - 2], 19) ^ (w[i - 2] >> 10);
+        w[i] = w[i - 16] + s0 + w[i - 7] + s1;
+    }
+    a = c->h[0]; b = c->h[1]; cc = c->h[2]; d = c->h[3];
+    e = c->h[4]; f = c->h[5]; g  = c->h[6]; h = c->h[7];
+    for (i = 0; i < 64; i++) {
+        unsigned int S1 = ror32(e, 6) ^ ror32(e, 11) ^ ror32(e, 25);
+        unsigned int ch = (e & f) ^ (~e & g);
+        unsigned int t1 = h + S1 + ch + K[i] + w[i];
+        unsigned int S0 = ror32(a, 2) ^ ror32(a, 13) ^ ror32(a, 22);
+        unsigned int maj = (a & b) ^ (a & cc) ^ (b & cc);
+        unsigned int t2 = S0 + maj;
+        h = g; g = f; f = e; e = d + t1;
+        d = cc; cc = b; b = a; a = t1 + t2;
+    }
+    c->h[0] += a; c->h[1] += b; c->h[2] += cc; c->h[3] += d;
+    c->h[4] += e; c->h[5] += f; c->h[6] += g;  c->h[7] += h;
+}
+
+static void sha256_init(sha256_ctx *c)
+{
+    c->h[0] = 0x6a09e667; c->h[1] = 0xbb67ae85; c->h[2] = 0x3c6ef372; c->h[3] = 0xa54ff53a;
+    c->h[4] = 0x510e527f; c->h[5] = 0x9b05688c; c->h[6] = 0x1f83d9ab; c->h[7] = 0x5be0cd19;
+    c->len = 0; c->n = 0;
+}
+
+static void sha256_update(sha256_ctx *c, const void *data, size_t n)
+{
+    const unsigned char *p = data;
+
+    c->len += n;
+    while (n > 0) {
+        size_t take = 64 - c->n;
+        if (take > n) take = n;
+        memcpy(c->buf + c->n, p, take);
+        c->n += take; p += take; n -= take;
+        if (c->n == 64) { sha256_block(c, c->buf); c->n = 0; }
+    }
+}
+
+static void sha256_final(sha256_ctx *c, unsigned char out[32])
+{
+    unsigned long long bits = c->len * 8;
+    unsigned char pad = 0x80;
+    int i;
+
+    sha256_update(c, &pad, 1);
+    pad = 0;
+    while (c->n != 56)
+        sha256_update(c, &pad, 1);
+    for (i = 7; i >= 0; i--) {
+        unsigned char b = (unsigned char)(bits >> (8 * i));
+        sha256_update(c, &b, 1);
+    }
+    for (i = 0; i < 8; i++) {
+        out[4 * i]     = (unsigned char)(c->h[i] >> 24);
+        out[4 * i + 1] = (unsigned char)(c->h[i] >> 16);
+        out[4 * i + 2] = (unsigned char)(c->h[i] >> 8);
+        out[4 * i + 3] = (unsigned char)(c->h[i]);
+    }
+}
+
+static void sha256_hex(const unsigned char *d, char *hex)
+{
+    int i;
+
+    for (i = 0; i < 32; i++)
+        snprintf(hex + 2 * i, 3, "%02x", d[i]);
+}
+
+/* Хеш файла целиком: 0 — ок (hexout 65 байт), -1 — файл не открылся. */
+static int sha256_file(const char *path, char hexout[65])
+{
+    FILE *f = fopen(path, "rb");
+    sha256_ctx c;
+    unsigned char buf[4096], d[32];
+    size_t n;
+
+    if (!f) return -1;
+    sha256_init(&c);
+    while ((n = fread(buf, 1, sizeof buf, f)) > 0)
+        sha256_update(&c, buf, n);
+    fclose(f);
+    sha256_final(&c, d);
+    sha256_hex(d, hexout);
+    return 0;
+}
 
 /* ---------- время и логи ---------- */
 
@@ -108,9 +247,12 @@ static void wall_ts(char *buf, size_t n)
     strftime(buf, n, "%Y-%m-%dT%H:%M:%SZ", &tm);
 }
 
+/* Виток 10: двойная летопись. Строка события уходит и в stdout (транскрипт
+ * демо), и в файл журнала — единственный носитель, который ротируется
+ * с пломбой-печатью. Журнал недоступен — события остаются в stdout, вслух. */
 static void log_ev(const unit_t *u, const char *event, const char *fmt, ...)
 {
-    char tsbuf[32], extra[256];
+    char tsbuf[32], extra[256], line[1600];
     va_list ap;
     long long up = now_ms() - g_t0;   /* виток 8: up_ms — жизнь супервизора, а не часы машины */
 
@@ -121,18 +263,64 @@ static void log_ev(const unit_t *u, const char *event, const char *fmt, ...)
 
     wall_ts(tsbuf, sizeof tsbuf);
     if (u && extra[0])
-        printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"unit\":\"%s\",\"event\":\"%s\",%s}\n",
-               tsbuf, up, u->name, event, extra);
+        snprintf(line, sizeof line,
+                 "{\"ts\":\"%s\",\"up_ms\":%lld,\"unit\":\"%s\",\"event\":\"%s\",%s}\n",
+                 tsbuf, up, u->name, event, extra);
     else if (u)
-        printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"unit\":\"%s\",\"event\":\"%s\"}\n",
-               tsbuf, up, u->name, event);
+        snprintf(line, sizeof line,
+                 "{\"ts\":\"%s\",\"up_ms\":%lld,\"unit\":\"%s\",\"event\":\"%s\"}\n",
+                 tsbuf, up, u->name, event);
     else if (extra[0])
-        printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"event\":\"%s\",%s}\n",
-               tsbuf, up, event, extra);
+        snprintf(line, sizeof line,
+                 "{\"ts\":\"%s\",\"up_ms\":%lld,\"event\":\"%s\",%s}\n",
+                 tsbuf, up, event, extra);
     else
-        printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"event\":\"%s\"}\n",
-               tsbuf, up, event);
+        snprintf(line, sizeof line,
+                 "{\"ts\":\"%s\",\"up_ms\":%lld,\"event\":\"%s\"}\n",
+                 tsbuf, up, event);
+
+    fputs(line, stdout);
     fflush(stdout);
+    if (g_journal) {
+        size_t n = strlen(line);
+        if (fwrite(line, 1, n, g_journal) == n)
+            g_journal_bytes += (long long)n;
+        fflush(g_journal);
+    }
+}
+
+/* Ротация журнала с пломбой (Виток 10, тикет «журнал-ротация»): хвост
+ * отрезается атомарно (rename-цепочка), в НОВЫЙ журнал первой строкой
+ * ложится реестр-печать: sha256 всего отрезанного файла — подделка любого
+ * байта хвоста (включая середину) ловится аудитором tools/journal_audit.sh;
+ * цепь печатей тянется через ротации, пока живы ROTATE_KEEP хвостов. */
+static void journal_rotate(void)
+{
+    char p1[1200], p2[1200], p3[1200];
+    char seal[65] = "";
+
+    if (!g_journal) return;
+    fclose(g_journal);
+    g_journal = NULL;
+    if (sha256_file(g_journal_path, seal) != 0)
+        seal[0] = '\0';                       /* печать не снята — вслух ниже */
+    snprintf(p1, sizeof p1, "%s.1", g_journal_path);
+    snprintf(p2, sizeof p2, "%s.2", g_journal_path);
+    snprintf(p3, sizeof p3, "%s.3", g_journal_path);
+    unlink(p3);
+    rename(p2, p3);
+    rename(p1, p2);
+    rename(g_journal_path, p1);
+    g_journal = fopen(g_journal_path, "w");
+    g_journal_bytes = 0;
+    g_rotations++;
+    if (!g_journal) {
+        fprintf(stderr, "agryp: журнал %s не открылся после ротации: %s\n",
+                g_journal_path, strerror(errno));
+        return;
+    }
+    log_ev(NULL, "rotate", "\"rotated_bytes\":%lld,\"seal\":\"%s\"",
+           g_rotate_bytes, seal[0] ? seal : "UNSEALED");
 }
 
 /* ---------- парсинг юнитов ---------- */
@@ -220,6 +408,18 @@ static int parse_unit_file(const char *path, const char *stem, size_t stem_len, 
     if (!u->exec[0]) {
         fprintf(stderr, "agryp: %s: ключ exec не задан — юнит пропущен\n", path);
         return -1;
+    }
+    /* Виток 10: подпись договора — хеш байт файла + mtime. «Кто менял» мы
+     * не различаем (агентов не подписываем — названо вслух), но «ЧТО именно
+     * поменялось» — машинный факт: дифф двух хешей виден в unit-sign. */
+    {
+        struct stat st;
+        if (sha256_file(path, u->sign) == 0 && stat(path, &st) == 0)
+            u->sign_mtime = (long long)st.st_mtime;
+        else {
+            u->sign[0] = '\0';
+            fprintf(stderr, "agryp: %s: подпись договора не снята\n", path);
+        }
     }
     return 0;
 }
@@ -432,9 +632,11 @@ static void reap(void)
         for (i = 0; i < g_nunits; i++) {
             if (g_units[i].pid == p) { handle_exit(&g_units[i], status); known = 1; break; }
         }
-        if (!known)                            /* subreaper: усыновлённого хороним вслух */
+        if (!known) {                          /* subreaper: усыновлённого хороним вслух */
+            g_orphans++;                       /* Виток 10: счёт сирот — метрика */
             log_ev(NULL, "reap-orphan", "\"pid\":%d,\"code\":%d", (int)p,
                    WIFEXITED(status) ? WEXITSTATUS(status) : -1);
+        }
     }
 }
 
@@ -473,6 +675,70 @@ static void write_status(void)
     }
     fclose(f);
     rename(tmp, g_status_path);
+}
+
+/* Метрики файлом (Виток 10, тикет «экспорт метрик», Ст. 13 — файл вместо сокета):
+ * формат Prometheus/OpenMetrics textfile — читается мировым инструментарием,
+ * пишется атомарно (tmp + rename), переписывается каждую итерацию цикла.
+ * Файл существует = супервизор жив; на выходе unlink (Ст. 13). */
+static void metrics_label(char *out, size_t n, const char *unit)
+{
+    size_t i, j = 0;
+
+    for (i = 0; unit[i] && j + 4 < n; i++) {
+        if (unit[i] == '\\' || unit[i] == '"' || unit[i] == '\n') {
+            out[j++] = '\\';
+            out[j++] = unit[i] == '\n' ? 'n' : unit[i];
+        } else
+            out[j++] = unit[i];
+    }
+    out[j] = '\0';
+}
+
+static void write_metrics(void)
+{
+    char tmp[1200], lab[96];
+    FILE *f;
+    int i;
+
+    snprintf(tmp, sizeof tmp, "%s.tmp", g_metrics_path);
+    f = fopen(tmp, "w");
+    if (!f) return;
+    fprintf(f, "# HELP agryp_up_ms Жизнь супервизора, мс\n# TYPE agryp_up_ms gauge\n");
+    fprintf(f, "agryp_up_ms %lld\n", now_ms() - g_t0);
+    fprintf(f, "# HELP agryp_units Юнитов в каталоге\n# TYPE agryp_units gauge\n");
+    fprintf(f, "agryp_units %d\n", g_nunits);
+    fprintf(f, "# HELP agryp_orphans_total Усыновлённые сироты (subreaper)\n# TYPE agryp_orphans_total counter\n");
+    fprintf(f, "agryp_orphans_total %lld\n", g_orphans);
+    fprintf(f, "# HELP agryp_reloads_total Перезагрузок каталога (SIGHUP)\n# TYPE agryp_reloads_total counter\n");
+    fprintf(f, "agryp_reloads_total %lld\n", g_reloads);
+    fprintf(f, "# HELP agryp_rotations_total Ротаций журнала с пломбой\n# TYPE agryp_rotations_total counter\n");
+    fprintf(f, "agryp_rotations_total %lld\n", g_rotations);
+    fprintf(f, "# HELP agryp_attempts_total Попыток юнита\n# TYPE agryp_attempts_total counter\n");
+    fprintf(f, "# HELP agryp_exits_ok_total Чистых выходов (code 0)\n# TYPE agryp_exits_ok_total counter\n");
+    fprintf(f, "# HELP agryp_exits_fail_total Неудачных выходов\n# TYPE agryp_exits_fail_total counter\n");
+    fprintf(f, "# HELP agryp_budget_kills_total Казней по бюджету времени\n# TYPE agryp_budget_kills_total counter\n");
+    fprintf(f, "# HELP agryp_token_kills_total Казней по токен-бюджету\n# TYPE agryp_token_kills_total counter\n");
+    fprintf(f, "# HELP agryp_tokens_total Токенов съедено за всё время\n# TYPE agryp_tokens_total counter\n");
+    fprintf(f, "# HELP agryp_restarts_total Перезапусков (выход из попытки в cooldown)\n# TYPE agryp_restarts_total counter\n");
+    fprintf(f, "# HELP agryp_fail_streak Смертей подряд (лестница Ст. 8)\n# TYPE agryp_fail_streak gauge\n");
+    fprintf(f, "# HELP agryp_ctl_down Политика заморожена файлом .down\n# TYPE agryp_ctl_down gauge\n");
+    for (i = 0; i < g_nunits; i++) {
+        unit_t *u = &g_units[i];
+
+        metrics_label(lab, sizeof lab, u->name);
+        fprintf(f, "agryp_attempts_total{unit=\"%s\"} %d\n", lab, u->attempts);
+        fprintf(f, "agryp_exits_ok_total{unit=\"%s\"} %d\n", lab, u->exits_ok);
+        fprintf(f, "agryp_exits_fail_total{unit=\"%s\"} %d\n", lab, u->exits_fail);
+        fprintf(f, "agryp_budget_kills_total{unit=\"%s\"} %d\n", lab, u->budget_kills);
+        fprintf(f, "agryp_token_kills_total{unit=\"%s\"} %d\n", lab, u->token_kills);
+        fprintf(f, "agryp_tokens_total{unit=\"%s\"} %d\n", lab, u->tokens_total);
+        fprintf(f, "agryp_restarts_total{unit=\"%s\"} %d\n", lab, u->restarts);
+        fprintf(f, "agryp_fail_streak{unit=\"%s\"} %d\n", lab, u->fail_streak);
+        fprintf(f, "agryp_ctl_down{unit=\"%s\"} %d\n", lab, u->ctl_down);
+    }
+    fclose(f);
+    rename(tmp, g_metrics_path);
 }
 
 static int print_status(const char *dir)
@@ -683,10 +949,21 @@ static void do_reload(const char *dir)
                                      ? u->run_started_ms + (long long)u->budget_sec * 1000LL
                                      : 0;
             }
+            /* Виток 10: сигнатура договора — дифф двух хешей, вслух, каждый reload */
+            if (strcmp(u->sign, nu->sign)) {
+                log_ev(u, "unit-sign", "\"old\":\"%s\",\"new\":\"%s\",\"mtime\":%lld",
+                       u->sign[0] ? u->sign : "",
+                       nu->sign[0] ? nu->sign : "", nu->sign_mtime);
+                snprintf(u->sign, sizeof u->sign, "%.64s", nu->sign);
+                u->sign_mtime = nu->sign_mtime;
+            }
         } else if (g_nunits < MAX_UNITS) {     /* новый файл: юнит появляется и стартует */
             unit_t *u = &g_units[g_nunits++];
             *u = *nu;
             log_ev(u, "unit-added", NULL);
+            if (u->sign[0])
+                log_ev(u, "unit-sign", "\"old\":null,\"new\":\"%s\",\"mtime\":%lld",
+                       u->sign, u->sign_mtime);
             added++;
             cgroup_room(u);                    /* комнатка или честный отказ (Ст. 15) */
             if (!u->ctl_down) spawn_unit(u);
@@ -703,6 +980,9 @@ static void do_reload(const char *dir)
             removed++;
             u->retired = 1; u->restart = R_NO; /* жизни больше нет — лестница не важна */
             log_ev(u, "unit-removed", NULL);
+            if (u->sign[0])
+                log_ev(u, "unit-sign", "\"old\":\"%s\",\"new\":null,\"mtime\":%lld",
+                       u->sign, u->sign_mtime);
             if (u->state == U_RUNNING && u->pid > 0) {
                 u->sup_kill = 1;
                 if (kill(-u->pgid, SIGTERM) < 0) kill(u->pid, SIGTERM);
@@ -710,6 +990,7 @@ static void do_reload(const char *dir)
                 u->state = U_STOPPED;
         }
     }
+    g_reloads++;                               /* Виток 10: счётчик — метрика */
     log_ev(NULL, "reload", "\"added\":%d,\"changed\":%d,\"removed\":%d", added, changed, removed);
 }
 
@@ -730,9 +1011,14 @@ int main(int argc, char **argv)
 
     for (i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "--dir") && i + 1 < argc) dir = argv[++i];
+        else if (!strcmp(argv[i], "--rotate-bytes") && i + 1 < argc) {
+            g_rotate_bytes = atoll(argv[++i]); /* Виток 10: демо и мелкие диски */
+            if (g_rotate_bytes < 256) g_rotate_bytes = 256;
+        }
         else if (!strcmp(argv[i], "status")) status_mode = 1;   /* Ст. 13: status читает файл */
+        else if (!strcmp(argv[i], "metrics")) status_mode = 2;  /* Виток 10: метрики — тот же файл */
         else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
-            printf("usage: agryp [--dir DIR] | agryp status [--dir DIR]\n");
+            printf("usage: agryp [--dir DIR] [--rotate-bytes N] | agryp status [--dir DIR] | agryp metrics [--dir DIR]\n");
             return 0;
         } else {
             fprintf(stderr, "agryp: неизвестный аргумент '%s'\n", argv[i]);
@@ -740,10 +1026,34 @@ int main(int argc, char **argv)
         }
     }
 
-    if (status_mode) return print_status(dir);
+    if (status_mode == 1) return print_status(dir);
+    if (status_mode == 2) {                    /* Виток 10: .prom — тот же файл-договор */
+        char mpath[1152];
+        FILE *f;
+        char line[2048];
+
+        snprintf(mpath, sizeof mpath, "%s/.agryp-metrics.prom", dir);
+        f = fopen(mpath, "r");
+        if (!f) {
+            fprintf(stderr, "agryp: супервизор не запущен (нет %s)\n", mpath);
+            return 1;
+        }
+        while (fgets(line, sizeof line, f)) fputs(line, stdout);
+        fclose(f);
+        return 0;
+    }
     snprintf(g_status_path, sizeof g_status_path, "%s/.agryp-status", dir);
     snprintf(g_report_path, sizeof g_report_path, "%s/.agryp-report", dir);
     snprintf(g_ctl_dir, sizeof g_ctl_dir, "%s/.agryp-ctl", dir);
+    snprintf(g_journal_path, sizeof g_journal_path, "%s/.agryp-journal.ndjson", dir);
+    snprintf(g_metrics_path, sizeof g_metrics_path, "%s/.agryp-metrics.prom", dir);
+    g_journal = fopen(g_journal_path, "a");
+    if (g_journal) {
+        fseek(g_journal, 0, SEEK_END);
+        g_journal_bytes = ftell(g_journal);
+    } else
+        fprintf(stderr, "agryp: журнал %s не открылся: %s — события только в stdout\n",
+                g_journal_path, strerror(errno));
     g_t0 = now_ms();
 
     memset(&sa, 0, sizeof sa);
@@ -772,7 +1082,11 @@ int main(int argc, char **argv)
         fprintf(stderr, "agryp: в каталоге %s нет юнитов *.agent\n", dir);
         return 2;
     }
-    log_ev(NULL, "boot", "\"units\":%d,\"dir\":\"%s\"", g_nunits, dir);
+    log_ev(NULL, "boot", "\"units\":%d,\"dir\":\"%s\",\"rotate_bytes\":%lld", g_nunits, dir, g_rotate_bytes);
+    for (i = 0; i < g_nunits; i++)             /* Виток 10: подпись каждого договора при boot */
+        if (g_units[i].sign[0])
+            log_ev(&g_units[i], "unit-sign", "\"old\":null,\"new\":\"%s\",\"mtime\":%lld",
+                   g_units[i].sign, g_units[i].sign_mtime);
     if (prctl(PR_SET_CHILD_SUBREAPER, 1, 0, 0, 0) == 0)
         log_ev(NULL, "subreaper", "\"on\":true");
     else
@@ -785,6 +1099,9 @@ int main(int argc, char **argv)
         long long timeout = 250;
 
         write_status();                /* Ст. 13: файл статуса всегда свежий */
+        write_metrics();               /* Виток 10: .prom всегда свежий */
+        if (g_journal && g_journal_bytes >= g_rotate_bytes)
+            journal_rotate();          /* Виток 10: отрезали хвост — печать в новом */
         reap();
         poll_ctl();                    /* Виток 5: файлы-договоры — казнь/заморозка/ctl-up */
         if (g_hup) {                   /* Виток 6: перечитать договоры без смерти детей */
@@ -873,5 +1190,7 @@ int main(int argc, char **argv)
     log_ev(NULL, "uptime-ms", "\"value\":%lld", now_ms() - g_t0);
     unlink(g_status_path);   /* Ст. 13: мёртвый PID 1 не притворяется живым */
     unlink(g_report_path);
+    unlink(g_metrics_path);  /* Виток 10: и метрики мёртвого — тоже не метрики */
+    if (g_journal) { fclose(g_journal); g_journal = NULL; }  /* журнал живёт — история не unlink */
     return 0;
 }

@@ -40,7 +40,7 @@ VALID_EVENTS = {
     "budget-kill", "token-kill", "ctl-down", "ctl-up", "ctl-drop", "ctl-kill",
     "cgroup-skip", "jail-skip", "report-drop", "subreaper", "reap-orphan",
     "shutdown", "summary", "uptime-ms", "finish", "reload", "unit-added",
-    "unit-removed",
+    "unit-removed", "unit-sign", "rotate",
 }
 # константы Ст. 8 — сверены с #define в src/agryp.c
 BACKOFF_CAP_MS = 30000
@@ -56,7 +56,8 @@ def load_unit_configs(repo_root):
     Юниты лежат в examples/ и в каталогах демо — аудитор читает все сразу."""
     cfgs = {}
     for sub in ("examples", "demo/ctl-units", "demo/finish-units", "demo/reload-units",
-                "demo/jail-units", "demo/stream-units"):
+                "demo/jail-units", "demo/stream-units", "demo/metrics-units",
+                "demo/rotate-units", "demo/sign-units"):
         for p in sorted(glob.glob(os.path.join(repo_root, sub, "*.agent"))):
             cfg = {}
             with open(p, encoding="utf-8") as f:

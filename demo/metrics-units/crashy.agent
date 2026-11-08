@@ -1,0 +1,8 @@
+# Падучий агент: 2 секунды работает, exit 3. Лестница Ст. 8: база 1 с,
+# 5 своих смертей подряд → failed. Клетка Ст. 15: 64 МБ (loud cgroup-skip).
+name        = crashy
+exec        = bash demo/crashy_agent.sh
+restart     = on-failure
+budget-sec  = 10
+cooldown-ms = 1000
+mem-max-mb  = 64
