@@ -1,0 +1,46 @@
+# agryp
+> PID1-подобный супервизор AI-агентов: один файл C, ноль зависимостей, файл-как-API (agrypctl), самоверифицирующийся NDJSON-журнал
+
+Автоген 2026-11-08 · источник: живой GitHub API (номера и файлы не руками) · владелец rtynbirf · ветка `main`
+
+## Мембрана
+- README.md — для человека (agryp — неспящий супервизор агентов уровня PID 1)
+- AGENTS.md — есть
+- LICENSE — MIT
+- topics: agent-infrastructure, ai-agents, c, cgroups, init-system, ndjson, pid1, posix, process-manager, supervisor, system-layer
+
+## Карта корня
+- .github/
+- .gitignore
+- AGENTS.md
+- CONSTITUTION.md
+- LICENSE
+- Makefile
+- README.md
+- SECURITY.md
+- agryp
+- agrypctl
+- demo/
+- docs/
+- examples/
+- src/
+- tasks/
+- … ещё 1
+
+## Метаболизм (make)
+- make agryp
+- make demo
+- make demo-ctl
+- make demo-finish
+- make demo-reload
+- make demo-jail
+- make demo-stream
+- make demo-jail-host
+
+## CI
+- workflow: ci
+
+## Ссылки
+- [GitHub](https://github.com/rtynbirf/agryp)
+- [README](https://github.com/rtynbirf/agryp/blob/main/README.md)
+- [raw llms.txt](https://raw.githubusercontent.com/rtynbirf/agryp/main/llms.txt)
