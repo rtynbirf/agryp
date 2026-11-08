@@ -1,0 +1,5 @@
+name        = alpha
+exec        = sh demo/reload_worker.sh
+restart     = always
+budget-sec  = 30
+cooldown-ms = 800

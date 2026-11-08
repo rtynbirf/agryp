@@ -1,23 +1,24 @@
-{"ts":"2026-11-07T18:41:04Z","up_ms":0,"event":"boot","units":1,"dir":"demo/finish-units"}
-{"ts":"2026-11-07T18:41:04Z","up_ms":1,"event":"subreaper","on":true}
-{"ts":"2026-11-07T18:41:04Z","up_ms":1,"unit":"sweeper","event":"spawn","pid":24956,"attempt":1,"budget_sec":0,"jailed":0}
-[sweeper] попытка 24957 началась
+{"ts":"2026-11-08T12:48:24Z","up_ms":0,"event":"boot","units":1,"dir":"demo/finish-units","rotate_bytes":262144}
+{"ts":"2026-11-08T12:48:24Z","up_ms":0,"unit":"sweeper","event":"unit-sign","old":null,"new":"38ee5162cf74589048c282569ebf4038ddf25256f8e7b88d714f3d150bcdb33d","mtime":1794142104}
+{"ts":"2026-11-08T12:48:24Z","up_ms":0,"event":"subreaper","on":true}
+{"ts":"2026-11-08T12:48:24Z","up_ms":1,"unit":"sweeper","event":"spawn","pid":2781,"attempt":1,"budget_sec":0,"jailed":0}
+[sweeper] попытка 2782 началась
 [sweeper] работа окончена — падаю (код 3)
-{"ts":"2026-11-07T18:41:06Z","up_ms":2004,"unit":"sweeper","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-07T18:41:06Z","up_ms":2029,"unit":"sweeper","event":"finish","code":0}
-{"ts":"2026-11-07T18:41:06Z","up_ms":2030,"unit":"sweeper","event":"restart","next_attempt":2,"backoff_ms":500,"streak":1}
-{"ts":"2026-11-07T18:41:07Z","up_ms":2531,"unit":"sweeper","event":"spawn","pid":24960,"attempt":2,"budget_sec":0,"jailed":0}
-[sweeper] попытка 24961 началась
+{"ts":"2026-11-08T12:48:26Z","up_ms":2005,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-08T12:48:26Z","up_ms":2030,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-08T12:48:26Z","up_ms":2030,"unit":"sweeper","event":"restart","next_attempt":2,"backoff_ms":500,"streak":1}
+{"ts":"2026-11-08T12:48:27Z","up_ms":2531,"unit":"sweeper","event":"spawn","pid":2785,"attempt":2,"budget_sec":0,"jailed":0}
+[sweeper] попытка 2786 началась
 [sweeper] работа окончена — падаю (код 3)
-{"ts":"2026-11-07T18:41:09Z","up_ms":4535,"unit":"sweeper","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-07T18:41:09Z","up_ms":4560,"unit":"sweeper","event":"finish","code":0}
-{"ts":"2026-11-07T18:41:09Z","up_ms":4560,"unit":"sweeper","event":"restart","next_attempt":3,"backoff_ms":1000,"streak":2}
-{"ts":"2026-11-07T18:41:10Z","up_ms":5562,"unit":"sweeper","event":"spawn","pid":24964,"attempt":3,"budget_sec":0,"jailed":0}
-[sweeper] попытка 24965 началась
+{"ts":"2026-11-08T12:48:29Z","up_ms":4535,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-08T12:48:29Z","up_ms":4560,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-08T12:48:29Z","up_ms":4561,"unit":"sweeper","event":"restart","next_attempt":3,"backoff_ms":1000,"streak":2}
+{"ts":"2026-11-08T12:48:30Z","up_ms":5563,"unit":"sweeper","event":"spawn","pid":2789,"attempt":3,"budget_sec":0,"jailed":0}
+[sweeper] попытка 2790 началась
 [sweeper] работа окончена — падаю (код 3)
-{"ts":"2026-11-07T18:41:12Z","up_ms":7566,"unit":"sweeper","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-07T18:41:12Z","up_ms":7591,"unit":"sweeper","event":"finish","code":0}
-{"ts":"2026-11-07T18:41:12Z","up_ms":7591,"unit":"sweeper","event":"restart","next_attempt":4,"backoff_ms":2000,"streak":3}
-{"ts":"2026-11-07T18:41:13Z","up_ms":9001,"event":"shutdown","reason":"signal"}
-{"ts":"2026-11-07T18:41:13Z","up_ms":9001,"unit":"sweeper","event":"summary","attempts":3,"exits_ok":0,"exits_fail":3,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":3}
-{"ts":"2026-11-07T18:41:13Z","up_ms":9001,"event":"uptime-ms","value":9001}
+{"ts":"2026-11-08T12:48:32Z","up_ms":7567,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-08T12:48:32Z","up_ms":7592,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-08T12:48:32Z","up_ms":7592,"unit":"sweeper","event":"restart","next_attempt":4,"backoff_ms":2000,"streak":3}
+{"ts":"2026-11-08T12:48:33Z","up_ms":9001,"event":"shutdown","reason":"signal"}
+{"ts":"2026-11-08T12:48:33Z","up_ms":9001,"unit":"sweeper","event":"summary","attempts":3,"exits_ok":0,"exits_fail":3,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":3}
+{"ts":"2026-11-08T12:48:33Z","up_ms":9001,"event":"uptime-ms","value":9001}

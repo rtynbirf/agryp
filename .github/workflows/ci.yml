@@ -2,15 +2,13 @@ name: ci
 
 # CI клетки agryp (волна 2026-11-08, W-AUD-12): сборка C и сверка стенограмм витков.
 # Этика LFS: один файл C, только libc, ноль зависимостей — сборка честная, без кэшей.
-# FIX-1.2: branches [main] восстановлен (был повреждён в 'ain]' — push-CI не срабатывал);
-# добавлен контракт каталога счётом (П-04): make catalog-guard.
 
 permissions:
   contents: read
 
 on:
   push:
-    branches: [main]
+    branches: [m[main]
   pull_request:
   workflow_dispatch:
 
@@ -36,6 +34,26 @@ jobs:
         run: make audit
       - name: make audit-ctl
         run: make audit-ctl
+      - name: make audit-reload
+        run: make audit-reload
+      - name: make audit-finish
+        run: make audit-finish
+      - name: make audit-stream
+        run: make audit-stream
+
+  # Виток 10: супервизор тестирует себя живьём — метрики, ротация с пломбой,
+  # сигнатуры договоров (тикеты 011–014, школа «метаболизма» W-AUD-12).
+  vitok-10:
+    name: vitok 10 — metrics / rotate / sign живьём
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: make demo-metrics
+        run: make demo-metrics
+      - name: make demo-rotate
+        run: make demo-rotate
+      - name: make demo-sign
+        run: make demo-sign
 
   catalog:
     name: каталог счётом — контракт П-04 (guard)

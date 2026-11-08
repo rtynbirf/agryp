@@ -368,7 +368,14 @@ make audit
 режут семью целиком через `kill(-pgid)`, каждый ребёнок носит
 `PR_SET_PDEATHSIG` — сирот не оставляем даже при SIGKILL супервизора.
 Ст. 13–15: статус семьи — файл `<dir>/.agryp-status` (tmp + rename каждую
-итерацию, unlink на выходе; `agryp status` читает); токены — агент пишет
+итерацию, unlink на выходе; `agryp status` читает); метрики — файл
+`<dir>/.agryp-metrics.prom` в формате Prometheus/OpenMetrics (tmp + rename,
+unlink на выходе; `agryp metrics` / `agrypctl metrics` читают тот же файл,
+Виток 10); летопись — файл `<dir>/.agryp-journal.ndjson`, двойная вместе
+с stdout, ротация с пломбой-печатью (sha256 отрезанного хвоста первой
+строкой нового журнала; аудитор — `tools/journal_audit.sh`, Виток 10);
+сигнатуры договоров — `unit-sign` (sha256 байт *.agent + mtime) при boot
+и каждом reload (Виток 10); токены — агент пишет
 `<unit> tokens <n>` в файл из env `AGRY_TOKEN_REPORT` и будит петлю
 `SIGUSR2` (пид — в env `AGRY_SUPER_PID`, Виток 7); память — `memory.max`
 в собственной делегированной ветке cgroup v2, агент переезжает до exec;
@@ -382,6 +389,9 @@ pid/mount namespace'ах через `clone(CLONE_NEWPID[|CLONE_NEWNS])` — бе
 Витки и тикеты живут в [`docs/spec/ROADMAP.md`](docs/spec/ROADMAP.md) и
 [`tasks/open/`](tasks/open/) (норма НОУС: очередь воли). Кратко:
 
+- виток 10 — **исполнен** (2026-11-08): метрики .prom, журнал-ротация
+  с пломбой, сигнатуры договоров; tool-catalog (2444 позиции) восстановлен
+  и влит ([тикет 012](tasks/done/012-vitok-10.md));
 - виток 5 — **исполнен** (2026-11-07): agrypctl — start/stop юнита
   файлами-договорами (школа s6-svc); ядро 654/656, Поправка №4;
 - виток 6 — **исполнен** (2026-11-07): finish-хук (s6), эскалация

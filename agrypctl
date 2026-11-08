@@ -5,7 +5,7 @@
 # жив; start снимает файл — ctl-up и новая попытка с чистой лестницей.
 # Статус не дублируем: читаем тот же файл семьи, что и `agryp status` (Ст. 13).
 #
-# usage: agrypctl [--dir DIR] stop <unit> | start <unit> | status
+# usage: agrypctl [--dir DIR] stop <unit> | start <unit> | status | metrics
 
 set -u
 
@@ -21,9 +21,9 @@ case "$cmd" in
         unit=${2:-}
         [ -n "$unit" ] || { echo "agrypctl: $cmd требует имя юнита" >&2; exit 2; }
         ;;
-    status) ;;
+    status|metrics) ;;
     *)
-        echo "usage: agrypctl [--dir DIR] stop <unit> | start <unit> | status" >&2
+        echo "usage: agrypctl [--dir DIR] stop <unit> | start <unit> | status | metrics" >&2
         exit 2
         ;;
 esac
@@ -51,5 +51,10 @@ case "$cmd" in
     status)
         [ -x ./agryp ] || { echo "agrypctl: соберите ядро: make" >&2; exit 2; }
         exec ./agryp status --dir "$dir"
+        ;;
+    metrics)
+        # Виток 10: метрики — тот же файл-договор .agryp-metrics.prom, не второй источник
+        [ -x ./agryp ] || { echo "agrypctl: соберите ядро: make" >&2; exit 2; }
+        exec ./agryp metrics --dir "$dir"
         ;;
 esac

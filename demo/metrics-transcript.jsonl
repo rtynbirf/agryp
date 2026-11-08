@@ -1,0 +1,26 @@
+{"ts":"2026-11-08T12:46:13Z","up_ms":0,"event":"boot","units":2,"dir":"demo/metrics-units","rotate_bytes":262144}
+{"ts":"2026-11-08T12:46:13Z","up_ms":0,"unit":"crashy","event":"unit-sign","old":null,"new":"457b2a2f73d7b47a7b12db4ea3c3db12ee37b7fbedc2c75360c62f54bf2b5ad7","mtime":1794141973}
+{"ts":"2026-11-08T12:46:13Z","up_ms":0,"unit":"hello","event":"unit-sign","old":null,"new":"0cfb4ac9724cb24ea06599355dca28995630fa019bc3cebc1ed93735422ebdf9","mtime":1794141973}
+{"ts":"2026-11-08T12:46:13Z","up_ms":0,"event":"subreaper","on":true}
+{"ts":"2026-11-08T12:46:13Z","up_ms":0,"unit":"crashy","event":"cgroup-skip","reason":"cgroupfs недоступен","errno":30}
+{"ts":"2026-11-08T12:46:13Z","up_ms":0,"unit":"crashy","event":"spawn","pid":2343,"attempt":1,"budget_sec":10,"jailed":0}
+{"ts":"2026-11-08T12:46:13Z","up_ms":0,"unit":"hello","event":"spawn","pid":2344,"attempt":1,"budget_sec":25,"jailed":0}
+[crashy-agent] попытка pid=2345: работаю 2 секунды и упаду
+[hello-agent] старт, pid=2346
+[hello-agent] heartbeat #1 pid=2346
+[hello-agent] heartbeat #2 pid=2346
+[hello-agent] heartbeat #3 pid=2346
+{"ts":"2026-11-08T12:46:15Z","up_ms":2005,"unit":"crashy","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-08T12:46:15Z","up_ms":2005,"unit":"crashy","event":"restart","next_attempt":2,"backoff_ms":1000,"streak":1}
+[hello-agent] heartbeat #4 pid=2346
+{"ts":"2026-11-08T12:46:16Z","up_ms":3007,"unit":"crashy","event":"spawn","pid":2352,"attempt":2,"budget_sec":10,"jailed":0}
+[crashy-agent] попытка pid=2353: работаю 2 секунды и упаду
+[hello-agent] heartbeat #5 pid=2346
+{"ts":"2026-11-08T12:46:17Z","up_ms":4018,"event":"shutdown","reason":"signal"}
+{"ts":"2026-11-08T12:46:18Z","up_ms":4068,"unit":"hello","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-08T12:46:18Z","up_ms":4068,"unit":"crashy","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-08T12:46:18Z","up_ms":4068,"event":"reap-orphan","pid":2353,"code":-1}
+{"ts":"2026-11-08T12:46:18Z","up_ms":4068,"event":"reap-orphan","pid":2346,"code":-1}
+{"ts":"2026-11-08T12:46:18Z","up_ms":4068,"unit":"crashy","event":"summary","attempts":2,"exits_ok":0,"exits_fail":2,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":1}
+{"ts":"2026-11-08T12:46:18Z","up_ms":4068,"unit":"hello","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":2500,"restarts":0}
+{"ts":"2026-11-08T12:46:18Z","up_ms":4068,"event":"uptime-ms","value":4068}

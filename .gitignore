@@ -1,1 +1,6 @@
 demo/ctl-units/
+.agryp-journal.ndjson*
+.agryp-metrics.prom
+.agryp-status
+.agryp-report
+.agryp-ctl/

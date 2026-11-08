@@ -1,0 +1,4 @@
+name        = tick1
+exec        = sleep 1
+restart     = always
+cooldown-ms = 1000
