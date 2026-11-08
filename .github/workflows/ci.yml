@@ -2,6 +2,8 @@ name: ci
 
 # CI клетки agryp (волна 2026-11-08, W-AUD-12): сборка C и сверка стенограмм витков.
 # Этика LFS: один файл C, только libc, ноль зависимостей — сборка честная, без кэшей.
+# FIX-1.2: branches [main] восстановлен (был повреждён в 'ain]' — push-CI не срабатывал);
+# добавлен контракт каталога счётом (П-04): make catalog-guard.
 
 permissions:
   contents: read
@@ -34,3 +36,11 @@ jobs:
         run: make audit
       - name: make audit-ctl
         run: make audit-ctl
+
+  catalog:
+    name: каталог счётом — контракт П-04 (guard)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: make catalog-guard
+        run: make catalog-guard
