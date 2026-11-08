@@ -1,0 +1,25 @@
+name: doctrine
+
+# Волна ×4 (2026-11-11): конституция не может лгать тихо.
+# Ст. 1 (один файл, потолок) сверяется машиной при каждом пуше —
+# Поправка №11 была поднята «по факту» и не была записана в статью;
+# этот workflow держит статью и тело ядра в одной счётной правде.
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  constitution:
+    name: Ст. 1 — статья сходится с телом
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: check_constitution — машина против лжи статьи
+        run: python3 tools/check_constitution.py
