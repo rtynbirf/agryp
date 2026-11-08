@@ -1,0 +1,59 @@
+name: p37
+
+# Волна ×4 (2026-11-11): П37 — подписанные конверты + A2A AgentCard.
+# Приёмка issue #6 (машинная):
+#   1. unit-тест «битая подпись → отказ» зелёный (tests/test_p37_envelope.py);
+#   2. карточка валидируется схемой A2A (schemas/a2a-agentcard.schema.json);
+#   3. поле endpoint живое (демо строит карту из живого супервизора).
+# Всё std-only: python3 без зависимостей + один файл C (Ст. 1–2).
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit:
+    name: unit — битая подпись → отказ
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: unittest (std-only)
+        run: python3 -m unittest discover -s tests -p 'test_p37*.py' -v
+      - name: CLI самопроверка подписи
+        run: |
+          python3 tools/signed_envelope.py keygen --secret demo
+          python3 tools/signed_envelope.py sign --secret demo --unit alpha \
+            --payload '{"heart_rate":72}' --seq 3 --out /tmp/env.json
+          python3 tools/signed_envelope.py verify /tmp/env.json
+          # негативная проба: подделка конверта обязана получить ОТКАЗ
+          python3 - <<'PY'
+          import json, subprocess, sys
+          env = json.load(open('/tmp/env.json'))
+          env['env']['payload']['heart_rate'] = 666
+          open('/tmp/bad.json','w').write(json.dumps(env))
+          rc = subprocess.run(['python3','tools/signed_envelope.py','verify','/tmp/bad.json'],
+                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode
+          sys.exit(0 if rc == 1 else 'подделка прошла проверку — fail-closed нарушен')
+          PY
+
+  live:
+    name: live — завод юнита решает подпись, карта живая
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: make agryp
+        run: make agryp
+      - name: демо П37 живьём
+        run: bash demo/run_demo_envelope.sh
+      - name: артефакты демо на месте
+        run: |
+          test -f demo/agentcard.json
+          test -f demo/envelope-transcript.jsonl
+          test -f demo/envelope-status-snapshot.jsonl
+          head -c 400 demo/agentcard.json
