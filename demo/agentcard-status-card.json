@@ -1,0 +1,68 @@
+{
+  "capabilities": {
+    "pushNotifications": false,
+    "stateTransitionHistory": true,
+    "streaming": true
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "application/x-ndjson",
+    "text/plain"
+  ],
+  "description": "PID1-подобный супервизор AI-агентов: один файл C, ноль зависимостей, файл-как-API",
+  "name": "agryp",
+  "preferredTransport": "file+ndjson",
+  "protocolVersion": "1.0",
+  "provider": {
+    "organization": "rtynbirf",
+    "url": "https://github.com/rtynbirf/agryp"
+  },
+  "skills": [
+    {
+      "description": "PID1-подобный супервизор: spawn/казнь/бюджеты/журнал NDJSON",
+      "id": "core:supervision",
+      "name": "process supervision",
+      "tags": [
+        "pid1",
+        "supervisor",
+        "ndjson"
+      ]
+    },
+    {
+      "description": "клетка юнита: state=RUNNING, attempt=1",
+      "id": "unit:alpha",
+      "name": "alpha",
+      "tags": [
+        "supervised",
+        "running"
+      ]
+    }
+  ],
+  "type": "AgentCard",
+  "url": "file:///home/z/my-project/work/agryp-x6/demo/envelope-units/.agryp-metrics.prom",
+  "version": "1.0.0",
+  "x-agryp": {
+    "endpoints": {
+      "card": "command: ./agrypctl card [--dir DIR]  (= ./agrypctl status --card)",
+      "ctl": "file:/home/z/my-project/work/agryp-x6/demo/envelope-units/.agryp-ctl",
+      "journal": "file:///home/z/my-project/work/agryp-x6/demo/envelope-units/.agryp-journal.ndjson",
+      "metrics": "file:///home/z/my-project/work/agryp-x6/demo/envelope-units/.agryp-metrics.prom",
+      "status": "command: ./agryp status --dir demo/envelope-units"
+    },
+    "identity": {
+      "cell_dir": "/home/z/my-project/work/agryp-x6/demo/envelope-units",
+      "pid": 5703,
+      "sup": "agryp",
+      "uptime_ms": 3007
+    },
+    "security": "конверты крови/событий подписаны ed25519 (RFC 8032; П37, волна ×6); overseer fail-closed: битая/чужая/повторная подпись = отказ завода юнита",
+    "signing": {
+      "alg": "ed25519",
+      "envelope_version": 2,
+      "key_id_format": "sha256(pub_bytes)[:16]",
+      "tool": "tools/ed25519tool (vendored orlp/ed25519, zlib) + tools/signed_envelope.py"
+    }
+  }
+}

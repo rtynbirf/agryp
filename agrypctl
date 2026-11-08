@@ -4,26 +4,42 @@
 # казнит попытку (TERM группе) и замораживает политику перезапуска, пока файл
 # жив; start снимает файл — ctl-up и новая попытка с чистой лестницей.
 # Статус не дублируем: читаем тот же файл семьи, что и `agryp status` (Ст. 13).
+# card (волна ×6, П37): A2A AgentCard из ЖИВОГО супервизора — тот же
+# строитель, что tools/agentcard.py; карта валидируется схемой до выдачи.
 #
-# usage: agrypctl [--dir DIR] stop <unit> | start <unit> | status | metrics
+# usage: agrypctl [--dir DIR] stop <unit> | start <unit> | status [--card] | metrics | card
+# (--dir принимается до или после команды: `agrypctl card --dir X` ≡ `agrypctl --dir X card`)
 
 set -u
 
 dir=examples
-if [ "${1:-}" = "--dir" ] && [ $# -ge 2 ]; then
-    dir=$2
-    shift 2
-fi
+card=no
+cmd=
+unit=
+prev=
+for a in "$@"; do
+    case "$prev" in
+        --dir) dir=$a ;;
+    esac
+    case "$a" in
+        --dir) prev=--dir ;;
+        --card) card=yes ;;
+        *)
+            if [ -z "$cmd" ]; then cmd=$a
+            elif [ -z "$unit" ] && { [ "$cmd" = stop ] || [ "$cmd" = start ]; }; then unit=$a
+            fi
+            prev=
+            ;;
+    esac
+done
 
-cmd=${1:-}
 case "$cmd" in
     stop|start)
-        unit=${2:-}
         [ -n "$unit" ] || { echo "agrypctl: $cmd требует имя юнита" >&2; exit 2; }
         ;;
-    status|metrics) ;;
+    status|metrics|card) ;;
     *)
-        echo "usage: agrypctl [--dir DIR] stop <unit> | start <unit> | status | metrics" >&2
+        echo "usage: agrypctl [--dir DIR] stop <unit> | start <unit> | status [--card] | metrics | card" >&2
         exit 2
         ;;
 esac
@@ -48,8 +64,12 @@ case "$cmd" in
             echo "agrypctl: $ctl/$unit.down не существует — юнит живёт по своей политике"
         fi
         ;;
-    status)
+    status|card)
         [ -x ./agryp ] || { echo "agrypctl: соберите ядро: make" >&2; exit 2; }
+        if [ "$card" = yes ] || [ "$cmd" = card ]; then
+            # П37 (волна ×6): карта жива или её нет — третий вариант не выдаётся
+            exec python3 "$(dirname "$0")/tools/agentcard.py" build --dir "$dir"
+        fi
         exec ./agryp status --dir "$dir"
         ;;
     metrics)

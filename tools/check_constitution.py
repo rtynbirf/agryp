@@ -7,9 +7,12 @@
 # не запускается машиной — лозунг. Здесь проверка запускается.
 #
 # Проверки:
-#   1. find *.c == 1            (Ст. 1 — один файл)
+#   1. find src/*.c == 1        (Ст. 1 — ядро один файл)
 #   2. wc -l src/agryp.c <= N   (N — потолок из статьи «не больше N строк»)
 #   3. «сейчас M» из статьи == факту (статья не лжёт о настоящем)
+#   4. Поправка №12 — счёт границы: tools/*.c == T, vendor/*.c == V,
+#      .c вне src/tools/vendor == 0 (числа T/V берутся ИЗ статьи —
+#      статья обязана знать настоящее, машина не даёт ей лгать)
 # rc=0 — конституция говорит правду; rc=1 — статья лжёт (с приговором).
 import re
 import sys
@@ -33,7 +36,7 @@ def main() -> int:
 
     text = CONSTITUTION.read_text(encoding="utf-8")
 
-    # Ст. 1 — один файл
+    # Ст. 1 — один файл (ядро)
     c_files = [p for p in ROOT.glob("src/*.c")]
     if len(c_files) != 1:
         return fail(f"файлов *.c в src/ — {len(c_files)}, а статья требует 1")
@@ -60,7 +63,31 @@ def main() -> int:
     if claimed != actual:
         return fail(f"статья говорит «сейчас {claimed}», а тело — {actual}")
 
-    print(f"Ст. 1 говорит правду: 1 файл C, {actual}/{ceiling} строк, «сейчас {claimed}» сходится.")
+    # Поправка №12 — счёт границы клетки (числа объявлены в статье)
+    m_tools = re.search(r"`find tools -name '\*\.c' \| wc -l` → `(\d+)`", art1)
+    m_vendor = re.search(r"`find vendor -name '\*\.c' \| wc -l` → `(\d+)`", art1)
+    if not m_tools or not m_vendor:
+        return fail("в Ст. 1 нет счёта границы (tools/vendor) — Поправка №12 стёрта?")
+    tools_n = int(m_tools.group(1))
+    vendor_n = int(m_vendor.group(1))
+
+    tools_c = sorted(str(p) for p in ROOT.glob("tools/*.c"))
+    if len(tools_c) != tools_n:
+        return fail(f"файлов *.c в tools/ — {len(tools_c)}, а статья объявляет {tools_n}")
+    vendor_c = sorted(str(p) for p in ROOT.glob("vendor/**/*.c"))
+    if len(vendor_c) != vendor_n:
+        return fail(f"файлов *.c в vendor/ — {len(vendor_c)}, а статья объявляет {vendor_n}")
+
+    allowed = [str(ROOT / "src"), str(ROOT / "tools"), str(ROOT / "vendor")]
+    stray = [str(p) for p in ROOT.rglob("*.c")
+             if not any(str(p).startswith(a + "/") for a in allowed)
+             and "/.git/" not in str(p)]
+    if stray:
+        return fail(f"контрабанда: *.c вне src/tools/vendor — {stray}")
+
+    print(f"Ст. 1 говорит правду: ядро 1 файл, {actual}/{ceiling} строк, "
+          f"«сейчас {claimed}» сходится; граница: tools {len(tools_c)}/{tools_n}, "
+          f"vendor {len(vendor_c)}/{vendor_n}, вне зон 0.")
     print("КОНСТИТУЦИЯ ЦЕЛА.")
     return 0
 

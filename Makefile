@@ -1,8 +1,24 @@
 CC      ?= gcc
 CFLAGS  ?= -O2 -Wall -Wextra -std=c99
 
+# П37 волна ×6: vendored orlp/ed25519 (zlib, verbatim) — примитив подписанных
+# конвертов. Один CLI границы клетки (Ст. 1, Поправка №12); ядро не тронуто.
+VENDOR      = vendor/ed25519
+ED25519_SRC = $(VENDOR)/fe.c $(VENDOR)/ge.c $(VENDOR)/sc.c $(VENDOR)/sha512.c \
+              $(VENDOR)/keypair.c $(VENDOR)/sign.c $(VENDOR)/verify.c
+
 agryp: src/agryp.c
 	$(CC) $(CFLAGS) -o $@ $<
+
+ed25519tool: tools/ed25519tool.c $(ED25519_SRC) $(VENDOR)/ed25519.h
+	$(CC) $(CFLAGS) -I$(VENDOR) -o $@ tools/ed25519tool.c $(ED25519_SRC)
+
+# Приёмка П37 (машинная): «битая подпись → отказ» + карточка по схеме A2A.
+test-p37: agryp ed25519tool
+	python3 -m unittest discover -s tests -p 'test_p37*.py' -v
+
+demo-envelope: agryp ed25519tool
+	bash demo/run_demo_envelope.sh
 
 demo: agryp
 	bash demo/run_demo.sh
@@ -79,6 +95,6 @@ audit-jail-host:
 	python3 demo/audit_jail_host.py demo/jail-host-transcript.jsonl
 
 clean:
-	rm -f agryp
+	rm -f agryp ed25519tool
 
-.PHONY: demo demo-ctl demo-finish demo-reload demo-jail demo-stream demo-jail-host demo-metrics demo-rotate demo-sign journal-audit audit audit-ctl audit-finish audit-reload audit-jail audit-stream audit-jail-host bridge-test bench bench-stdiobus clean
+.PHONY: demo demo-ctl demo-finish demo-reload demo-jail demo-stream demo-jail-host demo-metrics demo-rotate demo-sign demo-envelope journal-audit audit audit-ctl audit-finish audit-reload audit-jail audit-stream audit-jail-host bridge-test bench bench-stdiobus test-p37 clean

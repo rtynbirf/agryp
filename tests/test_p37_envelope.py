@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
-# test_p37_envelope.py — приёмка П37 (машинная, std-only unittest).
+# test_p37_envelope.py — приёмка П37 волны ×4 (легаси WOTS на sha256), машиноведная.
 #
+# Волна ×6 перенесла подписанта на ed25519 (tests/test_p37_ed25519.py).
+# Этот файл остаётся реврессией легаси: конверты v1 (sha256-wots) честно
+# проверяются, но дверь по умолчанию их больше не пускает — поэтому здесь
+# overseer-дверь строится с явным trusted_algs=('sha256-wots',).
 # Главный тест из issue #6: «битая подпись → отказ». OverseerGate
 # fail-closed: подделка любого байта конверта, чужой ключ, повтор seq,
 # мусор вместо конверта — всё это отказ завода юнита, а не «исключение мимо».
@@ -20,8 +24,11 @@ import signed_envelope as se  # noqa: E402
 import agentcard as ac  # noqa: E402
 
 
+WOTS_ALGS = ("sha256-wots",)
+
+
 def make_envelope(payload=None, seq=0):
-    signer = se.CellSigner(b"cell-secret-01", seq=seq)
+    signer = se.WotsCellSigner(b"cell-secret-01", seq=seq)
     env = signer.sign("blood", "alpha", payload if payload is not None
                       else {"heart_rate": 72, "attempt": 1})
     return signer, env
@@ -69,15 +76,17 @@ class TestSignedEnvelope(unittest.TestCase):
 
     def test_rogue_key_refused_by_gate(self):
         signer, env = make_envelope()
-        rogue = se.CellSigner(b"attacker")
+        rogue = se.WotsCellSigner(b"attacker")
         bad = rogue.sign("event", "alpha", {"lie": True})
-        gate = se.OverseerGate(trusted_key_ids=signer.trusted_keys)
+        gate = se.OverseerGate(trusted_key_ids=signer.trusted_keys,
+                               trusted_algs=WOTS_ALGS)
         with self.assertRaises(se.RefusedUnit):
             gate.admit(bad)
 
     def test_replay_refused_by_gate(self):
         signer, env = make_envelope(seq=5)
-        gate = se.OverseerGate(trusted_key_ids=signer.trusted_keys)
+        gate = se.OverseerGate(trusted_key_ids=signer.trusted_keys,
+                               trusted_algs=WOTS_ALGS)
         gate.admit(env)
         with self.assertRaises(se.RefusedUnit):  # повтор того же конверта
             gate.admit(env)
@@ -85,11 +94,13 @@ class TestSignedEnvelope(unittest.TestCase):
         # подпись свежего конверта после отката счётчика = повтор цепи
         older["env"]["seq"] = 3
         with self.assertRaises(se.RefusedUnit):
-            se.OverseerGate(trusted_key_ids=signer.trusted_keys).admit(older)
+            se.OverseerGate(trusted_key_ids=signer.trusted_keys,
+                            trusted_algs=WOTS_ALGS).admit(older)
 
     def test_gate_fail_closed_on_garbage(self):
         signer, _ = make_envelope()
-        gate = se.OverseerGate(trusted_key_ids=signer.trusted_keys)
+        gate = se.OverseerGate(trusted_key_ids=signer.trusted_keys,
+                               trusted_algs=WOTS_ALGS)
         for garbage in (None, [], "строка", 42, {}, {"env": {}},
                         {"env": {"v": 2}}, json.loads(json.dumps({"sig": None}))):
             with self.assertRaises(se.RefusedUnit):
@@ -108,9 +119,9 @@ class TestSignedEnvelope(unittest.TestCase):
     def test_seq_state_file_persisted(self):
         with tempfile.TemporaryDirectory() as td:
             sp = str(Path(td) / "state" / "seq")
-            s1 = se.CellSigner(b"sec", state_path=sp)
+            s1 = se.WotsCellSigner(b"sec", state_path=sp)
             s1.sign("blood", "a", {})
-            s2 = se.CellSigner(b"sec", state_path=sp)
+            s2 = se.WotsCellSigner(b"sec", state_path=sp)
             self.assertGreater(s2.seq, 0)
 
 
