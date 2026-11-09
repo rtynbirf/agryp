@@ -47,10 +47,16 @@ J_OK=$(grep -ac '"event":"exit".*"ok":true' demo/metrics-transcript.jsonl)
     || { echo ">> ДЕМО ПРОВАЛЕНО: exits_ok сумма .prom=$M_OK_SUM, журнал=$J_OK"; exit 1; }
 echo ">> демо: счётчики .prom == журнал (attempts/exits_ok — одна правда на два носителя)"
 
-# Приёмка 3: agryp metrics читает тот же файл (Ст. 13 — не второй источник)
+# Приёмка 3: agryp metrics читает тот же файл (Ст. 13 — не второй источник).
+# Детерминизм: супервизор в цикле переписывает .prom (agryp_up_ms живёт, мс),
+# поэтому на время сверки замораживаем его STOP'ом — файл стабилен, гонки нет
+# (урок прогона 42647663156: красный на живом файле — гонка демо, не баг кода).
+kill -STOP "$SUP" 2>/dev/null
+sleep 0.3
 ./agryp metrics --dir demo/metrics-units > demo/metrics-ctl-snapshot.prom
 diff -q "$M" demo/metrics-ctl-snapshot.prom >/dev/null \
-    || { echo ">> ДЕМО ПРОВАЛЕНО: agryp metrics отдал не то, что в файле"; exit 1; }
+    || { echo ">> ДЕМО ПРОВАЛЕНО: agryp metrics отдал не то, что в файле"; kill -CONT "$SUP" 2>/dev/null; exit 1; }
+kill -CONT "$SUP" 2>/dev/null
 echo ">> демо: agryp metrics == файл (одна правда, ноль сокетов)"
 
 kill -TERM "$SUP" 2>/dev/null
