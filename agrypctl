@@ -19,7 +19,10 @@ unit=
 prev=
 for a in "$@"; do
     case "$prev" in
-        --dir) dir=$a ;;
+        # --dir съедает только своё значение, а не следующую команду
+        # (независимый аудит 2026-11-10: `agrypctl --dir DIR stop unit`
+        # превращал DIR в команду — demo-ctl красный на чистой машине)
+        --dir) dir=$a; prev=; continue ;;
     esac
     case "$a" in
         --dir) prev=--dir ;;
