@@ -41,19 +41,19 @@
     }
   ],
   "type": "AgentCard",
-  "url": "file:///home/z/my-project/work/agryp-x6/demo/envelope-units/.agryp-metrics.prom",
+  "url": "file:///home/z/my-project/download/agryp-upstream/demo/envelope-units/.agryp-metrics.prom",
   "version": "1.0.0",
   "x-agryp": {
     "endpoints": {
       "card": "command: ./agrypctl card [--dir DIR]  (= ./agrypctl status --card)",
-      "ctl": "file:/home/z/my-project/work/agryp-x6/demo/envelope-units/.agryp-ctl",
-      "journal": "file:///home/z/my-project/work/agryp-x6/demo/envelope-units/.agryp-journal.ndjson",
-      "metrics": "file:///home/z/my-project/work/agryp-x6/demo/envelope-units/.agryp-metrics.prom",
+      "ctl": "file:/home/z/my-project/download/agryp-upstream/demo/envelope-units/.agryp-ctl",
+      "journal": "file:///home/z/my-project/download/agryp-upstream/demo/envelope-units/.agryp-journal.ndjson",
+      "metrics": "file:///home/z/my-project/download/agryp-upstream/demo/envelope-units/.agryp-metrics.prom",
       "status": "command: ./agryp status --dir demo/envelope-units"
     },
     "identity": {
-      "cell_dir": "/home/z/my-project/work/agryp-x6/demo/envelope-units",
-      "pid": 5703,
+      "cell_dir": "/home/z/my-project/download/agryp-upstream/demo/envelope-units",
+      "pid": 4501,
       "sup": "agryp",
       "uptime_ms": 3007
     },
