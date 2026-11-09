@@ -445,7 +445,7 @@ pid/mount namespace'ах через `clone(CLONE_NEWPID[|CLONE_NEWNS])` — бе
 
 - виток 11 — **исполнен** (2026-11-10): per-unit `finish-timeout-ms`
   (s6 `timeout-finish`) и readiness файл-как-API (`AGRY_READY_PATH` —
-  sd_notify без сокетов); ядро 1253/1280, Поправки №13–№14
+  sd_notify без сокетов); ядро 1263/1280, Поправки №13–№14
   ([тикеты 015–016](tasks/done/015-finish-timeout-ms.md));
 - виток 10 — **исполнен** (2026-11-08): метрики .prom, журнал-ротация
   с пломбой, сигнатуры договоров; tool-catalog (2444 позиции) восстановлен

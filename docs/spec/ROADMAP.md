@@ -208,5 +208,5 @@ GitHub'ом 2026-11-07) — блокировка пакетной части в�
   `make demo-ready` (ready 501 мс, молчун 0), батарея rc=0, test-p37
   42/42, правило №10 аудитора, Ст. 1 машиной (check_constitution rc=0);
   CI: `demo-ready` в battery, `audit-ready` в audit-джобу.
-- Ядро 1253/1280.
+- Ядро 1263/1280.
 

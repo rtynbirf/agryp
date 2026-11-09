@@ -105,6 +105,7 @@ static FILE *g_journal;
 static long long g_journal_bytes;
 static long long g_rotate_bytes = ROTATE_BYTES;
 static long long g_orphans;   /* усыновлённые сироты (subreaper) */
+static int g_shutdown_logged; /* Виток 11: shutdown уже в летописи — после него stopped молчит */
 static long long g_reloads;   /* перезагрузок каталога (SIGHUP) */
 static long long g_rotations; /* ротаций журнала */
 
@@ -607,7 +608,15 @@ static void handle_exit(unit_t *u, int status)
 
     run_finish(u, code, sig);                  /* Виток 6: уборка до лестницы (тикет 004) */
 
-    if (g_stop) { u->state = U_STOPPED; return; }
+    if (g_stop) {
+        u->state = U_STOPPED;
+        /* Виток 11: останов юнита не молчит (Ст. 6), но после строки shutdown
+         * событие запрещено (аудитор) — там попытку хоронит сам shutdown. */
+        if (!g_shutdown_logged)
+            log_ev(u, "stopped", "\"reason\":\"%s\"",
+                   u->ctl_down ? "ctl-down" : "shutdown");
+        return;
+    }
 
     /* Лестница перезапуска (Ст. 8, учителя — docs/TEACHERS.md): своя смерть
      * растит счётчик, победа гасит, казнь закона нейтральна, «проработал» — с нуля. */
@@ -1215,6 +1224,7 @@ int main(int argc, char **argv)
 
     /* graceful shutdown: TERM → ждём → KILL */
     log_ev(NULL, "shutdown", "\"reason\":\"signal\"");
+    g_shutdown_logged = 1;                     /* Виток 11: дальше stopped не пишется */
     for (i = 0; i < g_nunits; i++)
         if (g_units[i].state == U_RUNNING && g_units[i].pid > 0)
             if (kill(-g_units[i].pgid, SIGTERM) < 0)
