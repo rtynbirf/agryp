@@ -86,6 +86,8 @@ jobs:
         run: make demo-stream
       - name: make demo-envelope
         run: make demo-envelope
+      - name: make demo-rotate (готовит журнал для аудитора — свежий чекаут пуст)
+        run: make demo-rotate
       - name: make journal-audit
         run: make journal-audit
       - name: make bridge-test
