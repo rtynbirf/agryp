@@ -53,9 +53,9 @@
     },
     "identity": {
       "cell_dir": "/home/z/my-project/download/agryp-upstream/demo/envelope-units",
-      "pid": 4501,
+      "pid": 6390,
       "sup": "agryp",
-      "uptime_ms": 3007
+      "uptime_ms": 3006
     },
     "security": "конверты крови/событий подписаны ed25519 (RFC 8032; П37, волна ×6); overseer fail-closed: битая/чужая/повторная подпись = отказ завода юнита",
     "signing": {

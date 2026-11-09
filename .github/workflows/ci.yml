@@ -63,3 +63,50 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: make catalog-guard
         run: make catalog-guard
+
+  # Независимый аудит 2026-11-10 (урок бага agrypctl --dir, коммит 364c1f0):
+  # demo-ctl не гонялся CI — интерфейсный баг дожил до внешнего аудита на
+  # чистой машине. Лекарство: CI гоняет ВСЮ живую батарею, что гоняет рука.
+  battery:
+    name: battery — живые демо целиком (урок бага --dir)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: ядро и инструмент
+        run: make agryp ed25519tool
+      - name: make demo
+        run: make demo
+      - name: make demo-ctl
+        run: make demo-ctl
+      - name: make demo-finish
+        run: make demo-finish
+      - name: make demo-reload
+        run: make demo-reload
+      - name: make demo-stream
+        run: make demo-stream
+      - name: make demo-envelope
+        run: make demo-envelope
+      - name: make journal-audit
+        run: make journal-audit
+      - name: make bridge-test
+        run: make bridge-test
+
+  # Независимый аудит 2026-11-10: санитайзеры — исполняемый контракт
+  # (мировая практика: ASan+UBSan на каждый пуш; ядро не держит кучу —
+  # LSan включён и должен молчать). demo-envelope исключён: vendored
+  # orlp/ed25519 (verbatim) ловит UBSan «left shift of negative value»
+  # (vendor/ed25519/ge.c:359) — квирк апстрима, см. KNOWN_ISSUES.md и
+  # docs/audits/CI-BATTERY-SANITIZERS-2026-11-10.md; фикс — только апстримом.
+  sanitizers:
+    name: sanitizers — ASan+UBSan на живой батарее ядра
+    runs-on: ubuntu-latest
+    env:
+      ASAN_OPTIONS: detect_leaks=1:abort_on_error=1
+      UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+      SAN_CFLAGS: -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined -fsanitize-address-use-after-scope -std=c99
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: ядро под ASan+UBSan
+        run: make clean && CFLAGS="$SAN_CFLAGS" make agryp
+      - name: живая батарея под санитайзерами
+        run: CFLAGS="$SAN_CFLAGS" make demo demo-ctl demo-finish demo-reload demo-stream demo-metrics demo-rotate demo-sign
