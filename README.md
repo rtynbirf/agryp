@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="banner.png" alt="agryp — PID1-подобный супервизор AI-агентов — один файл C, ноль зависимостей" width="100%">
+</div>
+
 # agryp — неспящий супервизор агентов уровня PID 1
 
 <p align="center"><img src=".github/social-preview.png" alt="agryp" width="100%"></p>
