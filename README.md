@@ -123,6 +123,7 @@ budget-sec   = 25           # time-бюджет попытки (Ст. 7)
 token-budget = 5000         # токен-бюджет: burn-rate агент отдаёт сам (Ст. 14)
 cooldown-ms  = 1000         # база лестницы перезапуска (Ст. 8)
 # finish       = rm -rf /tmp/$AGRY_UNIT-worktree   # хук после каждой смерти (Виток 6)
+# finish-timeout-ms = 600  # потолок хука per-unit, 0/нет = дефолт 5000 (Виток 11, s6 timeout-finish)
 # mem-max-mb = 64           # клетка cgroups v2 (Ст. 15), 0 = без клетки
 # jail       = pid,mount    # комнаты имён попытки: pid | mount | pid,mount (Виток 7)
 # max-attempts = 0          # 0 = без лимита
@@ -143,9 +144,9 @@ kill -HUP $(pgrep -f 'agryp --dir examples')
 
 Логи — JSON-строки в stdout (`boot`, `spawn`, `exit`, `restart`, `stopped`,
 `failed`, `budget-kill`, `token-kill`, `ctl-down`, `ctl-up`, `ctl-drop`,
-`ctl-kill`, `finish`, `reload`, `unit-added`, `unit-removed`, `cgroup-skip`,
-`jail-skip`, `report-drop`, `subreaper`, `reap-orphan`, `shutdown`, `summary`) —
-удобно направлять в любой сборщик.
+`ctl-kill`, `finish`, `reload`, `ready`, `unit-added`, `unit-removed`,
+`cgroup-skip`, `jail-skip`, `report-drop`, `subreaper`, `reap-orphan`,
+`shutdown`, `summary`) — удобно направлять в любой сборщик.
 
 ## Живое демо: что доказывает транскрипт
 
@@ -219,8 +220,10 @@ worker казнён без единого рестарта, сосед-ghost н�
 - **finish-хук** (школа s6 `./finish`): ключ `finish = <строка sh>` —
   после КАЖДОЙ смерти попытки, до лестницы перезапуска; хук получает
   env `AGRY_UNIT`, `AGRY_EXIT_CODE`, `AGRY_BY_SIGNAL` и живёт вне
-  группы попытки (казнь группы его не трогает); потолок `FINISH_MS`
-  (5 с), упор — громкое событие `finish` с `"timeout":true`; сбой
+  группы попытки (казнь группы его не трогает); потолок — per-unit
+  ключ `finish-timeout-ms` (Виток 11, школа s6 `timeout-finish`;
+  0/не задан = дефолт ядра `FINISH_MS` 5000), упор — громкое событие
+  `finish` с `"timeout":true,"ms":<потолок юнита>`; сбой
   хука лестницу не трогает. Типовое применение фермы:
   `finish = rm -rf /tmp/$AGRY_UNIT-worktree` — каждый новый заход
   агента начинается в чистом рабочем пространстве
@@ -243,6 +246,20 @@ worker казнён без единого рестарта, сосед-ghost н�
   сверяет их с юнит-событиями (`make demo-reload`: бюджет 5→60 на той
   же попытке, beta удалён graceful, gamma добавлен — reload 1/1/1).
   Перезапуск конкретного юнита — не здесь, это agrypctl stop/start.
+
+## Готовность: файл-как-API (Виток 11)
+
+`sd_notify` говорит сокетом, s6 `notification-fd` — пайпом; весь мир
+строит мосты между сокетами. Здесь готовность — файл-договор, как всё
+в этом доме (Ст. 13): каждая попытка получает env `AGRY_READY_PATH`,
+агент, ставший готовым, создаёт файл (`touch "$AGRY_READY_PATH"`),
+супервизор даёт событие `ready` с честной задержкой от старта попытки
+(`ready_ms` — и в журнале, и в срезе статуса). Мёртвая попытка не
+остаётся «готовой»: ready-файл снимает супервизор при смерти и при
+новом спавне — чужой или старый файл попытку не переживает. Молчун не
+готов — и это факт, а не нарушение: готовность объявляется, а не
+додумывается (`make demo-ready`: quickready объявился за 501 мс,
+neverready честно 0; аудитор сверяет ms с хронологией spawn→ready).
 
 ## Виток 7: клетка имён, токен-будильник и мост на язык systemd
 
@@ -289,6 +306,8 @@ worker казнён без единого рестарта, сосед-ghost н�
 | `token-budget` | — | у systemd нет второй валюты: честно в шапке .service (Ст. 14) |
 | `mem-max-mb` | `MemoryMax=N M` | — |
 | `finish` | `ExecStopPost=/bin/sh -c '…'` | env: у нас `AGRY_EXIT_CODE`/`AGRY_BY_SIGNAL`, у systemd `$EXIT_CODE`/`$EXIT_STATUS` |
+| `finish-timeout-ms` | s6 `timeout-finish` (файл в servicedir) | у systemd потолок ExecStopPost не настраивается per-unit; дефолт 5000 = канон s6 |
+| — | `Type=notify` / `sd_notify READY=1` | готовность — файл-договор: env `AGRY_READY_PATH`, готов = создал файл (Виток 11) |
 | `jail` | — | комнаты имён не переносятся: это не контейнер |
 | — | `WorkingDirectory=` (каталог .agent) | обратная трансляция cwd не восстанавливает — это не договор |
 
@@ -424,6 +443,10 @@ pid/mount namespace'ах через `clone(CLONE_NEWPID[|CLONE_NEWNS])` — бе
 Витки и тикеты живут в [`docs/spec/ROADMAP.md`](docs/spec/ROADMAP.md) и
 [`tasks/open/`](tasks/open/) (норма НОУС: очередь воли). Кратко:
 
+- виток 11 — **исполнен** (2026-11-10): per-unit `finish-timeout-ms`
+  (s6 `timeout-finish`) и readiness файл-как-API (`AGRY_READY_PATH` —
+  sd_notify без сокетов); ядро 1253/1280, Поправки №13–№14
+  ([тикеты 015–016](tasks/done/015-finish-timeout-ms.md));
 - виток 10 — **исполнен** (2026-11-08): метрики .prom, журнал-ротация
   с пломбой, сигнатуры договоров; tool-catalog (2444 позиции) восстановлен
   и влит ([тикет 012](tasks/done/012-vitok-10.md));

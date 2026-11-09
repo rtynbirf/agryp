@@ -29,6 +29,9 @@ demo-ctl: agryp
 demo-finish: agryp
 	bash demo/run_demo_finish.sh
 
+demo-ready: agryp
+	bash demo/run_demo_ready.sh
+
 demo-reload: agryp
 	bash demo/run_demo_reload.sh
 
@@ -82,6 +85,9 @@ audit-ctl:
 audit-finish:
 	python3 demo/audit_transcript.py demo/finish-transcript.jsonl
 
+audit-ready:
+	python3 demo/audit_transcript.py demo/ready-transcript.jsonl
+
 audit-reload:
 	python3 demo/audit_transcript.py demo/reload-transcript.jsonl
 
@@ -97,4 +103,4 @@ audit-jail-host:
 clean:
 	rm -f agryp ed25519tool
 
-.PHONY: demo demo-ctl demo-finish demo-reload demo-jail demo-stream demo-jail-host demo-metrics demo-rotate demo-sign demo-envelope journal-audit audit audit-ctl audit-finish audit-reload audit-jail audit-stream audit-jail-host bridge-test bench bench-stdiobus test-p37 clean
+.PHONY: demo demo-ctl demo-finish demo-ready demo-reload demo-jail demo-stream demo-jail-host demo-metrics demo-rotate demo-sign demo-envelope journal-audit audit audit-ctl audit-finish audit-ready audit-reload audit-jail audit-stream audit-jail-host bridge-test bench bench-stdiobus test-p37 clean

@@ -26,6 +26,9 @@
   9. ctl-дисциплина (Виток 5, Ст. 13): spawn при живом .down невозможен;
      ctl-up без ctl-down — ложь; казнённая ctl-down попытка обязана
      получить exit и остановиться с reason ctl-down.
+ 10. readiness (Виток 11, тикет 016): ready возможен только у живой
+     попытки, один на попытку; ms — задержка от старта попытки и обязана
+     сходиться с расстоянием от spawn до ready (±2 мс — такт now_ms).
 
 Успех: печатает OK и сводку, код выхода 0. Иначе — список нарушений, код 1.
 """
@@ -40,7 +43,7 @@ VALID_EVENTS = {
     "budget-kill", "token-kill", "ctl-down", "ctl-up", "ctl-drop", "ctl-kill",
     "cgroup-skip", "jail-skip", "report-drop", "subreaper", "reap-orphan",
     "shutdown", "summary", "uptime-ms", "finish", "reload", "unit-added",
-    "unit-removed", "unit-sign", "rotate",
+    "unit-removed", "unit-sign", "rotate", "ready",
 }
 # константы Ст. 8 — сверены с #define в src/agryp.c
 BACKOFF_CAP_MS = 30000
@@ -57,7 +60,7 @@ def load_unit_configs(repo_root):
     cfgs = {}
     for sub in ("examples", "demo/ctl-units", "demo/finish-units", "demo/reload-units",
                 "demo/jail-units", "demo/stream-units", "demo/metrics-units",
-                "demo/rotate-units", "demo/sign-units"):
+                "demo/rotate-units", "demo/sign-units", "demo/ready-units"):
         for p in sorted(glob.glob(os.path.join(repo_root, sub, "*.agent"))):
             cfg = {}
             with open(p, encoding="utf-8") as f:
@@ -139,6 +142,7 @@ def main(path):
             "streak": None, "failed": False,
             "ctl_down": False, "ctl_e0": None, "expect_stop": None,
             "finishes": [], "retired": False, "added": False,
+            "ready": False, "spawn_up": None,
         })
         et = ev["event"]
         if et == "spawn":
@@ -154,10 +158,13 @@ def main(path):
                 fail(errors, idx, f"spawn юнита {name} после терминального failed")
             u["running"] = True
             u["spawns"].append((idx, ev.get("attempt")))
+            u["spawn_up"] = ev.get("up_ms")
+            u["ready"] = False
         elif et == "exit":
             if not u["running"]:
                 fail(errors, idx, f"exit юнита {name} без живой попытки")
             u["running"] = False
+            u["ready"] = False
             u["exits"].append((idx, ev.get("ok")))
             if ev.get("ok") is True:
                 u["ok_exits"] += 1
@@ -165,6 +172,20 @@ def main(path):
             if not u["exits"]:
                 fail(errors, idx, f"finish юнита {name} без смерти попытки — журнал лжёт")
             u["finishes"].append(idx)
+        elif et == "ready":
+            if not u["running"]:
+                fail(errors, idx, f"ready юнита {name} без живой попытки — готовность лжёт")
+            if u["ready"]:
+                fail(errors, idx, f"{name}: второй ready на одной попытке")
+            ms = ev.get("ms")
+            if not isinstance(ms, int) or ms < 0:
+                fail(errors, idx, f"{name}: ready.ms={ms!r} — не честная задержка")
+            elif u["spawn_up"] is not None:
+                want = ev.get("up_ms") - u["spawn_up"]
+                if abs(ms - want) > 2:
+                    fail(errors, idx,
+                         f"{name}: ready.ms={ms}, а от спавна прошло {want} — задержка лжёт")
+            u["ready"] = True
         elif et == "restart":
             u["restarts"] += 1
             streak, backoff = ev.get("streak"), ev.get("backoff_ms")

@@ -1,0 +1,4 @@
+name         = quickready
+exec         = sleep 0.4; touch "$AGRY_READY_PATH"; while :; do sleep 1; echo hb; done
+restart      = always
+cooldown-ms  = 500
