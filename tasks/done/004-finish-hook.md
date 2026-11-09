@@ -34,3 +34,15 @@ s6-урок: у службы есть `finish`-скрипт, который ис
    каждой смерти, в журнале `finish` по каждой; сироты 0.
 3. `make audit` → OK (аудитор знает `finish` и сверяет с числом exit'ов).
 4. Слепая зона предыдущих витков (завалы /tmp) закрыта демо-транскриптом.
+
+## Отчёт о исполнении (2026-11-10)
+
+Исполнен одним атомом с Поправкой №5. Ключ `finish` в парсере
+(вынесен в `parse_unit_file()`); `run_finish_hook()` — fork+execl
+`/bin/sh -c`, env `AGRY_UNIT`/`AGRY_EXIT_CODE`/`AGRY_BY_SIGNAL`,
+`FINISH_TIMEOUT_MS 2000`, упор — `finish-timeout`; вызов в
+`handle_exit` после exit-события. Приёмки: `make demo-v6` — sweeper
+3 смерти / 3 уборки (`demo/v6-finish.log`), junk-каталог убит,
+`make audit-v6` OK (1:1 хуков со смертями проверен); подделка D в
+`negative_ctl_test.py` (finish у юнита без конфига) ловится.
+Потолок Ст. 1: 656 → 720 (код 654 → 707).

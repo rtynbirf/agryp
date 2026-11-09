@@ -30,3 +30,14 @@
    ≤ GRACE_MS, затем `ctl-kill` и exit по сигналу 9; сироты 0.
 2. `make audit` → OK (`ctl-kill` в VALID_EVENTS, каждый подтверждён exit).
 3. Отрицательный тест расширен: `ctl-kill` без последующего exit → FAIL.
+
+## Отчёт о исполнении (2026-11-10)
+
+Исполнен одним атомом с Поправкой №6. `ctl_since_ms` в unit_t,
+ставится при появлении .down; эскалация в `poll_ctl()`: (ctl_down ||
+retired) && RUNNING && now-ctl_since_ms > GRACE_MS → `ctl-kill`
+(с why: ctl/reload) + SIGKILL группы, sup_kill=1. ctl-drop — реестр
+последних 8 имён, один раз на файл. Приёмки: `make demo-v6` — stubborn
+с `trap '' TERM` пережил TERM, добит через GRACE_MS (exit по сигналу 9,
+stopped reason ctl-down); подделка C (ctl-kill без exit) ловится в
+`negative_ctl_test.py`; сироты 0. Потолок Ст. 1: 720 → 752 (707 → 732).

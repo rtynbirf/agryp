@@ -167,3 +167,59 @@ README топов ниши (токен Хозяина, read-only, значени
 - openhuman: https://github.com/tinyhumansai/openhuman
 - agent-orchestrator: https://github.com/OrchestratorInc/agent-orchestrator
 - supervisor (учитель, верное место на GitHub): https://github.com/Supervisor/supervisor
+
+---
+
+## §VI · Виток 6 (2026-11-10): хук финиша, reload, эскалация останова
+
+Вопросы витка — три: что делать между смертью и рестартом; как менять
+договоры на живой семье; как останавливать упрямых. Учителя сходятся,
+расхождения зафиксированы и отклонены с причинами.
+
+Принято (учителя):
+
+- s6 ./finish (skarnet.org/software/s6/s6-supervise.html): после смерти
+  run исполняется finish — уборка между жизнями; таймаут прощания с
+  хуком (у s6 по умолчанию 5 с, у нас FINISH_TIMEOUT_MS 2000 — объявлен
+  честно, Ст. 11); минимум между спавнами против busyloop — у нас уже
+  стояла лестница Ст. 8. Отвергнуто: особый смысл exit 125 хука («не
+  рестартовать») — решение о рестарте у нас принадлежит только политике
+  юнита (Ст. 8), хук — уборщик, а не голосующий.
+- ExecStopPost (freedesktop.org/software/systemd/man/systemd.service.html):
+  пост-мортем исполняется всегда, результат службы передаётся env
+  ($SERVICE_RESULT/$EXIT_CODE/$EXIT_STATUS) → наш env-договор
+  AGRY_UNIT/AGRY_EXIT_CODE/AGRY_BY_SIGNAL. Отвергнуто: разделение
+  ExecStop/ExecStopPost — у агента нет «вежливого стопа», агент либо
+  жив, либо мёртв; хук один.
+- daemon-reload (freedesktop.org, man systemd.service): конфигурация
+  меняется без перезапуска юнитов → Ст. 18. Прямой контраст:
+  supervisord на SIGHUP останавливает ВСЕ процессы
+  (supervisord.org/running.html) — для агентов антипаттерн: попытка
+  агента — это дни жизни, а не секунды; отвергнут.
+- TimeoutStopSec (systemd) и terminationGracePeriodSeconds
+  (kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle;
+  cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-terminating-with-grace):
+  TERM → грейс → KILL, останов обязан довести юнит до смерти → Ст. 13,
+  эскалация ctl-kill. Отвергнуто: отдельный конфиг таймаута останова —
+  GRACE_MS один на семью (Ст. 11: констант-бюджет прощания один).
+
+Сверстники §VI (2026-11-10):
+
+- zeptopm («PM2 для LLM», Erlang-inspired supervision, real-time agent
+  channels): https://github.com/qhkm/zeptopm — подтверждает спрос на
+  супервизию агентов, но живёт рантаймом и сокетами; finish-хука,
+  reload без крови и гарантии эскалации на файловом API не даёт.
+
+Итог витка: три инварианта приняты (хук финиша 1:1 со смертями,
+reload без кровопролития, эскалация останова), три формы отвергнуты
+с причинами. Сингулярность держится на отказах не хуже, чем на
+принятиях.
+
+Источники:
+
+- s6-supervise (finish, таймауты): https://skarnet.org/software/s6/s6-supervise.html
+- systemd.service (ExecStopPost, RestartSteps): https://www.freedesktop.org/software/systemd/man/systemd.service.html
+- supervisord SIGHUP/reread/update: https://supervisord.org/running.html
+- Kubernetes pod lifecycle: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle
+- Kubernetes terminating with grace: https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-terminating-with-grace
+- zeptopm: https://github.com/qhkm/zeptopm
