@@ -1,0 +1,39 @@
+{
+  "sua_version": "0.1",
+  "record_type": "process_layer",
+  "measured_at_utc": "2026-11-09T20:26:14Z",
+  "source": "make bench (CI, GH runner)",
+  "subject": {
+    "commit": "b6f5e90",
+    "core_loc": 1196,
+    "host": "x86_64 7.0.0-1019-azure",
+    "cap_sys_admin": false
+  },
+  "config": {
+    "n_agents": 100,
+    "window_s": 30
+  },
+  "metrics": {
+    "binary_bytes": 48312,
+    "dyn_deps": 3,
+    "supervisor_rss_kb_median_m2": 1836,
+    "supervisor_rss_kb_median_m3_farm": 2048,
+    "journal_bytes_delta_m4": 0,
+    "workers_before_m6": 100,
+    "workers_after_m6": 100,
+    "orphans_after_kill9_m2": 0,
+    "orphans_after_5s_m5": 0,
+    "m7_grandchildren_orphans": 20,
+    "m7_verdict": "граница Ст. 9: PDEATHSIG — один уровень; внуки переживают супервизора; дом-ответ — jail=pid (pid_namespaces(7): смерть init убивает комнату)"
+  },
+  "gates": {
+    "orphans_zero": true,
+    "no_worker_leak_m6": true,
+    "m7_boundary_recorded": true
+  },
+  "not_measured": [
+    "jail (cgroups недоступны на GH runner — граница среды, протокол v0.1)",
+    "tini_median_ms (в этом прогоне не замерялся)",
+    "restart_ladder_ms (в этом прогоне не замерялся)"
+  ]
+}
