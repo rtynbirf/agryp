@@ -1,0 +1,66 @@
+{"ts":"2026-11-09T21:14:27Z","up_ms":0,"event":"boot","units":3,"dir":"demo/v6-units"}
+{"ts":"2026-11-09T21:14:27Z","up_ms":0,"event":"subreaper","on":true}
+{"ts":"2026-11-09T21:14:27Z","up_ms":0,"unit":"resident","event":"spawn","pid":3037,"attempt":1,"budget_sec":60}
+{"ts":"2026-11-09T21:14:27Z","up_ms":0,"unit":"victim","event":"spawn","pid":3038,"attempt":1,"budget_sec":0}
+{"ts":"2026-11-09T21:14:27Z","up_ms":0,"unit":"sweeper","event":"spawn","pid":3039,"attempt":1,"budget_sec":0}
+[victim] обречён
+[resident] жив
+[victim] hb
+[resident] hb
+{"ts":"2026-11-09T21:14:28Z","up_ms":1252,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-09T21:14:28Z","up_ms":1272,"unit":"sweeper","event":"finish","hook_exit":0}
+{"ts":"2026-11-09T21:14:28Z","up_ms":1272,"unit":"sweeper","event":"restart","next_attempt":2,"backoff_ms":700,"streak":1}
+[victim] hb
+[resident] hb
+{"ts":"2026-11-09T21:14:29Z","up_ms":2024,"unit":"sweeper","event":"spawn","pid":3050,"attempt":2,"budget_sec":0}
+[victim] hb
+[resident] hb
+{"ts":"2026-11-09T21:14:30Z","up_ms":3004,"event":"reload","added":2,"changed":1,"removed":1}
+{"ts":"2026-11-09T21:14:30Z","up_ms":3004,"unit":"newcomer","event":"spawn","pid":3060,"attempt":1,"budget_sec":0}
+{"ts":"2026-11-09T21:14:30Z","up_ms":3005,"unit":"stubborn","event":"spawn","pid":3061,"attempt":1,"budget_sec":0}
+[newcomer] пришёл по reload
+[stubborn] TERM меня не берёт
+{"ts":"2026-11-09T21:14:30Z","up_ms":3255,"unit":"victim","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-09T21:14:30Z","up_ms":3255,"unit":"victim","event":"stopped","reason":"reload"}
+{"ts":"2026-11-09T21:14:30Z","up_ms":3255,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-09T21:14:30Z","up_ms":3275,"unit":"sweeper","event":"finish","hook_exit":0}
+{"ts":"2026-11-09T21:14:30Z","up_ms":3275,"unit":"sweeper","event":"restart","next_attempt":3,"backoff_ms":1400,"streak":2}
+[resident] hb
+[newcomer] hb
+[stubborn] hb
+{"ts":"2026-11-09T21:14:31Z","up_ms":4527,"unit":"stubborn","event":"ctl-down"}
+{"ts":"2026-11-09T21:14:32Z","up_ms":4778,"unit":"sweeper","event":"spawn","pid":3081,"attempt":3,"budget_sec":0}
+[resident] hb
+[newcomer] hb
+[stubborn] hb
+[resident] hb
+[newcomer] hb
+[stubborn] hb
+{"ts":"2026-11-09T21:14:33Z","up_ms":6030,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-09T21:14:33Z","up_ms":6050,"unit":"sweeper","event":"finish","hook_exit":0}
+{"ts":"2026-11-09T21:14:33Z","up_ms":6050,"unit":"sweeper","event":"stopped","reason":"max-attempts"}
+[resident] hb
+[newcomer] hb
+[stubborn] hb
+{"ts":"2026-11-09T21:14:34Z","up_ms":7553,"unit":"stubborn","event":"ctl-kill","grace_ms":3000,"why":"ctl"}
+{"ts":"2026-11-09T21:14:35Z","up_ms":7804,"unit":"stubborn","event":"exit","by_signal":9,"ok":false}
+{"ts":"2026-11-09T21:14:35Z","up_ms":7804,"unit":"stubborn","event":"stopped","reason":"ctl-down"}
+{"ts":"2026-11-09T21:14:35Z","up_ms":7804,"event":"reap-orphan","pid":3094,"code":-1}
+[resident] hb
+[newcomer] hb
+[resident] hb
+[newcomer] hb
+[resident] hb
+[newcomer] hb
+[resident] hb
+[newcomer] hb
+{"ts":"2026-11-09T21:14:38Z","up_ms":11020,"event":"shutdown","reason":"signal"}
+{"ts":"2026-11-09T21:14:38Z","up_ms":11070,"unit":"resident","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-09T21:14:38Z","up_ms":11070,"unit":"newcomer","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-09T21:14:38Z","up_ms":11070,"event":"reap-orphan","pid":3108,"code":-1}
+{"ts":"2026-11-09T21:14:38Z","up_ms":11070,"unit":"resident","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-09T21:14:38Z","up_ms":11070,"unit":"victim","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-09T21:14:38Z","up_ms":11070,"unit":"sweeper","event":"summary","attempts":3,"exits_ok":0,"exits_fail":3,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":2}
+{"ts":"2026-11-09T21:14:38Z","up_ms":11070,"unit":"newcomer","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-09T21:14:38Z","up_ms":11070,"unit":"stubborn","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-09T21:14:38Z","up_ms":11070,"event":"uptime-ms","value":11070}

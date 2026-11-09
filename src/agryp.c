@@ -37,6 +37,7 @@
 #define SUSTAIN_MS     10000 /* «проработал» гасит лестницу перезапуска (Ст. 8) */
 #define BACKOFF_CAP_MS 30000 /* потолок лестницы перезапуска (Ст. 8) */
 #define CRASH_LIMIT    5     /* подряд своих смертей → терминальный failed (Ст. 8) */
+#define FINISH_TIMEOUT_MS 2000 /* хук финиша: потолок прощания с уборщиком (Ст. 11, 17) */
 
 typedef enum { R_ALWAYS = 0, R_ON_FAILURE = 1, R_NO = 2 } restart_t;
 typedef enum { U_STOPPED = 0, U_RUNNING = 1, U_COOLDOWN = 2 } state_t;
@@ -51,6 +52,7 @@ typedef struct {
     int       max_attempts;  /* 0 = без лимита */
     int       token_budget;  /* 0 = без лимита: вторая валюта бюджета (Ст. 14) */
     int       mem_max_mb;    /* 0 = без клетки: memory.max cgroups v2 (Ст. 15) */
+    char      finish[192];   /* хук после смерти попытки, до рестарта (Ст. 17) */
     /* рантайм */
     state_t   state;
     pid_t     pid;
@@ -68,12 +70,15 @@ typedef struct {
     int       fail_streak;   /* подряд своих смертей — растит лестницу (Ст. 8) */
     int       sup_kill;      /* казнь законом (бюджет/токены) — не ошибка агента */
     int       ctl_down;      /* файл <unit>.down жив — политика заморожена (Ст. 13) */
+    long long ctl_since_ms;  /* момент появления .down: эскалация останова (Ст. 13) */
+    int       retired;       /* файл юнита удалён с диска — рестарта не будет (Ст. 18) */
     long long run_started_ms; /* старт текущей попытки: «проработал» меряем от неё */
 } unit_t;
 
 static unit_t g_units[MAX_UNITS];
 static int    g_nunits = 0;
 static volatile sig_atomic_t g_stop = 0;
+static volatile sig_atomic_t g_reload = 0;
 static char g_status_path[1152];  /* Ст. 13: снимок состояния — файл, не сокет */
 static char g_report_path[1152];  /* Ст. 14: сюда агенты отдают burn-rate */
 static char g_cgbase[CG_BASE_LEN]; /* Ст. 15: наша делегированная ветка cgroup v2 */
@@ -110,16 +115,16 @@ static void log_ev(const unit_t *u, const char *event, const char *fmt, ...)
     wall_ts(tsbuf, sizeof tsbuf);
     if (u && extra[0])
         printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"unit\":\"%s\",\"event\":\"%s\",%s}\n",
-               tsbuf, now_ms(), u->name, event, extra);
+               tsbuf, now_ms() - g_t0, u->name, event, extra);
     else if (u)
         printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"unit\":\"%s\",\"event\":\"%s\"}\n",
-               tsbuf, now_ms(), u->name, event);
+               tsbuf, now_ms() - g_t0, u->name, event);
     else if (extra[0])
         printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"event\":\"%s\",%s}\n",
-               tsbuf, now_ms(), event, extra);
+               tsbuf, now_ms() - g_t0, event, extra);
     else
         printf("{\"ts\":\"%s\",\"up_ms\":%lld,\"event\":\"%s\"}\n",
-               tsbuf, now_ms(), event);
+               tsbuf, now_ms() - g_t0, event);
     fflush(stdout);
 }
 
@@ -145,6 +150,44 @@ static int parse_restart(const char *v, restart_t *out)
     return -1;
 }
 
+static int parse_unit_file(const char *path, unit_t *u)
+{
+    FILE *f = fopen(path, "r");
+    char line[1024];
+    int lineno = 0;
+
+    if (!f) return -1;
+    while (fgets(line, sizeof line, f)) {
+        char *s, *eq, *key, *val;
+        lineno++;
+        s = trim(line);
+        if (!*s || *s == '#') continue;
+        eq = strchr(s, '=');
+        if (!eq) {
+            fprintf(stderr, "agryp: %s:%d: строка без '=' пропущена\n", path, lineno);
+            continue;
+        }
+        *eq = '\0';
+        key = trim(s);
+        val = trim(eq + 1);
+        if      (!strcmp(key, "name"))         snprintf(u->name, sizeof u->name, "%.60s", val);
+        else if (!strcmp(key, "exec"))         snprintf(u->exec, sizeof u->exec, "%.500s", val);
+        else if (!strcmp(key, "restart")) {
+            if (parse_restart(val, &u->restart))
+                fprintf(stderr, "agryp: %s:%d: неизвестный restart '%s'\n", path, lineno, val);
+        }
+        else if (!strcmp(key, "budget-sec"))   u->budget_sec   = atoi(val);
+        else if (!strcmp(key, "cooldown-ms"))  u->cooldown_ms  = atoi(val);
+        else if (!strcmp(key, "max-attempts")) u->max_attempts = atoi(val);
+        else if (!strcmp(key, "token-budget")) u->token_budget = atoi(val);
+        else if (!strcmp(key, "mem-max-mb"))   u->mem_max_mb   = atoi(val);
+        else if (!strcmp(key, "finish"))       snprintf(u->finish, sizeof u->finish, "%.190s", val);
+        else fprintf(stderr, "agryp: %s:%d: неизвестный ключ '%s'\n", path, lineno, key);
+    }
+    fclose(f);
+    return 0;
+}
+
 static void load_units(const char *dir)
 {
     DIR *d = opendir(dir);
@@ -156,49 +199,16 @@ static void load_units(const char *dir)
     }
     while ((de = readdir(d)) != NULL && g_nunits < MAX_UNITS) {
         size_t len = strlen(de->d_name);
-        char path[1024], line[1024];
-        FILE *f;
+        char path[1024];
         unit_t u;
-        int lineno = 0;
 
         if (len < 7 || strcmp(de->d_name + len - 6, ".agent")) continue;
         snprintf(path, sizeof path, "%s/%s", dir, de->d_name);
-        f = fopen(path, "r");
-        if (!f) continue;
-
         memset(&u, 0, sizeof u);
         u.restart     = R_ALWAYS;
         u.cooldown_ms = 1000;
         snprintf(u.name, sizeof u.name, "%.*s", (int)(len - 6), de->d_name);
-
-        while (fgets(line, sizeof line, f)) {
-            char *s, *eq, *key, *val;
-            lineno++;
-            s = trim(line);
-            if (!*s || *s == '#') continue;
-            eq = strchr(s, '=');
-            if (!eq) {
-                fprintf(stderr, "agryp: %s:%d: строка без '=' пропущена\n", path, lineno);
-                continue;
-            }
-            *eq = '\0';
-            key = trim(s);
-            val = trim(eq + 1);
-            if      (!strcmp(key, "name"))         snprintf(u.name, sizeof u.name, "%.60s", val);
-            else if (!strcmp(key, "exec"))         snprintf(u.exec, sizeof u.exec, "%.500s", val);
-            else if (!strcmp(key, "restart")) {
-                if (parse_restart(val, &u.restart))
-                    fprintf(stderr, "agryp: %s:%d: неизвестный restart '%s'\n", path, lineno, val);
-            }
-            else if (!strcmp(key, "budget-sec"))   u.budget_sec   = atoi(val);
-            else if (!strcmp(key, "cooldown-ms"))  u.cooldown_ms  = atoi(val);
-            else if (!strcmp(key, "max-attempts")) u.max_attempts = atoi(val);
-            else if (!strcmp(key, "token-budget")) u.token_budget = atoi(val);
-            else if (!strcmp(key, "mem-max-mb"))   u.mem_max_mb   = atoi(val);
-            else fprintf(stderr, "agryp: %s:%d: неизвестный ключ '%s'\n", path, lineno, key);
-        }
-        fclose(f);
-
+        if (parse_unit_file(path, &u)) continue;
         if (!u.exec[0]) {
             fprintf(stderr, "agryp: %s: ключ exec не задан — юнит пропущен\n", path);
             continue;
@@ -257,6 +267,50 @@ static void spawn_unit(unit_t *u)
            (int)p, u->attempts, u->budget_sec);
 }
 
+/* ---------- хук финиша: чистота между жизнями (Ст. 17, школа s6) ---------- */
+
+/* После смерти попытки и до решения о рестарте супервизор исполняет строку
+ * `finish` юнита через /bin/sh -c — уборка за агентом (tmp, worktree, замки).
+ * Хук получает AGRY_UNIT, AGRY_EXIT_CODE, AGRY_BY_SIGNAL (учителя —
+ * ExecStopPost: $SERVICE_RESULT/$EXIT_CODE/$EXIT_STATUS). Группу хука не
+ * режем; упор по FINISH_TIMEOUT_MS — loud finish-timeout; исход хука
+ * лестницу перезапуска не трогает. */
+static void run_finish_hook(unit_t *u, int code, int sig)
+{
+    char ec[16], sg[16];
+    pid_t p;
+
+    if (!u->finish[0]) return;
+    p = fork();
+    if (p < 0) { log_ev(u, "finish", "\"error\":\"fork\",\"errno\":%d", errno); return; }
+    if (p == 0) {
+        snprintf(ec, sizeof ec, "%d", code);
+        snprintf(sg, sizeof sg, "%d", sig);
+        setenv("AGRY_UNIT", u->name, 1);
+        setenv("AGRY_EXIT_CODE", ec, 1);
+        setenv("AGRY_BY_SIGNAL", sg, 1);
+        execl("/bin/sh", "sh", "-c", u->finish, (char *)NULL);
+        _exit(127);
+    }
+    long long deadline = now_ms() + FINISH_TIMEOUT_MS;
+    for (;;) {
+        int status;
+        pid_t r = waitpid(p, &status, WNOHANG);
+        if (r == p) {
+            log_ev(u, "finish", "\"hook_exit\":%d",
+                   WIFEXITED(status) ? WEXITSTATUS(status) : -1);
+            return;
+        }
+        if (now_ms() >= deadline) {          /* упор — вслух (Ст. 6, Ст. 11) */
+            kill(p, SIGKILL);
+            waitpid(p, &status, 0);
+            log_ev(u, "finish-timeout", "\"ms\":%d", FINISH_TIMEOUT_MS);
+            return;
+        }
+        poll(NULL, 0, 20);
+    }
+}
+
 static void handle_exit(unit_t *u, int status)
 {
     int code = WIFEXITED(status)   ? WEXITSTATUS(status) : -1;
@@ -268,6 +322,8 @@ static void handle_exit(unit_t *u, int status)
 
     if (sig) log_ev(u, "exit", "\"by_signal\":%d,\"ok\":%s", sig, ok ? "true" : "false");
     else     log_ev(u, "exit", "\"code\":%d,\"ok\":%s",       code, ok ? "true" : "false");
+
+    run_finish_hook(u, code, sig);   /* Ст. 17: уборка между жизнями — всегда */
 
     if (g_stop) { u->state = U_STOPPED; return; }
 
@@ -283,7 +339,7 @@ static void handle_exit(unit_t *u, int status)
         u->fail_streak = 0;
 
     int want = ((u->restart == R_ALWAYS) ||
-                (u->restart == R_ON_FAILURE && !ok)) && !u->ctl_down;
+                (u->restart == R_ON_FAILURE && !ok)) && !u->ctl_down && !u->retired;
     int fused = want && !ok && !sup_killed && u->fail_streak >= CRASH_LIMIT;
 
     if (want && !fused && (u->max_attempts == 0 || u->attempts < u->max_attempts)) {
@@ -303,7 +359,8 @@ static void handle_exit(unit_t *u, int status)
         if (fused)
             log_ev(u, "failed", "\"reason\":\"crash-loop\",\"streak\":%d,\"attempts\":%d",
                    u->fail_streak, u->attempts);
-        log_ev(u, "stopped", "\"reason\":\"%s\"", u->ctl_down ? "ctl-down" :
+        log_ev(u, "stopped", "\"reason\":\"%s\"", u->retired ? "reload" :
+               u->ctl_down ? "ctl-down" :
                fused ? "crash-loop" : want ? "max-attempts" : "policy");
     }
 }
@@ -416,8 +473,14 @@ static void collect_tokens(void)
 
 /* agrypctl stop кладёт <dir>/.agryp-ctl/<unit>.down, start снимает: файловая
  * система и есть API (Ст. 13). Файл жив — попытка казнена TERM'ом группы,
- * политика перезапуска заморожена. Файл снят — ctl-up: рука оператора даёт
- * новую попытку с чистой лестницей. Чужое имя — ctl-drop: молчания нет. */
+ * политика перезапуска заморожена. TERM не убил за GRACE_MS — ctl-kill:
+ * stop обязан довести юнит до смерти (школа учителей — Ст. 13,
+ * docs/TEACHERS.md §VI). Файл снят — ctl-up: рука оператора даёт
+ * новую попытку с чистой лестницей. Чужое имя — ctl-drop: один раз на файл,
+ * не каждую итерацию (реестр последних 8 имён); молчания нет (Ст. 6). */
+static char g_drop_seen[8][NAME_LEN];      /* реестр ctl-drop: раз на файл */
+static int  g_drop_n = 0;
+
 static void poll_ctl(void)
 {
     DIR *d = opendir(g_ctl_dir);
@@ -431,12 +494,19 @@ static void poll_ctl(void)
         snprintf(name, sizeof name, "%.*s", (int)(len - 5), de->d_name);
         for (i = 0; i < g_nunits && strcmp(g_units[i].name, name); i++);
         if (i == g_nunits) {
-            log_ev(NULL, "ctl-drop", "\"file\":\"%.63s\"", de->d_name);
-            continue;                          /* чужое имя — вслух (Ст. 6) */
+            int j, said = 0;
+            for (j = 0; j < 8; j++)
+                if (g_drop_seen[j][0] && !strcmp(g_drop_seen[j], name)) { said = 1; break; }
+            if (!said) {
+                snprintf(g_drop_seen[g_drop_n++ % 8], NAME_LEN, "%.63s", name);
+                log_ev(NULL, "ctl-drop", "\"file\":\"%.63s\"", de->d_name);
+            }
+            continue;                          /* чужое имя — вслух, но раз на файл */
         }
         seen[i] = 1; unit_t *u = &g_units[i];
         if (!u->ctl_down) {                    /* файл появился: казнь и заморозка */
-            u->ctl_down = 1; log_ev(u, "ctl-down", NULL);
+            u->ctl_down = 1; u->ctl_since_ms = now_ms();
+            log_ev(u, "ctl-down", NULL);
             if (u->state == U_RUNNING && u->pid > 0) {
                 u->sup_kill = 1;               /* казнь закона лестницу не растит */
                 if (kill(-u->pgid, SIGTERM) < 0) kill(u->pid, SIGTERM);
@@ -452,6 +522,107 @@ static void poll_ctl(void)
             if (u->state != U_RUNNING) spawn_unit(u);   /* минуя cooldown */
         }
     }
+    for (i = 0; i < g_nunits; i++) {           /* Ст. 13: stop обязан добить */
+        unit_t *u = &g_units[i];
+        if ((u->ctl_down || u->retired) && u->state == U_RUNNING && u->pid > 0 &&
+            now_ms() - u->ctl_since_ms > GRACE_MS) {
+            u->sup_kill = 1;
+            log_ev(u, "ctl-kill", "\"grace_ms\":%d,\"why\":\"%s\"",
+                   GRACE_MS, u->ctl_down ? "ctl" : "reload");
+            if (kill(-u->pgid, SIGKILL) < 0) kill(u->pid, SIGKILL);
+        }
+    }
+}
+
+/* ---------- SIGHUP: перечитать договоры без кровопролития (Ст. 18) ---------- */
+
+/* Школа daemon-reload (учителя — docs/TEACHERS.md §VI); прямой контраст — supervisord, чей SIGHUP
+ * останавливает ВСЕ процессы. Здесь: живые попытки не умирают; изменённые
+ * ключи действуют со следующей попытки, а дедлайн бюджета пересчитывается
+ * сразу — от начавшейся попытки; новый *.agent — юнит стартует; удалённый
+ * файл — graceful-stop по Ст. 9 (казнь закона, лестницу не растит, stopped
+ * reason reload, упрямого добьёт эскалация Ст. 13). Упёрся в MAX_UNITS —
+ * loud reload-skip (Ст. 11). */
+static void reload_units(const char *dir)
+{
+    DIR *d = opendir(dir);
+    struct dirent *de;
+    char fresh[MAX_UNITS][NAME_LEN];
+    int added = 0, changed = 0, removed = 0, n_fresh = 0, i, j;
+
+    if (!d) { log_ev(NULL, "reload", "\"error\":\"opendir\",\"errno\":%d", errno); return; }
+    memset(fresh, 0, sizeof fresh);
+    while ((de = readdir(d)) != NULL) {
+        size_t len = strlen(de->d_name);
+        char path[1024];
+        unit_t u;
+
+        if (len < 7 || strcmp(de->d_name + len - 6, ".agent")) continue;
+        snprintf(path, sizeof path, "%s/%s", dir, de->d_name);
+        memset(&u, 0, sizeof u);
+        u.restart     = R_ALWAYS;
+        u.cooldown_ms = 1000;
+        snprintf(u.name, sizeof u.name, "%.*s", (int)(len - 6), de->d_name);
+        if (parse_unit_file(path, &u) || !u.exec[0]) continue;
+        if (n_fresh < MAX_UNITS) snprintf(fresh[n_fresh++], NAME_LEN, "%.63s", u.name);
+        for (i = 0; i < g_nunits && strcmp(g_units[i].name, u.name); i++);
+        if (i < g_nunits) {                    /* юнит жив: сверяем договор */
+            unit_t *t = &g_units[i];
+            int differs = strcmp(t->exec, u.exec) || t->restart != u.restart ||
+                          t->budget_sec != u.budget_sec ||
+                          t->cooldown_ms != u.cooldown_ms ||
+                          t->max_attempts != u.max_attempts ||
+                          t->token_budget != u.token_budget ||
+                          t->mem_max_mb != u.mem_max_mb ||
+                          strcmp(t->finish, u.finish);
+            int was_retired = t->retired;
+
+            t->retired = 0;                    /* файл вернули — юнит прощён */
+            if (was_retired && t->state == U_STOPPED) {
+                t->state = U_COOLDOWN; t->next_start_ms = 0;   /* жизнь с чистой попыткой */
+            }
+            if (!differs) continue;            /* перечитали без изменений — не «изменён» */
+            int old_budget = t->budget_sec;
+
+            t->restart = u.restart;          t->budget_sec   = u.budget_sec;
+            t->cooldown_ms = u.cooldown_ms;  t->max_attempts = u.max_attempts;
+            t->token_budget = u.token_budget; t->mem_max_mb = u.mem_max_mb;
+            memcpy(t->exec, u.exec, sizeof t->exec);
+            memcpy(t->finish, u.finish, sizeof t->finish);
+            if (t->state == U_RUNNING && t->budget_sec != old_budget && t->budget_sec > 0)
+                t->deadline_ms = t->run_started_ms +
+                                 (long long)t->budget_sec * 1000LL;
+            changed++;
+            continue;
+        }
+        if (g_nunits >= MAX_UNITS) {           /* Ст. 11: потолок — вслух */
+            log_ev(NULL, "reload-skip", "\"unit\":\"%.63s\",\"reason\":\"MAX_UNITS\"", u.name);
+            continue;
+        }
+        u.state = U_COOLDOWN; u.next_start_ms = 0;   /* старт в этой же итерации */
+        g_units[g_nunits++] = u;
+        added++;
+    }
+    closedir(d);
+    for (i = 0; i < g_nunits; i++) {           /* файл удалён — юнит уходит */
+        unit_t *u = &g_units[i];
+        int known = 0;
+
+        if (u->retired) continue;
+        for (j = 0; j < n_fresh; j++)
+            if (!strcmp(fresh[j], u->name)) { known = 1; break; }
+        if (known) continue;
+        u->retired = 1; u->ctl_since_ms = now_ms();
+        removed++;
+        if (u->state == U_RUNNING && u->pid > 0) {
+            u->sup_kill = 1;                   /* казнь закона, лестницу не растит */
+            if (kill(-u->pgid, SIGTERM) < 0) kill(u->pid, SIGTERM);
+        } else if (u->state == U_COOLDOWN) {
+            u->state = U_STOPPED;              /* рестарт не состоялся — и не станет */
+        }
+    }
+    log_ev(NULL, "reload", "\"added\":%d,\"changed\":%d,\"removed\":%d",
+           added, changed, removed);
 }
 
 /* ---------- память: клетка cgroup v2 в собственной ветке (Ст. 15) ---------- */
@@ -505,6 +676,8 @@ static void on_signal(int s) { (void)s; g_stop = 1; }
 
 static void on_status(int s) { (void)s; }   /* пинг лишь будит poll() — EINTR */
 
+static void on_reload(int s) { (void)s; g_reload = 1; }   /* Ст. 18: перечитать договоры */
+
 int main(int argc, char **argv)
 {
     const char *dir = "examples";
@@ -538,6 +711,8 @@ int main(int argc, char **argv)
     sigaction(SIGINT,  &sa, NULL);
     sa.sa_handler = on_status;
     sigaction(SIGUSR1, &sa, NULL);   /* Ст. 13: пинг будит цикл, статус и так свежий */
+    sa.sa_handler = on_reload;
+    sigaction(SIGHUP,  &sa, NULL);   /* Ст. 18: перечитать каталог юнитов без крови */
     signal(SIGPIPE, SIG_IGN);
 
     /* O_APPEND на открытый файл stdout: флаг наследуется детьми через fork+exec,
@@ -567,13 +742,14 @@ int main(int argc, char **argv)
 
         write_status();                /* Ст. 13: файл статуса всегда свежий */
         reap();
+        if (g_reload) { g_reload = 0; reload_units(dir); }   /* Ст. 18: SIGHUP */
         poll_ctl();                    /* Виток 5: файлы-договоры — казнь/заморозка/ctl-up */
 
         /* выход из cooldown */
         long long now = now_ms();
         for (i = 0; i < g_nunits; i++) {
             unit_t *u = &g_units[i];
-            if (u->state == U_COOLDOWN && now >= u->next_start_ms && !u->ctl_down)
+            if (u->state == U_COOLDOWN && now >= u->next_start_ms && !u->ctl_down && !u->retired)
                 spawn_unit(u);
         }
 

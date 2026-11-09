@@ -25,7 +25,10 @@
      спавнов юнита не бывает.
   9. ctl-дисциплина (Виток 5, Ст. 13): spawn при живом .down невозможен;
      ctl-up без ctl-down — ложь; казнённая ctl-down попытка обязана
-     получить exit и остановиться с reason ctl-down.
+     получить exit и остановиться с reason ctl-down;
+ 10. виток 6: каждый ctl-kill подтверждён exit (эскалация не мажет);
+     хук финиша (Ст. 17): у юнита с ключом finish число finish(+finish-
+     timeout) равно числу exit; у юнита без ключа — ноль, иначе журнал лжёт.
 
 Успех: печатает OK и сводку, код выхода 0. Иначе — список нарушений, код 1.
 """
@@ -34,10 +37,12 @@ import json
 import os
 import sys
 
-ALLOWED_AFTER_SHUTDOWN = {"exit", "summary", "uptime-ms", "reap-orphan"}
+ALLOWED_AFTER_SHUTDOWN = {"exit", "summary", "uptime-ms", "reap-orphan",
+                          "finish", "finish-timeout"}
 VALID_EVENTS = {
     "boot", "spawn", "spawn-fail", "exit", "restart", "stopped", "failed",
-    "budget-kill", "token-kill", "ctl-down", "ctl-up", "ctl-drop",
+    "budget-kill", "token-kill", "ctl-down", "ctl-up", "ctl-drop", "ctl-kill",
+    "reload", "reload-skip", "finish", "finish-timeout",
     "cgroup-skip", "report-drop", "subreaper", "reap-orphan", "shutdown",
     "summary", "uptime-ms",
 }
@@ -50,10 +55,12 @@ def fail(errors, idx, msg):
     errors.append(f"строка {idx + 1}: {msg}")
 
 
-def load_unit_configs(repo_root):
-    """cooldown-ms из examples/*.agent — база лестницы (Ст. 8)."""
+def load_unit_configs(repo_root, units_dir=None):
+    """ключи юнитов: база лестницы (Ст. 8) и finish-конфиг (Ст. 17).
+    units_dir — каталог юнитов конкретного демо; по умолчанию examples/."""
+    base = os.path.join(repo_root, units_dir) if units_dir else os.path.join(repo_root, "examples")
     cfgs = {}
-    for p in sorted(glob.glob(os.path.join(repo_root, "examples", "*.agent"))):
+    for p in sorted(glob.glob(os.path.join(base, "*.agent"))):
         cfg = {}
         with open(p, encoding="utf-8") as f:
             for ln in f:
@@ -66,9 +73,10 @@ def load_unit_configs(repo_root):
     return cfgs
 
 
-def main(path):
+def main(path, units_dir=None):
     errors = []
-    cfgs = load_unit_configs(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    cfgs = load_unit_configs(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                             units_dir)
     with open(path, "rb") as f:
         raw = f.read()
 
@@ -130,7 +138,9 @@ def main(path):
             continue
         u = units.setdefault(name, {
             "spawns": [], "exits": [], "restarts": 0, "stopped": 0,
-            "budget_kills": 0, "token_kills": 0, "running": False, "ok_exits": 0,
+            "budget_kills": 0, "token_kills": 0, "ctl_kills": 0,
+            "finishes": 0, "finish_timeouts": 0,
+            "running": False, "ok_exits": 0,
             "streak": None, "failed": False,
             "ctl_down": False, "ctl_e0": None, "expect_stop": None,
         })
@@ -198,6 +208,17 @@ def main(path):
             u["budget_kills"] += 1
         elif et == "token-kill":
             u["token_kills"] += 1
+        elif et == "ctl-kill":
+            u["ctl_kills"] += 1
+        elif et == "finish":
+            u["finishes"] += 1
+        elif et == "finish-timeout":
+            u["finish_timeouts"] += 1
+        elif et == "reload":
+            for fld in ("added", "changed", "removed"):
+                v = ev.get(fld)
+                if not isinstance(v, int) or v < 0:
+                    fail(errors, idx, f"reload: поле {fld}={v!r} — не счёт")
         elif et == "summary":
             u.setdefault("summary", []).append((idx, ev))
 
@@ -206,11 +227,19 @@ def main(path):
         if attempts != list(range(1, len(attempts) + 1)):
             fail(errors, 0, f"{name}: номера попыток не подряд: {attempts}")
 
-        # каждый budget-kill / token-kill → последующий exit того же юнита
+        # каждый budget-kill / token-kill / ctl-kill → последующий exit того же юнита
         for kidx, kev in events:
-            if kev.get("unit") == name and kev["event"] in ("budget-kill", "token-kill"):
+            if kev.get("unit") == name and kev["event"] in ("budget-kill", "token-kill", "ctl-kill"):
                 if not any(eidx > kidx for eidx, _ in u["exits"]):
                     fail(errors, kidx, f"{name}: {kev['event']} без последующего exit")
+
+        # Ст. 17: хук финиша живёт 1:1 со смертями попытки — и не иначе
+        has_finish = "finish" in cfgs.get(name, {})
+        n_hooks = u["finishes"] + u["finish_timeouts"]
+        if has_finish and n_hooks != len(u["exits"]):
+            fail(errors, 0, f"{name}: finish-хуков {n_hooks}, а exit'ов {len(u['exits'])} — 1:1 нарушен")
+        if not has_finish and n_hooks > 0:
+            fail(errors, 0, f"{name}: {n_hooks} finish-событий у юнита без finish-конфига — журнал лжёт")
 
         if len(u["spawns"]) != len(u["exits"]):
             fail(errors, 0, f"{name}: spawn'ов {len(u['spawns'])}, exit'ов {len(u['exits'])}")
@@ -271,7 +300,12 @@ def report(errors, events=None, units=None, agent_lines=0):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("usage: audit_transcript.py <demo-transcript.jsonl>", file=sys.stderr)
+    args = sys.argv[1:]
+    units_dir = None
+    if len(args) == 3 and args[1] == "--units":
+        units_dir = args[2]
+        args = args[:1]
+    if len(args) != 1:
+        print("usage: audit_transcript.py <demo-transcript.jsonl> [--units DIR]", file=sys.stderr)
         sys.exit(2)
-    sys.exit(main(sys.argv[1]))
+    sys.exit(main(args[0], units_dir))
