@@ -1,24 +1,24 @@
-{"ts":"2026-11-09T21:19:12Z","up_ms":0,"event":"boot","units":1,"dir":"demo/finish-units","rotate_bytes":262144}
-{"ts":"2026-11-09T21:19:12Z","up_ms":0,"unit":"sweeper","event":"unit-sign","old":null,"new":"38ee5162cf74589048c282569ebf4038ddf25256f8e7b88d714f3d150bcdb33d","mtime":1794259152}
-{"ts":"2026-11-09T21:19:12Z","up_ms":0,"event":"subreaper","on":true}
-{"ts":"2026-11-09T21:19:12Z","up_ms":0,"unit":"sweeper","event":"spawn","pid":4189,"attempt":1,"budget_sec":0,"jailed":0}
-[sweeper] попытка 4190 началась
+{"ts":"2026-11-09T21:26:10Z","up_ms":0,"event":"boot","units":1,"dir":"demo/finish-units","rotate_bytes":262144}
+{"ts":"2026-11-09T21:26:10Z","up_ms":0,"unit":"sweeper","event":"unit-sign","old":null,"new":"38ee5162cf74589048c282569ebf4038ddf25256f8e7b88d714f3d150bcdb33d","mtime":1794259570}
+{"ts":"2026-11-09T21:26:10Z","up_ms":0,"event":"subreaper","on":true}
+{"ts":"2026-11-09T21:26:10Z","up_ms":1,"unit":"sweeper","event":"spawn","pid":6011,"attempt":1,"budget_sec":0,"jailed":0}
+[sweeper] попытка 6012 началась
 [sweeper] работа окончена — падаю (код 3)
-{"ts":"2026-11-09T21:19:14Z","up_ms":2004,"unit":"sweeper","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-09T21:19:14Z","up_ms":2029,"unit":"sweeper","event":"finish","code":0}
-{"ts":"2026-11-09T21:19:14Z","up_ms":2029,"unit":"sweeper","event":"restart","next_attempt":2,"backoff_ms":500,"streak":1}
-{"ts":"2026-11-09T21:19:15Z","up_ms":2531,"unit":"sweeper","event":"spawn","pid":4193,"attempt":2,"budget_sec":0,"jailed":0}
-[sweeper] попытка 4194 началась
+{"ts":"2026-11-09T21:26:12Z","up_ms":2005,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-09T21:26:12Z","up_ms":2030,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-09T21:26:12Z","up_ms":2030,"unit":"sweeper","event":"restart","next_attempt":2,"backoff_ms":500,"streak":1}
+{"ts":"2026-11-09T21:26:13Z","up_ms":2531,"unit":"sweeper","event":"spawn","pid":6017,"attempt":2,"budget_sec":0,"jailed":0}
+[sweeper] попытка 6018 началась
 [sweeper] работа окончена — падаю (код 3)
-{"ts":"2026-11-09T21:19:17Z","up_ms":4536,"unit":"sweeper","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-09T21:19:17Z","up_ms":4561,"unit":"sweeper","event":"finish","code":0}
-{"ts":"2026-11-09T21:19:17Z","up_ms":4561,"unit":"sweeper","event":"restart","next_attempt":3,"backoff_ms":1000,"streak":2}
-{"ts":"2026-11-09T21:19:18Z","up_ms":5563,"unit":"sweeper","event":"spawn","pid":4197,"attempt":3,"budget_sec":0,"jailed":0}
-[sweeper] попытка 4198 началась
+{"ts":"2026-11-09T21:26:15Z","up_ms":4535,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-09T21:26:15Z","up_ms":4560,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-09T21:26:15Z","up_ms":4560,"unit":"sweeper","event":"restart","next_attempt":3,"backoff_ms":1000,"streak":2}
+{"ts":"2026-11-09T21:26:16Z","up_ms":5562,"unit":"sweeper","event":"spawn","pid":6025,"attempt":3,"budget_sec":0,"jailed":0}
+[sweeper] попытка 6026 началась
 [sweeper] работа окончена — падаю (код 3)
-{"ts":"2026-11-09T21:19:20Z","up_ms":7567,"unit":"sweeper","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-09T21:19:20Z","up_ms":7593,"unit":"sweeper","event":"finish","code":0}
-{"ts":"2026-11-09T21:19:20Z","up_ms":7593,"unit":"sweeper","event":"restart","next_attempt":4,"backoff_ms":2000,"streak":3}
-{"ts":"2026-11-09T21:19:21Z","up_ms":9000,"event":"shutdown","reason":"signal"}
-{"ts":"2026-11-09T21:19:21Z","up_ms":9000,"unit":"sweeper","event":"summary","attempts":3,"exits_ok":0,"exits_fail":3,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":3}
-{"ts":"2026-11-09T21:19:21Z","up_ms":9000,"event":"uptime-ms","value":9000}
+{"ts":"2026-11-09T21:26:18Z","up_ms":7566,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-09T21:26:18Z","up_ms":7592,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-09T21:26:18Z","up_ms":7592,"unit":"sweeper","event":"restart","next_attempt":4,"backoff_ms":2000,"streak":3}
+{"ts":"2026-11-09T21:26:19Z","up_ms":9001,"event":"shutdown","reason":"signal"}
+{"ts":"2026-11-09T21:26:19Z","up_ms":9001,"unit":"sweeper","event":"summary","attempts":3,"exits_ok":0,"exits_fail":3,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":3}
+{"ts":"2026-11-09T21:26:19Z","up_ms":9001,"event":"uptime-ms","value":9001}
