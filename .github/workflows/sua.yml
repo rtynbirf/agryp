@@ -1,0 +1,117 @@
+name: sua
+
+# SUA — Stability Under Agents: первый CI-замер стабильности репо под
+# агентной нагрузкой (протокол SUA v0.1, рой ПОЛИМАТ, 2026-11-07; схема
+# записи — SUA_RECORD: subject/config/metrics/gates/not_measured).
+# Ниша подтверждена срезом 2026-11-09: в AAIF 10 проектов (Agent Skills,
+# Open Responses, OpenEnv, OpenSandbox...), ни один не меряет процессный
+# слой и стабильность под агентами; побеги из сэндбоксов (OpenAI 07,
+# Gemini/Irregular 09) — тот же разрыв.
+# Закон дома (blood-genome): запуск — СОБЫТИЕ, никогда расписание.
+# Стенограмма бенча — docs/bench/bench-transcript.jsonl (make bench);
+# SUA-запись пишется в docs/sua/ — паттерн дома: транскрипты в репо.
+# Граница среды: на GH runner нет cgroups/CAP_SYS_ADMIN для jail-клетки —
+# jail честно уходит в not_measured (протокол v0.1, поле среды), ферма
+# M1–M7 нативна и от привилегий не зависит.
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sua:
+    name: "sua — ферма 100 агентов, kill -9 супервизора, сироты, запись"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: "make agryp — сборка (gcc -Wall -Wextra -std=c99)"
+        run: make agryp
+
+      - name: "make demo — база: юниты до RUNNING, сироты 0"
+        run: make demo
+
+      - name: "make bench — ферма 100 агентов, метрики M1–M7"
+        run: make bench
+
+      - name: "SUA-запись — сводка прогона в docs/sua/ (протокол v0.1)"
+        run: |
+          mkdir -p docs/sua
+          D=$(date -u +%F)
+          F="docs/sua/SUA_RECORD_${D}.json"
+          python3 - "$F" <<'PYEOF'
+          import json, os, re, subprocess, datetime, sys
+          tr_path = "docs/bench/bench-transcript.jsonl"
+          events = []
+          for line in open(tr_path, encoding="utf-8"):
+              line = line.strip()
+              if not line:
+                  continue
+              try:
+                  events.append(json.loads("{" + line.split("{", 1)[1]))
+              except Exception:
+                  pass
+          by_metric = {}
+          for e in events:
+              m = e.get("metric")
+              if m:
+                  by_metric[m] = e
+          m1, m2, m3, m5, m6, m7 = (by_metric.get(k, {}) for k in ("M1", "M2", "M3", "M5", "M6", "M7"))
+          commit = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], text=True).strip()
+          host = os.uname().machine + " " + subprocess.check_output(["uname", "-r"], text=True).strip()
+          core_loc = sum(1 for _ in open("src/agryp.c", encoding="utf-8", errors="replace"))
+          o2 = m2.get("orphans_after_kill9", -1)
+          o5 = m5.get("orphans_after_5s", -1)
+          g7 = m7.get("grandchildren_orphans", -1)
+          w6b, w6a = m6.get("workers_before", -1), m6.get("workers_after", -1)
+          record = {
+              "sua_version": "0.1",
+              "record_type": "process_layer",
+              "measured_at_utc": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "source": "make bench (CI, GH runner)",
+              "subject": {"commit": commit, "core_loc": core_loc, "host": host, "cap_sys_admin": False},
+              "config": {"n_agents": m3.get("agents", 100), "window_s": 30},
+              "metrics": {
+                  "binary_bytes": m1.get("binary_bytes"),
+                  "dyn_deps": m1.get("dyn_deps"),
+                  "supervisor_rss_kb_median_m2": m2.get("rss_kb_median"),
+                  "supervisor_rss_kb_median_m3_farm": m3.get("rss_kb_median"),
+                  "journal_bytes_delta_m4": by_metric.get("M4", {}).get("journal_bytes_delta"),
+                  "workers_before_m6": w6b,
+                  "workers_after_m6": w6a,
+                  "orphans_after_kill9_m2": o2,
+                  "orphans_after_5s_m5": o5,
+                  "m7_grandchildren_orphans": g7,
+                  "m7_verdict": m7.get("verdict"),
+              },
+              "gates": {
+                  "orphans_zero": (o2 == 0 and o5 == 0),
+                  "no_worker_leak_m6": (w6b == w6a),
+                  "m7_boundary_recorded": ("grandchildren" in str(m7.get("verdict", "")) or g7 is not None),
+              },
+              "not_measured": [
+                  "jail (cgroups недоступны на GH runner — граница среды, протокол v0.1)",
+                  "tini_median_ms (в этом прогоне не замерялся)",
+                  "restart_ladder_ms (в этом прогоне не замерялся)",
+              ],
+          }
+          with open(sys.argv[1], "w", encoding="utf-8") as f:
+              json.dump(record, f, ensure_ascii=False, indent=2)
+              f.write("\n")
+          print("SUA-запись:", sys.argv[1])
+          print(json.dumps(record["gates"], ensure_ascii=False))
+          PYEOF
+
+      - name: "коммит записи (идемпотентно: одна запись на день)"
+        run: |
+          git config user.name "sua-bot"
+          git config user.email "sua-bot@rtynbirf.local"
+          git add docs/sua/
+          if git diff --cached --quiet; then
+            echo "запись за сегодня уже есть — идемпотентный пропуск"
+          else
+            git commit -m "sua: запись стабильности под агентами $(date -u +%F) (CI, протокол v0.1)"
+            git push
+          fi
