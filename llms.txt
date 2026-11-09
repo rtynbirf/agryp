@@ -44,3 +44,4 @@
 - [GitHub](https://github.com/rtynbirf/agryp)
 - [README](https://github.com/rtynbirf/agryp/blob/main/README.md)
 - [raw llms.txt](https://raw.githubusercontent.com/rtynbirf/agryp/main/llms.txt)
+- [PULSE.md](PULSE.md): живой пульс репозитория — прогоны, пломбы, здоровье.
