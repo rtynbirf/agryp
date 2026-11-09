@@ -145,6 +145,30 @@ README-числа («11 MB binary», «500+ agents on 4 GB RAM») осталис
 уснул). zeptopm — единственный процессный сверстник, уснувший целиком
 (2026-04). runit — вне GitHub (smarden.org).
 
+
+### Сверка учителей витка 11 (2026-11-10, перед мутлением — как велит порядок витка)
+
+- s6 `timeout-finish` (skarnet, service directories): потолок жизни
+  `./finish` — файл в каталоге службы, дефолт **5000 мс** — ровно наш
+  `FINISH_MS`. Канон: настройка per-service при щедром дефолте —
+  стал тикетом 015 (ключ `finish-timeout-ms`), спор 2000-vs-5000 из
+  свёртки параллельной вилки закрыт настройкой.
+- s6 `notifywhenup` / `notification-fd`: готовность службы — запись
+  в дескриптор-пайп, супервизор читает канал. Канон: readiness есть,
+  но канал — пайп.
+- `sd_notify(3)` READY=1 (man7, 2026-09): готовность/окончание reload —
+  через unix-сокет `$NOTIFY_SOCKET`; `Type=notify-reload` обязывает
+  подтвердить reload повторным READY=1. Канон: readiness есть, но
+  канал — сокет; reload-подтверждение — дверь тикету 017+
+  (`reload-done`, предложение 2 свёртки).
+- Индустрия строит мосты между каналами (notify-fd: релей sd_notify →
+  ready-fd) — файлов с готовностью никто не делает. Ниша тикета 016:
+  `AGRY_READY_PATH`, готов = создал файл; читается тем же языком, что
+  статус/ctl/метрики (Ст. 13).
+- Дефолты останова мира без изменений: Docker 10 c, ECS 30 c
+  (GRACE_MS 3000 — наш заявленный потолок, Ст. 11; не новый учитель —
+  перепроверка 2026-11-10).
+
 ## Источники
 
 Учителя:
@@ -189,3 +213,8 @@ README-числа («11 MB binary», «500+ agents on 4 GB RAM») осталис
 - openhuman: https://github.com/tinyhumansai/openhuman
 - agent-orchestrator: https://github.com/OrchestratorInc/agent-orchestrator
 - supervisor (учитель, верное место на GitHub): https://github.com/Supervisor/supervisor
+
+- s6 service directories (timeout-finish, дефолт 5000): https://skarnet.org/software/s6/servicedir.html
+- s6 notifywhenup / notification-fd: https://skarnet.org/software/s6/notifywhenup.html
+- sd_notify(3), man7 (2026-09): https://man7.org/linux/man-pages/man3/sd_notify.3.html
+- notify-fd (релей sd_notify → ready-fd): https://sr.ht/~whynothugo/notify-fd

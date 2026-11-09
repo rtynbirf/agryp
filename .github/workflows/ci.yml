@@ -39,6 +39,8 @@ jobs:
         run: make audit-reload
       - name: make audit-finish
         run: make audit-finish
+      - name: make audit-ready
+        run: make audit-ready
       - name: make audit-stream
         run: make audit-stream
 
@@ -80,6 +82,8 @@ jobs:
         run: make demo-ctl
       - name: make demo-finish
         run: make demo-finish
+      - name: make demo-ready
+        run: make demo-ready
       - name: make demo-reload
         run: make demo-reload
       - name: make demo-stream

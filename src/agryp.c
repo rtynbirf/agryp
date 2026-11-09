@@ -40,7 +40,7 @@
 #define SUSTAIN_MS     10000 /* «проработал» гасит лестницу перезапуска (Ст. 8) */
 #define BACKOFF_CAP_MS 30000 /* потолок лестницы перезапуска (Ст. 8) */
 #define CRASH_LIMIT    5     /* подряд своих смертей → терминальный failed (Ст. 8) */
-#define FINISH_MS 5000   /* потолок жизни finish-хука: упор — вслух (Ст. 11, Виток 6) */
+#define FINISH_MS 5000   /* дефолт потолка finish-хука (s6 timeout-finish): ключ юнита перекрывает (Виток 11) */
 #define ROTATE_BYTES  262144 /* Виток 10: потолок журнала до ротации (может --rotate-bytes) */
 #define ROTATE_KEEP   3      /* Виток 10: сколько отрезанных хвостов хранить */
 
@@ -59,6 +59,7 @@ typedef struct {
     int       mem_max_mb;    /* 0 = без клетки: memory.max cgroups v2 (Ст. 15) */
     int       jail;          /* 0|1=pid|2=mount|3 — комнаты имён попытки (Виток 7) */
     char      finish[256];   /* хук уборки между смертью и рестартом (Виток 6, школа s6) */
+    int       finish_timeout_ms; /* потолок хука per-unit, 0→FINISH_MS (Виток 11, s6 timeout-finish) */
     /* рантайм */
     state_t   state;
     pid_t     pid;
@@ -79,6 +80,8 @@ typedef struct {
     long long ctl_since_ms;  /* с каких пор жив .down: TERM не убил за GRACE_MS — казнь (Виток 6) */
     int       retired;       /* файл юнита удалён из каталога — жизни больше нет (Виток 6) */
     long long run_started_ms; /* старт текущей попытки: «проработал» меряем от неё */
+    int       ready;          /* Виток 11: попытка объявила готовность ready-файлом */
+    long long ready_ms;       /* Виток 11: задержка готовности от старта попытки */
     char      sign[65];      /* Виток 10: сигнатура договора — sha256 байт *.agent */
     long long sign_mtime;    /* Виток 10: mtime договора на момент подписи */
 } unit_t;
@@ -91,6 +94,7 @@ static char g_status_path[1152];  /* Ст. 13: снимок состояния �
 static char g_report_path[1152];  /* Ст. 14: сюда агенты отдают burn-rate */
 static char g_cgbase[CG_BASE_LEN]; /* Ст. 15: наша делегированная ветка cgroup v2 */
 static char g_ctl_dir[1152];  /* agrypctl: файлы-договоры вместо сокетов (Ст. 13) */
+static char g_units_dir[1024]; /* Виток 11: каталог юнитов — от него строится AGRY_READY_PATH */
 static char g_dropped[8][NAME_LEN]; /* Виток 6: ctl-drop не шумит — реестр последних 8 имён */
 static int  g_ndropped = 0;
 static long long g_t0;
@@ -375,6 +379,7 @@ static int parse_unit_file(const char *path, const char *stem, size_t stem_len, 
     memset(u, 0, sizeof *u);
     u->restart     = R_ALWAYS;
     u->cooldown_ms = 1000;
+    u->finish_timeout_ms = FINISH_MS;      /* Виток 11: дефолт канона s6 (5000) */
     snprintf(u->name, sizeof u->name, "%.*s", (int)stem_len, stem);
     while (fgets(line, sizeof line, f)) {
         char *s, *eq, *key, *val;
@@ -402,6 +407,11 @@ static int parse_unit_file(const char *path, const char *stem, size_t stem_len, 
         else if (!strcmp(key, "mem-max-mb"))   u->mem_max_mb   = atoi(val);
         else if (!strcmp(key, "jail"))         u->jail         = parse_jail(val);
         else if (!strcmp(key, "finish"))       snprintf(u->finish, sizeof u->finish, "%.250s", val);
+        else if (!strcmp(key, "finish-timeout-ms")) {
+            u->finish_timeout_ms = atoi(val);  /* 0/минус — не «без лимита»: бесконечный */
+            if (u->finish_timeout_ms <= 0)     /* хук нарушает Ст. 11 — дефолт ядра (Виток 11) */
+                u->finish_timeout_ms = FINISH_MS;
+        }
         else fprintf(stderr, "agryp: %s:%d: неизвестный ключ '%s'\n", path, lineno, key);
     }
     fclose(f);
@@ -488,6 +498,11 @@ static void spawn_unit(unit_t *u)
         setpgid(0, 0);                         /* своя группа: режем семью целиком */
         setenv("AGRY_UNIT", u->name, 1);       /* договор hook'а: кто ты и куда отчитываться */
         setenv("AGRY_TOKEN_REPORT", g_report_path, 1);
+        {   /* Виток 11 (тикет 016): readiness без сокетов — канал объявлен env-договором */
+            char rp[1152];
+            snprintf(rp, sizeof rp, "%.500s/%.63s.ready", g_units_dir, u->name);
+            setenv("AGRY_READY_PATH", rp, 1);  /* создал файл — попытка готова (Ст. 13) */
+        }
         if (jmask & 1) {                       /* терминал комнаты глух: TERM проксируется */
             signal(SIGTERM, jail_term);
             signal(SIGINT,  jail_term);
@@ -514,6 +529,12 @@ static void spawn_unit(unit_t *u)
         _exit(127);
     }
     setpgid(p, p);                             /* и в родителе — закрываем гонку */
+    {   /* Виток 11: чистота между жизнями — чужой ready-файл попытку не переживёт */
+        char rp[1152];
+        snprintf(rp, sizeof rp, "%.500s/%.63s.ready", g_units_dir, u->name);
+        unlink(rp);
+    }
+    u->ready = 0; u->ready_ms = 0;             /* новая попытка — готовность с нуля */
     u->pid         = p;
     u->pgid        = p;
     u->state       = U_RUNNING;
@@ -550,13 +571,13 @@ static void run_finish(unit_t *u, int code, int sig)
         execl("/bin/sh", "sh", "-c", u->finish, (char *)NULL);
         _exit(127);
     }
-    deadline = now_ms() + FINISH_MS;
+    deadline = now_ms() + u->finish_timeout_ms;   /* потолок per-unit (Виток 11) */
     while ((r = waitpid(p, &status, WNOHANG)) == 0 && now_ms() < deadline)
         poll(NULL, 0, 25);
     if (r == 0) {                              /* упёрся в потолок — говорим вслух */
         kill(p, SIGKILL);
         waitpid(p, &status, 0);
-        log_ev(u, "finish", "\"timeout\":true");
+        log_ev(u, "finish", "\"timeout\":true,\"ms\":%d", u->finish_timeout_ms);
         return;
     }
     if (r < 0) { log_ev(u, "finish", "\"error\":\"waitpid\",\"errno\":%d", errno); return; }
@@ -574,6 +595,12 @@ static void handle_exit(unit_t *u, int status)
 
     if (ok) u->exits_ok++; else u->exits_fail++;
     u->pid = 0;
+    {   /* Виток 11: мёртвая попытка не остаётся «готовой» — договор снят (Ст. 13) */
+        char rp[1152];
+        snprintf(rp, sizeof rp, "%.500s/%.63s.ready", g_units_dir, u->name);
+        unlink(rp);
+    }
+    u->ready = 0; u->ready_ms = 0;
 
     if (sig) log_ev(u, "exit", "\"by_signal\":%d,\"ok\":%s", sig, ok ? "true" : "false");
     else     log_ev(u, "exit", "\"code\":%d,\"ok\":%s",       code, ok ? "true" : "false");
@@ -667,11 +694,13 @@ static void write_status(void)
                    "\"budget_sec\":%d,\"token_budget\":%d,\"tokens\":%d,"
                    "\"mem_max_mb\":%d,\"jail\":%d,\"attempts\":%d,\"exits_ok\":%d,"
                    "\"exits_fail\":%d,\"budget_kills\":%d,\"token_kills\":%d,"
-                   "\"restarts\":%d,\"streak\":%d,\"ctl_down\":%d}\n",
+                   "\"restarts\":%d,\"streak\":%d,\"ready\":%d,\"ready_ms\":%lld,"
+                   "\"ctl_down\":%d}\n",
                 u->name, state_name(u->state), (int)u->pid, u->attempts,
                 u->budget_sec, u->token_budget, u->tokens, u->mem_max_mb,
                 u->jail, u->attempts, u->exits_ok, u->exits_fail,
-                u->budget_kills, u->token_kills, u->restarts, u->fail_streak, u->ctl_down);
+                u->budget_kills, u->token_kills, u->restarts, u->fail_streak,
+                u->ready, u->ready_ms, u->ctl_down);
     }
     fclose(f);
     rename(tmp, g_status_path);
@@ -788,6 +817,30 @@ static void collect_tokens(void)
     fclose(f);
     tr = fopen(g_report_path, "w");   /* отчёт съеден целиком */
     if (tr) fclose(tr);
+}
+
+/* ---------- готовность: файл-договор вместо сокета (Виток 11, тикет 016) ---------- */
+
+/* Договор как у sd_notify READY=1 / s6 notification-fd, но канал — файл:
+ * агенту выдан AGRY_READY_PATH, создал файл — попытка готова. Сокета нет,
+ * пайпа нет: файловая система и есть API (Ст. 13). Появление — вслух один
+ * раз на попытку: ready с честной задержкой от старта попытки. Молчание
+ * агента готовностью не считается: кто не объявился — тот не готов. */
+static void poll_ready(void)
+{
+    int i;
+
+    for (i = 0; i < g_nunits; i++) {
+        unit_t *u = &g_units[i];
+        char rp[1152];
+        if (u->ready || u->state != U_RUNNING || u->pid <= 0) continue;
+        snprintf(rp, sizeof rp, "%.500s/%.63s.ready", g_units_dir, u->name);
+        if (access(rp, F_OK) == 0) {
+            u->ready = 1;
+            u->ready_ms = now_ms() - u->run_started_ms;
+            log_ev(u, "ready", "\"ms\":%lld,\"attempt\":%d", u->ready_ms, u->attempts);
+        }
+    }
 }
 
 /* ---------- ctl: команда — файл-договор (Виток 5, школа s6) ---------- */
@@ -933,6 +986,7 @@ static void do_reload(const char *dir)
                 u->cooldown_ms != nu->cooldown_ms || u->max_attempts != nu->max_attempts ||
                 u->token_budget != nu->token_budget || u->mem_max_mb != nu->mem_max_mb ||
                 u->jail != nu->jail ||
+                u->finish_timeout_ms != nu->finish_timeout_ms ||   /* Виток 11 */
                 strcmp(u->exec, nu->exec) || strcmp(u->finish, nu->finish)) {
                 changed++;
                 u->restart = nu->restart;
@@ -944,6 +998,7 @@ static void do_reload(const char *dir)
                 u->jail = nu->jail;            /* reload перевзводит клетку имён */
                 snprintf(u->exec, sizeof u->exec, "%.500s", nu->exec);
                 snprintf(u->finish, sizeof u->finish, "%.250s", nu->finish);
+                u->finish_timeout_ms = nu->finish_timeout_ms;  /* Виток 11: per-unit потолок */
                 if (u->state == U_RUNNING)     /* дедлайн — от живой попытки */
                     u->deadline_ms = (u->budget_sec > 0)
                                      ? u->run_started_ms + (long long)u->budget_sec * 1000LL
@@ -1045,6 +1100,7 @@ int main(int argc, char **argv)
     snprintf(g_status_path, sizeof g_status_path, "%s/.agryp-status", dir);
     snprintf(g_report_path, sizeof g_report_path, "%s/.agryp-report", dir);
     snprintf(g_ctl_dir, sizeof g_ctl_dir, "%s/.agryp-ctl", dir);
+    snprintf(g_units_dir, sizeof g_units_dir, "%s", dir);  /* Виток 11: ready-файлы рядом с юнитами */
     snprintf(g_journal_path, sizeof g_journal_path, "%s/.agryp-journal.ndjson", dir);
     snprintf(g_metrics_path, sizeof g_metrics_path, "%s/.agryp-metrics.prom", dir);
     g_journal = fopen(g_journal_path, "a");
@@ -1104,6 +1160,7 @@ int main(int argc, char **argv)
             journal_rotate();          /* Виток 10: отрезали хвост — печать в новом */
         reap();
         poll_ctl();                    /* Виток 5: файлы-договоры — казнь/заморозка/ctl-up */
+        poll_ready();                  /* Виток 11: ready-файлы — готовность вслух */
         if (g_hup) {                   /* Виток 6: перечитать договоры без смерти детей */
             g_hup = 0;
             do_reload(dir);

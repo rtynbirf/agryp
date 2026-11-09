@@ -1,89 +1,87 @@
-{"ts":"2026-11-09T21:25:21Z","up_ms":1,"event":"boot","units":2,"dir":"examples","rotate_bytes":262144}
-{"ts":"2026-11-09T21:25:21Z","up_ms":1,"unit":"crashy","event":"unit-sign","old":null,"new":"457b2a2f73d7b47a7b12db4ea3c3db12ee37b7fbedc2c75360c62f54bf2b5ad7","mtime":1794258980}
-{"ts":"2026-11-09T21:25:21Z","up_ms":1,"unit":"hello","event":"unit-sign","old":null,"new":"0cfb4ac9724cb24ea06599355dca28995630fa019bc3cebc1ed93735422ebdf9","mtime":1794258980}
-{"ts":"2026-11-09T21:25:21Z","up_ms":1,"event":"subreaper","on":true}
-{"ts":"2026-11-09T21:25:21Z","up_ms":1,"unit":"crashy","event":"cgroup-skip","reason":"cgroupfs недоступен","errno":30}
-{"ts":"2026-11-09T21:25:21Z","up_ms":1,"unit":"crashy","event":"spawn","pid":5786,"attempt":1,"budget_sec":10,"jailed":0}
-{"ts":"2026-11-09T21:25:21Z","up_ms":1,"unit":"hello","event":"spawn","pid":5787,"attempt":1,"budget_sec":25,"jailed":0}
-{"ts":"2026-11-09T21:25:21Z","up_ms":1,"event":"report-drop","unit":"ghost","tokens":100}
-[crashy-agent] попытка pid=5788: работаю 2 секунды и упаду
-[hello-agent] старт, pid=5789
-[hello-agent] heartbeat #1 pid=5789
-[hello-agent] heartbeat #2 pid=5789
-[hello-agent] heartbeat #3 pid=5789
-{"ts":"2026-11-09T21:25:23Z","up_ms":2005,"unit":"crashy","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-09T21:25:23Z","up_ms":2005,"unit":"crashy","event":"restart","next_attempt":2,"backoff_ms":1000,"streak":1}
-[hello-agent] heartbeat #4 pid=5789
-{"ts":"2026-11-09T21:25:24Z","up_ms":3007,"unit":"crashy","event":"spawn","pid":5798,"attempt":2,"budget_sec":10,"jailed":0}
-[crashy-agent] попытка pid=5799: работаю 2 секунды и упаду
-[hello-agent] heartbeat #5 pid=5789
-{"ts":"2026-11-09T21:25:26Z","up_ms":5012,"unit":"hello","event":"exit","by_signal":9,"ok":false}
-{"ts":"2026-11-09T21:25:26Z","up_ms":5012,"unit":"hello","event":"restart","next_attempt":2,"backoff_ms":1000,"streak":1}
-{"ts":"2026-11-09T21:25:26Z","up_ms":5012,"unit":"crashy","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-09T21:25:26Z","up_ms":5012,"unit":"crashy","event":"restart","next_attempt":3,"backoff_ms":2000,"streak":2}
-{"ts":"2026-11-09T21:25:26Z","up_ms":5012,"event":"reap-orphan","pid":5789,"code":-1}
-{"ts":"2026-11-09T21:25:27Z","up_ms":6014,"unit":"hello","event":"spawn","pid":5811,"attempt":2,"budget_sec":25,"jailed":0}
-[hello-agent] старт, pid=5812
-[hello-agent] heartbeat #1 pid=5812
-[hello-agent] heartbeat #2 pid=5812
-{"ts":"2026-11-09T21:25:28Z","up_ms":7017,"unit":"crashy","event":"spawn","pid":5816,"attempt":3,"budget_sec":10,"jailed":0}
-[crashy-agent] попытка pid=5817: работаю 2 секунды и упаду
-[hello-agent] heartbeat #3 pid=5812
-[hello-agent] heartbeat #4 pid=5812
-{"ts":"2026-11-09T21:25:30Z","up_ms":9021,"unit":"crashy","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-09T21:25:30Z","up_ms":9021,"unit":"crashy","event":"restart","next_attempt":4,"backoff_ms":4000,"streak":3}
-[hello-agent] heartbeat #5 pid=5812
-[hello-agent] heartbeat #6 pid=5812
-[hello-agent] heartbeat #7 pid=5812
-[hello-agent] heartbeat #8 pid=5812
-{"ts":"2026-11-09T21:25:34Z","up_ms":13030,"unit":"crashy","event":"spawn","pid":5832,"attempt":4,"budget_sec":10,"jailed":0}
-[crashy-agent] попытка pid=5833: работаю 2 секунды и упаду
-[hello-agent] heartbeat #9 pid=5812
-[hello-agent] heartbeat #10 pid=5812
-{"ts":"2026-11-09T21:25:36Z","up_ms":15034,"unit":"crashy","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-09T21:25:36Z","up_ms":15034,"unit":"crashy","event":"restart","next_attempt":5,"backoff_ms":8000,"streak":4}
-{"ts":"2026-11-09T21:25:36Z","up_ms":15034,"unit":"hello","event":"token-kill","tokens":5000,"budget":5000}
-{"ts":"2026-11-09T21:25:36Z","up_ms":15284,"unit":"hello","event":"exit","by_signal":9,"ok":false}
-{"ts":"2026-11-09T21:25:36Z","up_ms":15284,"unit":"hello","event":"restart","next_attempt":3,"backoff_ms":1000,"streak":1}
-{"ts":"2026-11-09T21:25:36Z","up_ms":15284,"event":"reap-orphan","pid":5812,"code":-1}
-{"ts":"2026-11-09T21:25:36Z","up_ms":15284,"event":"reap-orphan","pid":5840,"code":-1}
-{"ts":"2026-11-09T21:25:37Z","up_ms":16286,"unit":"hello","event":"spawn","pid":5842,"attempt":3,"budget_sec":25,"jailed":0}
-[hello-agent] старт, pid=5843
-[hello-agent] heartbeat #1 pid=5843
-[hello-agent] heartbeat #2 pid=5843
-[hello-agent] heartbeat #3 pid=5843
-[hello-agent] heartbeat #4 pid=5843
-[hello-agent] heartbeat #5 pid=5843
-[hello-agent] heartbeat #6 pid=5843
-[hello-agent] heartbeat #7 pid=5843
-{"ts":"2026-11-09T21:25:44Z","up_ms":23050,"unit":"crashy","event":"spawn","pid":5858,"attempt":5,"budget_sec":10,"jailed":0}
-[crashy-agent] попытка pid=5859: работаю 2 секунды и упаду
-[hello-agent] heartbeat #8 pid=5843
-[hello-agent] heartbeat #9 pid=5843
-{"ts":"2026-11-09T21:25:46Z","up_ms":25054,"unit":"crashy","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-09T21:25:46Z","up_ms":25054,"unit":"crashy","event":"failed","reason":"crash-loop","streak":5,"attempts":5}
-{"ts":"2026-11-09T21:25:46Z","up_ms":25054,"unit":"crashy","event":"stopped","reason":"crash-loop"}
-[hello-agent] heartbeat #10 pid=5843
-{"ts":"2026-11-09T21:25:46Z","up_ms":25305,"unit":"hello","event":"token-kill","tokens":5000,"budget":5000}
-{"ts":"2026-11-09T21:25:47Z","up_ms":25555,"unit":"hello","event":"exit","by_signal":9,"ok":false}
-{"ts":"2026-11-09T21:25:47Z","up_ms":25555,"unit":"hello","event":"restart","next_attempt":4,"backoff_ms":1000,"streak":1}
-{"ts":"2026-11-09T21:25:47Z","up_ms":25555,"event":"reap-orphan","pid":5843,"code":-1}
-{"ts":"2026-11-09T21:25:47Z","up_ms":25555,"event":"reap-orphan","pid":5865,"code":-1}
-{"ts":"2026-11-09T21:25:48Z","up_ms":26557,"unit":"hello","event":"spawn","pid":5868,"attempt":4,"budget_sec":25,"jailed":0}
-[hello-agent] старт, pid=5869
-[hello-agent] heartbeat #1 pid=5869
-[hello-agent] heartbeat #2 pid=5869
-[hello-agent] heartbeat #3 pid=5869
-[hello-agent] heartbeat #4 pid=5869
-[hello-agent] heartbeat #5 pid=5869
-[hello-agent] heartbeat #6 pid=5869
-[hello-agent] heartbeat #7 pid=5869
-[hello-agent] heartbeat #8 pid=5869
-[hello-agent] heartbeat #9 pid=5869
-{"ts":"2026-11-09T21:25:56Z","up_ms":35006,"event":"shutdown","reason":"signal"}
-{"ts":"2026-11-09T21:25:56Z","up_ms":35056,"unit":"hello","event":"exit","by_signal":15,"ok":false}
-{"ts":"2026-11-09T21:25:56Z","up_ms":35056,"event":"reap-orphan","pid":5869,"code":-1}
-{"ts":"2026-11-09T21:25:56Z","up_ms":35056,"event":"reap-orphan","pid":5886,"code":-1}
-{"ts":"2026-11-09T21:25:56Z","up_ms":35056,"unit":"crashy","event":"summary","attempts":5,"exits_ok":0,"exits_fail":5,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":4}
-{"ts":"2026-11-09T21:25:56Z","up_ms":35056,"unit":"hello","event":"summary","attempts":4,"exits_ok":0,"exits_fail":4,"budget_kills":0,"token_kills":2,"tokens_total":17000,"restarts":3}
-{"ts":"2026-11-09T21:25:56Z","up_ms":35056,"event":"uptime-ms","value":35056}
+{"ts":"2026-11-09T22:05:18Z","up_ms":0,"event":"boot","units":2,"dir":"examples","rotate_bytes":262144}
+{"ts":"2026-11-09T22:05:18Z","up_ms":0,"unit":"crashy","event":"unit-sign","old":null,"new":"457b2a2f73d7b47a7b12db4ea3c3db12ee37b7fbedc2c75360c62f54bf2b5ad7","mtime":1794260470}
+{"ts":"2026-11-09T22:05:18Z","up_ms":0,"unit":"hello","event":"unit-sign","old":null,"new":"0cfb4ac9724cb24ea06599355dca28995630fa019bc3cebc1ed93735422ebdf9","mtime":1794260470}
+{"ts":"2026-11-09T22:05:18Z","up_ms":0,"event":"subreaper","on":true}
+{"ts":"2026-11-09T22:05:18Z","up_ms":0,"unit":"crashy","event":"cgroup-skip","reason":"cgroupfs недоступен","errno":30}
+{"ts":"2026-11-09T22:05:18Z","up_ms":0,"unit":"crashy","event":"spawn","pid":8657,"attempt":1,"budget_sec":10,"jailed":0}
+{"ts":"2026-11-09T22:05:18Z","up_ms":0,"unit":"hello","event":"spawn","pid":8658,"attempt":1,"budget_sec":25,"jailed":0}
+{"ts":"2026-11-09T22:05:18Z","up_ms":0,"event":"report-drop","unit":"ghost","tokens":100}
+[crashy-agent] попытка pid=8659: работаю 2 секунды и упаду
+[hello-agent] старт, pid=8660
+[hello-agent] heartbeat #1 pid=8660
+[hello-agent] heartbeat #2 pid=8660
+[hello-agent] heartbeat #3 pid=8660
+{"ts":"2026-11-09T22:05:20Z","up_ms":2004,"unit":"crashy","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-09T22:05:20Z","up_ms":2004,"unit":"crashy","event":"restart","next_attempt":2,"backoff_ms":1000,"streak":1}
+[hello-agent] heartbeat #4 pid=8660
+{"ts":"2026-11-09T22:05:21Z","up_ms":3006,"unit":"crashy","event":"spawn","pid":8666,"attempt":2,"budget_sec":10,"jailed":0}
+[crashy-agent] попытка pid=8667: работаю 2 секунды и упаду
+[hello-agent] heartbeat #5 pid=8660
+{"ts":"2026-11-09T22:05:23Z","up_ms":5010,"unit":"hello","event":"exit","by_signal":9,"ok":false}
+{"ts":"2026-11-09T22:05:23Z","up_ms":5010,"unit":"hello","event":"restart","next_attempt":2,"backoff_ms":1000,"streak":1}
+{"ts":"2026-11-09T22:05:23Z","up_ms":5010,"unit":"crashy","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-09T22:05:23Z","up_ms":5010,"unit":"crashy","event":"restart","next_attempt":3,"backoff_ms":2000,"streak":2}
+{"ts":"2026-11-09T22:05:23Z","up_ms":5010,"event":"reap-orphan","pid":8660,"code":-1}
+{"ts":"2026-11-09T22:05:24Z","up_ms":6012,"unit":"hello","event":"spawn","pid":8676,"attempt":2,"budget_sec":25,"jailed":0}
+[hello-agent] старт, pid=8677
+[hello-agent] heartbeat #1 pid=8677
+{"ts":"2026-11-09T22:05:25Z","up_ms":7015,"unit":"crashy","event":"spawn","pid":8679,"attempt":3,"budget_sec":10,"jailed":0}
+[hello-agent] heartbeat #2 pid=8677
+[crashy-agent] попытка pid=8681: работаю 2 секунды и упаду
+[hello-agent] heartbeat #3 pid=8677
+[hello-agent] heartbeat #4 pid=8677
+{"ts":"2026-11-09T22:05:27Z","up_ms":9019,"unit":"crashy","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-09T22:05:27Z","up_ms":9019,"unit":"crashy","event":"restart","next_attempt":4,"backoff_ms":4000,"streak":3}
+[hello-agent] heartbeat #5 pid=8677
+[hello-agent] heartbeat #6 pid=8677
+[hello-agent] heartbeat #7 pid=8677
+[hello-agent] heartbeat #8 pid=8677
+{"ts":"2026-11-09T22:05:31Z","up_ms":13027,"unit":"crashy","event":"spawn","pid":8689,"attempt":4,"budget_sec":10,"jailed":0}
+[crashy-agent] попытка pid=8690: работаю 2 секунды и упаду
+[hello-agent] heartbeat #9 pid=8677
+[hello-agent] heartbeat #10 pid=8677
+{"ts":"2026-11-09T22:05:33Z","up_ms":15031,"unit":"crashy","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-09T22:05:33Z","up_ms":15031,"unit":"crashy","event":"restart","next_attempt":5,"backoff_ms":8000,"streak":4}
+{"ts":"2026-11-09T22:05:33Z","up_ms":15031,"unit":"hello","event":"token-kill","tokens":5000,"budget":5000}
+{"ts":"2026-11-09T22:05:33Z","up_ms":15281,"unit":"hello","event":"exit","by_signal":9,"ok":false}
+{"ts":"2026-11-09T22:05:33Z","up_ms":15281,"unit":"hello","event":"restart","next_attempt":3,"backoff_ms":1000,"streak":1}
+{"ts":"2026-11-09T22:05:33Z","up_ms":15281,"event":"reap-orphan","pid":8677,"code":-1}
+{"ts":"2026-11-09T22:05:33Z","up_ms":15281,"event":"reap-orphan","pid":8695,"code":-1}
+{"ts":"2026-11-09T22:05:34Z","up_ms":16283,"unit":"hello","event":"spawn","pid":8696,"attempt":3,"budget_sec":25,"jailed":0}
+[hello-agent] старт, pid=8697
+[hello-agent] heartbeat #1 pid=8697
+[hello-agent] heartbeat #2 pid=8697
+[hello-agent] heartbeat #3 pid=8697
+[hello-agent] heartbeat #4 pid=8697
+[hello-agent] heartbeat #5 pid=8697
+[hello-agent] heartbeat #6 pid=8697
+[hello-agent] heartbeat #7 pid=8697
+{"ts":"2026-11-09T22:05:41Z","up_ms":23047,"unit":"crashy","event":"spawn","pid":8705,"attempt":5,"budget_sec":10,"jailed":0}
+[crashy-agent] попытка pid=8706: работаю 2 секунды и упаду
+[hello-agent] heartbeat #8 pid=8697
+[hello-agent] heartbeat #9 pid=8697
+{"ts":"2026-11-09T22:05:43Z","up_ms":25051,"unit":"crashy","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-09T22:05:43Z","up_ms":25051,"unit":"crashy","event":"failed","reason":"crash-loop","streak":5,"attempts":5}
+{"ts":"2026-11-09T22:05:43Z","up_ms":25051,"unit":"crashy","event":"stopped","reason":"crash-loop"}
+[hello-agent] heartbeat #10 pid=8697
+{"ts":"2026-11-09T22:05:43Z","up_ms":25301,"unit":"hello","event":"token-kill","tokens":5000,"budget":5000}
+{"ts":"2026-11-09T22:05:44Z","up_ms":25552,"unit":"hello","event":"exit","by_signal":9,"ok":false}
+{"ts":"2026-11-09T22:05:44Z","up_ms":25552,"unit":"hello","event":"restart","next_attempt":4,"backoff_ms":1000,"streak":1}
+{"ts":"2026-11-09T22:05:44Z","up_ms":25552,"event":"reap-orphan","pid":8697,"code":-1}
+{"ts":"2026-11-09T22:05:44Z","up_ms":25552,"event":"reap-orphan","pid":8710,"code":-1}
+{"ts":"2026-11-09T22:05:45Z","up_ms":26554,"unit":"hello","event":"spawn","pid":8711,"attempt":4,"budget_sec":25,"jailed":0}
+[hello-agent] старт, pid=8712
+[hello-agent] heartbeat #1 pid=8712
+[hello-agent] heartbeat #2 pid=8712
+[hello-agent] heartbeat #3 pid=8712
+[hello-agent] heartbeat #4 pid=8712
+[hello-agent] heartbeat #5 pid=8712
+[hello-agent] heartbeat #6 pid=8712
+[hello-agent] heartbeat #7 pid=8712
+[hello-agent] heartbeat #8 pid=8712
+[hello-agent] heartbeat #9 pid=8712
+{"ts":"2026-11-09T22:05:53Z","up_ms":35005,"event":"shutdown","reason":"signal"}
+{"ts":"2026-11-09T22:05:53Z","up_ms":35005,"unit":"hello","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-09T22:05:53Z","up_ms":35005,"unit":"crashy","event":"summary","attempts":5,"exits_ok":0,"exits_fail":5,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":4}
+{"ts":"2026-11-09T22:05:53Z","up_ms":35005,"unit":"hello","event":"summary","attempts":4,"exits_ok":0,"exits_fail":4,"budget_kills":0,"token_kills":2,"tokens_total":17000,"restarts":3}
+{"ts":"2026-11-09T22:05:53Z","up_ms":35005,"event":"uptime-ms","value":35005}

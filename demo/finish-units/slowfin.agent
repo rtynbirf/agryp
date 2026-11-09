@@ -1,0 +1,6 @@
+name              = slowfin
+exec              = sleep 1; exit 7
+restart           = always
+cooldown-ms       = 300
+finish-timeout-ms = 600
+finish            = sleep 2
