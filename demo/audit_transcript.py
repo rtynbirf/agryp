@@ -138,6 +138,7 @@ def main(path):
             continue
         u = units.setdefault(name, {
             "spawns": [], "exits": [], "restarts": 0, "stopped": 0,
+            "stopped_idx": [],
             "budget_kills": 0, "token_kills": 0, "running": False, "ok_exits": 0,
             "streak": None, "failed": False,
             "ctl_down": False, "ctl_e0": None, "expect_stop": None,
@@ -229,6 +230,7 @@ def main(path):
             u["ctl_e0"] = None
         elif et == "stopped":
             u["stopped"] += 1
+            u["stopped_idx"].append(idx)
             if u["expect_stop"] is not None:
                 if ev.get("reason") != u["expect_stop"]:
                     fail(errors, idx,
@@ -301,16 +303,22 @@ def main(path):
                 if s.get("exits_fail") != n_fail:
                     fail(errors, 0,
                          f"{name}: summary.exits_fail={s.get('exits_fail')}, в потоке {n_fail}")
-                # каждый exit ДО shutdown обязан получить restart или stopped;
+                # каждый exit ДО shutdown обязан получить restart или stopped
+                # до shutdown (Виток 11: останов перед shutdown получает stopped
+                # reason shutdown; после строки shutdown похороны молчаливы);
                 # exit-ы во время shutdown (после события shutdown) — исключение
                 n_exit_before = sum(
                     1 for eidx, _ in u["exits"]
                     if shutdown_idx is not None and eidx < shutdown_idx
                 )
-                if u["restarts"] + u["stopped"] != n_exit_before:
+                n_stopped_before = sum(
+                    1 for sidx in u["stopped_idx"]
+                    if shutdown_idx is not None and sidx < shutdown_idx
+                )
+                if u["restarts"] + n_stopped_before != n_exit_before:
                     fail(errors, 0,
-                         f"{name}: restarts({u['restarts']})+stopped({u['stopped']}) "
-                         f"≠ exit'ов до shutdown ({n_exit_before})")
+                         f"{name}: restarts({u['restarts']})+stopped до shutdown "
+                         f"({n_stopped_before}) ≠ exit'ов до shutdown ({n_exit_before})")
 
     if not units:
         errors.append("в транскрипте нет ни одного юнита")
