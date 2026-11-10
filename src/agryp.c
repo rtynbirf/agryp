@@ -108,6 +108,15 @@ static long long g_orphans;   /* усыновлённые сироты (subreape
 static int g_shutdown_logged; /* Виток 11: shutdown уже в летописи — после него stopped молчит */
 static long long g_reloads;   /* перезагрузок каталога (SIGHUP) */
 static long long g_rotations; /* ротаций журнала */
+/* Виток 11 (тикет 017): скобка reload→reload-done (школа Type=notify-reload).
+ * reload объявляет числа перечитывания, reload-done закрывает скобку, когда
+ * пыль легла — все удалённые попытки мертвы (или дом закрывается: closed
+ * =shutdown). gen сшивает пару: второй SIGHUP скобку не перекрывает
+ * (школа MONOTONIC_USEC — старое не выдают за свежее). */
+static int       g_rl_open;    /* скобка открыта: reload-done ещё не сказан */
+static long long g_rl_gen, g_rl_t0;  /* номер и момент перечитывания */
+static int       g_rl_added, g_rl_changed, g_rl_removed;
+static int       g_rl_killed;  /* упрямым удалённым KILL уже отдан — один раз */
 
 /* ---------- sha256: пломбы Витка 10 (ротация журнала, сигнатуры договоров) ---------- */
 
@@ -596,6 +605,13 @@ static void handle_exit(unit_t *u, int status)
 
     if (ok) u->exits_ok++; else u->exits_fail++;
     u->pid = 0;
+    if (u->pgid > 0) {                         /* Ст. 4 до конца (урок stubborn-демо тикета 017):
+                                                * главный умер — группу добиваем SIGKILL: упрямец
+                                                * с trap TERM не переживает свою попытку,
+                                                * сирот внутри семьи не бывает */
+        kill(-u->pgid, SIGKILL);
+        u->pgid = 0;
+    }
     {   /* Виток 11: мёртвая попытка не остаётся «готовой» — договор снят (Ст. 13) */
         char rp[1152];
         snprintf(rp, sizeof rp, "%.500s/%.63s.ready", g_units_dir, u->name);
@@ -973,7 +989,7 @@ static void do_reload(const char *dir)
     unit_t fresh[MAX_UNITS];
     DIR *d = opendir(dir);
     struct dirent *de;
-    int nfresh = 0, added = 0, changed = 0, removed = 0;
+    int nfresh = 0, added = 0, changed = 0, removed = 0, skipped = 0;
     int i, j;
 
     if (!d) { log_ev(NULL, "reload", "\"error\":\"opendir\",\"errno\":%d", errno); return; }
@@ -983,7 +999,10 @@ static void do_reload(const char *dir)
 
         if (len < 7 || strcmp(de->d_name + len - 6, ".agent")) continue;
         snprintf(path, sizeof path, "%s/%s", dir, de->d_name);
-        if (parse_unit_file(path, de->d_name, len - 6, &fresh[nfresh]) == 0) nfresh++;
+        if (parse_unit_file(path, de->d_name, len - 6, &fresh[nfresh]) == 0)
+            nfresh++;
+        else
+            skipped++;             /* битый договор: вслух в stderr — и счётом (тикет 017) */
     }
     closedir(d);
     for (j = 0; j < nfresh; j++) {
@@ -1031,8 +1050,10 @@ static void do_reload(const char *dir)
             added++;
             cgroup_room(u);                    /* комнатка или честный отказ (Ст. 15) */
             if (!u->ctl_down) spawn_unit(u);
-        } else
+        } else {
+            skipped++;             /* потолок фермы — тоже честное число (Ст. 11, тикет 017) */
             fprintf(stderr, "agryp: reload: %s: потолок MAX_UNITS — юнит пропущен\n", nu->name);
+        }
     }
     for (i = 0; i < g_nunits; i++) {           /* файл удалён: graceful-stop по Ст. 9 */
         unit_t *u = &g_units[i];
@@ -1054,8 +1075,12 @@ static void do_reload(const char *dir)
                 u->state = U_STOPPED;
         }
     }
-    g_reloads++;                               /* Виток 10: счётчик — метрика */
-    log_ev(NULL, "reload", "\"added\":%d,\"changed\":%d,\"removed\":%d", added, changed, removed);
+    g_reloads++;                  /* Виток 10: метрика; он же gen пары скобки (тикет 017) */
+    g_rl_open = 1; g_rl_killed = 0;            /* скобка открыта — ждём пыль */
+    g_rl_gen = g_reloads; g_rl_t0 = now_ms();
+    g_rl_added = added; g_rl_changed = changed; g_rl_removed = removed;
+    log_ev(NULL, "reload", "\"added\":%d,\"changed\":%d,\"removed\":%d,\"skipped\":%d,\"gen\":%lld",
+           added, changed, removed, skipped, g_rl_gen);
 }
 
 /* ---------- главный цикл ---------- */
@@ -1170,9 +1195,33 @@ int main(int argc, char **argv)
         reap();
         poll_ctl();                    /* Виток 5: файлы-договоры — казнь/заморозка/ctl-up */
         poll_ready();                  /* Виток 11: ready-файлы — готовность вслух */
-        if (g_hup) {                   /* Виток 6: перечитать договоры без смерти детей */
+        if (g_hup && !g_rl_open) {     /* Виток 6: перечитать договоры без смерти детей;
+                                        * тикет 017: открытую скобку не перекрываем —
+                                        * SIGHUP подождёт закрытия (флаг жив, reload будет) */
             g_hup = 0;
             do_reload(dir);
+        }
+        if (g_rl_open) {               /* тикет 017: пыль reload — скобка обязана закрыться */
+            int pending = 0;
+            long long age = now_ms() - g_rl_t0;
+
+            for (i = 0; i < g_nunits; i++) {
+                unit_t *u = &g_units[i];
+                if (!u->retired || u->state != U_RUNNING || u->pid <= 0) continue;
+                pending = 1;
+                if (age > GRACE_MS && !g_rl_killed) {
+                    u->sup_kill = 1;   /* казнь закона: TERM игнорирован GRACE_MS (школа ctl-kill) */
+                    log_ev(u, "reload-kill", "\"pid\":%d,\"attempt\":%d", (int)u->pid, u->attempts);
+                    if (kill(-u->pgid, SIGKILL) < 0) kill(u->pid, SIGKILL);
+                }
+            }
+            if (pending && age > GRACE_MS) g_rl_killed = 1;
+            if (!pending) {            /* пыль легла: удалённые мертвы — скобка закрыта */
+                g_rl_open = 0;
+                log_ev(NULL, "reload-done",
+                       "\"gen\":%lld,\"added\":%d,\"changed\":%d,\"removed\":%d,\"ms\":%lld",
+                       g_rl_gen, g_rl_added, g_rl_changed, g_rl_removed, now_ms() - g_rl_t0);
+            }
         }
 
         /* выход из cooldown */
@@ -1220,6 +1269,14 @@ int main(int argc, char **argv)
         }
         if (g_stop) break;
         poll(NULL, 0, (int)timeout);
+    }
+
+    /* тикет 017: скобка reload не остаётся открытой — дом закрывается вслух */
+    if (g_rl_open) {
+        g_rl_open = 0;
+        log_ev(NULL, "reload-done",
+               "\"gen\":%lld,\"added\":%d,\"changed\":%d,\"removed\":%d,\"ms\":%lld,\"closed\":\"shutdown\"",
+               g_rl_gen, g_rl_added, g_rl_changed, g_rl_removed, now_ms() - g_rl_t0);
     }
 
     /* graceful shutdown: TERM → ждём → KILL */

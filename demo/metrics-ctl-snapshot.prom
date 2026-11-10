@@ -1,6 +1,6 @@
 # HELP agryp_up_ms Жизнь супервизора, мс
 # TYPE agryp_up_ms gauge
-agryp_up_ms 4009
+agryp_up_ms 4010
 # HELP agryp_units Юнитов в каталоге
 # TYPE agryp_units gauge
 agryp_units 2
@@ -31,15 +31,6 @@ agryp_rotations_total 0
 # TYPE agryp_fail_streak gauge
 # HELP agryp_ctl_down Политика заморожена файлом .down
 # TYPE agryp_ctl_down gauge
-agryp_attempts_total{unit="crashy"} 2
-agryp_exits_ok_total{unit="crashy"} 0
-agryp_exits_fail_total{unit="crashy"} 1
-agryp_budget_kills_total{unit="crashy"} 0
-agryp_token_kills_total{unit="crashy"} 0
-agryp_tokens_total{unit="crashy"} 0
-agryp_restarts_total{unit="crashy"} 1
-agryp_fail_streak{unit="crashy"} 1
-agryp_ctl_down{unit="crashy"} 0
 agryp_attempts_total{unit="hello"} 1
 agryp_exits_ok_total{unit="hello"} 0
 agryp_exits_fail_total{unit="hello"} 0
@@ -49,3 +40,12 @@ agryp_tokens_total{unit="hello"} 2000
 agryp_restarts_total{unit="hello"} 0
 agryp_fail_streak{unit="hello"} 0
 agryp_ctl_down{unit="hello"} 0
+agryp_attempts_total{unit="crashy"} 2
+agryp_exits_ok_total{unit="crashy"} 0
+agryp_exits_fail_total{unit="crashy"} 1
+agryp_budget_kills_total{unit="crashy"} 0
+agryp_token_kills_total{unit="crashy"} 0
+agryp_tokens_total{unit="crashy"} 0
+agryp_restarts_total{unit="crashy"} 1
+agryp_fail_streak{unit="crashy"} 1
+agryp_ctl_down{unit="crashy"} 0

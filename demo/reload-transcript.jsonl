@@ -1,37 +1,57 @@
-{"ts":"2026-11-09T22:15:15Z","up_ms":0,"event":"boot","units":2,"dir":"demo/reload-units","rotate_bytes":262144}
-{"ts":"2026-11-09T22:15:15Z","up_ms":0,"unit":"alpha","event":"unit-sign","old":null,"new":"b0372c967c36d62837f563e02881a7b2c897c0ebb0c793164d656ff6006fab1f","mtime":1794262515}
-{"ts":"2026-11-09T22:15:15Z","up_ms":0,"unit":"beta","event":"unit-sign","old":null,"new":"4aef0a82143161abed8a50e2f2ca29a7afee5da384c1d4de7aed6742c5c2114c","mtime":1794262515}
-{"ts":"2026-11-09T22:15:15Z","up_ms":0,"event":"subreaper","on":true}
-{"ts":"2026-11-09T22:15:15Z","up_ms":0,"unit":"alpha","event":"spawn","pid":10263,"attempt":1,"budget_sec":5,"jailed":0}
-{"ts":"2026-11-09T22:15:15Z","up_ms":0,"unit":"beta","event":"spawn","pid":10264,"attempt":1,"budget_sec":0,"jailed":0}
-[alpha] старт попытки 10265
-[beta] старт попытки 10266
+{"ts":"2026-11-10T08:21:15Z","up_ms":0,"event":"boot","units":3,"dir":"demo/reload-units","rotate_bytes":262144}
+{"ts":"2026-11-10T08:21:15Z","up_ms":0,"unit":"beta","event":"unit-sign","old":null,"new":"4aef0a82143161abed8a50e2f2ca29a7afee5da384c1d4de7aed6742c5c2114c","mtime":1794298875}
+{"ts":"2026-11-10T08:21:15Z","up_ms":0,"unit":"stubborn","event":"unit-sign","old":null,"new":"d9d3d182777cebb770f0bf475a2cd9cbc32291cd47dbc9f6bbffb4c7e589f7c9","mtime":1794298875}
+{"ts":"2026-11-10T08:21:15Z","up_ms":0,"unit":"alpha","event":"unit-sign","old":null,"new":"b0372c967c36d62837f563e02881a7b2c897c0ebb0c793164d656ff6006fab1f","mtime":1794298875}
+{"ts":"2026-11-10T08:21:15Z","up_ms":0,"event":"subreaper","on":true}
+{"ts":"2026-11-10T08:21:15Z","up_ms":0,"unit":"beta","event":"spawn","pid":8244,"attempt":1,"budget_sec":0,"jailed":0}
+{"ts":"2026-11-10T08:21:15Z","up_ms":0,"unit":"stubborn","event":"spawn","pid":8245,"attempt":1,"budget_sec":0,"jailed":0}
+{"ts":"2026-11-10T08:21:15Z","up_ms":0,"unit":"alpha","event":"spawn","pid":8246,"attempt":1,"budget_sec":5,"jailed":0}
+[beta] старт попытки 8247
+[stubborn] старт попытки 8245, TERM игнорирую
+[alpha] старт попытки 8248
+[beta] heartbeat
+[stubborn] heartbeat
 [alpha] heartbeat
 [beta] heartbeat
-[beta] heartbeat
+[stubborn] heartbeat
 [alpha] heartbeat
-{"ts":"2026-11-09T22:15:18Z","up_ms":3003,"unit":"gamma","event":"unit-added"}
-{"ts":"2026-11-09T22:15:18Z","up_ms":3003,"unit":"gamma","event":"unit-sign","old":null,"new":"e528cb5f0709cb6fe97160357ee3d0c64bbc1bad561fc429cc902674e04a0d53","mtime":1794262518}
-{"ts":"2026-11-09T22:15:18Z","up_ms":3003,"unit":"gamma","event":"spawn","pid":10277,"attempt":1,"budget_sec":0,"jailed":0}
-{"ts":"2026-11-09T22:15:18Z","up_ms":3003,"unit":"alpha","event":"unit-sign","old":"b0372c967c36d62837f563e02881a7b2c897c0ebb0c793164d656ff6006fab1f","new":"9cd254af3c485fc791423d0c2fa02a9e9742e6cea918bfc5b118607c88e772c7","mtime":1794262518}
-{"ts":"2026-11-09T22:15:18Z","up_ms":3003,"unit":"beta","event":"unit-removed"}
-{"ts":"2026-11-09T22:15:18Z","up_ms":3003,"unit":"beta","event":"unit-sign","old":"4aef0a82143161abed8a50e2f2ca29a7afee5da384c1d4de7aed6742c5c2114c","new":null,"mtime":1794262515}
-{"ts":"2026-11-09T22:15:18Z","up_ms":3003,"event":"reload","added":1,"changed":1,"removed":1}
+{"ts":"2026-11-10T08:21:18Z","up_ms":3002,"unit":"gamma","event":"unit-added"}
+{"ts":"2026-11-10T08:21:18Z","up_ms":3002,"unit":"gamma","event":"unit-sign","old":null,"new":"e528cb5f0709cb6fe97160357ee3d0c64bbc1bad561fc429cc902674e04a0d53","mtime":1794298878}
+{"ts":"2026-11-10T08:21:18Z","up_ms":3002,"unit":"gamma","event":"spawn","pid":8262,"attempt":1,"budget_sec":0,"jailed":0}
+{"ts":"2026-11-10T08:21:18Z","up_ms":3003,"unit":"alpha","event":"unit-sign","old":"b0372c967c36d62837f563e02881a7b2c897c0ebb0c793164d656ff6006fab1f","new":"9cd254af3c485fc791423d0c2fa02a9e9742e6cea918bfc5b118607c88e772c7","mtime":1794298878}
+{"ts":"2026-11-10T08:21:18Z","up_ms":3003,"unit":"beta","event":"unit-removed"}
+{"ts":"2026-11-10T08:21:18Z","up_ms":3003,"unit":"beta","event":"unit-sign","old":"4aef0a82143161abed8a50e2f2ca29a7afee5da384c1d4de7aed6742c5c2114c","new":null,"mtime":1794298875}
+{"ts":"2026-11-10T08:21:18Z","up_ms":3003,"unit":"stubborn","event":"unit-removed"}
+{"ts":"2026-11-10T08:21:18Z","up_ms":3003,"unit":"stubborn","event":"unit-sign","old":"d9d3d182777cebb770f0bf475a2cd9cbc32291cd47dbc9f6bbffb4c7e589f7c9","new":null,"mtime":1794298875}
+{"ts":"2026-11-10T08:21:18Z","up_ms":3003,"event":"reload","added":1,"changed":1,"removed":2,"skipped":0,"gen":1}
+[stubborn] heartbeat
+[gamma] старт попытки 8263
 [alpha] heartbeat
-[gamma] старт попытки 10278
-{"ts":"2026-11-09T22:15:18Z","up_ms":3253,"unit":"beta","event":"exit","by_signal":15,"ok":false}
-{"ts":"2026-11-09T22:15:18Z","up_ms":3253,"unit":"beta","event":"stopped","reason":"reload"}
-{"ts":"2026-11-09T22:15:18Z","up_ms":3253,"event":"reap-orphan","pid":10266,"code":-1}
-[alpha] heartbeat
+{"ts":"2026-11-10T08:21:18Z","up_ms":3253,"unit":"beta","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-10T08:21:18Z","up_ms":3253,"unit":"beta","event":"stopped","reason":"reload"}
+[stubborn] heartbeat
 [gamma] heartbeat
 [alpha] heartbeat
+[stubborn] heartbeat
+[alpha] heartbeat
 [gamma] heartbeat
-{"ts":"2026-11-09T22:15:20Z","up_ms":5012,"event":"shutdown","reason":"signal"}
-{"ts":"2026-11-09T22:15:20Z","up_ms":5063,"unit":"alpha","event":"exit","by_signal":15,"ok":false}
-{"ts":"2026-11-09T22:15:20Z","up_ms":5063,"unit":"gamma","event":"exit","by_signal":15,"ok":false}
-{"ts":"2026-11-09T22:15:20Z","up_ms":5063,"event":"reap-orphan","pid":10285,"code":-1}
-{"ts":"2026-11-09T22:15:20Z","up_ms":5063,"event":"reap-orphan","pid":10288,"code":-1}
-{"ts":"2026-11-09T22:15:20Z","up_ms":5063,"unit":"alpha","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
-{"ts":"2026-11-09T22:15:20Z","up_ms":5063,"unit":"beta","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
-{"ts":"2026-11-09T22:15:20Z","up_ms":5063,"unit":"gamma","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
-{"ts":"2026-11-09T22:15:20Z","up_ms":5063,"event":"uptime-ms","value":5063}
+[stubborn] heartbeat
+[alpha] heartbeat
+[gamma] heartbeat
+{"ts":"2026-11-10T08:21:21Z","up_ms":6009,"unit":"stubborn","event":"reload-kill","pid":8245,"attempt":1}
+{"ts":"2026-11-10T08:21:21Z","up_ms":6259,"unit":"stubborn","event":"exit","by_signal":9,"ok":false}
+{"ts":"2026-11-10T08:21:21Z","up_ms":6259,"unit":"stubborn","event":"stopped","reason":"reload"}
+{"ts":"2026-11-10T08:21:21Z","up_ms":6259,"event":"reap-orphan","pid":8273,"code":-1}
+{"ts":"2026-11-10T08:21:21Z","up_ms":6259,"event":"reload-done","gen":1,"added":1,"changed":1,"removed":2,"ms":3256}
+[alpha] heartbeat
+[gamma] heartbeat
+{"ts":"2026-11-10T08:21:22Z","up_ms":7515,"event":"shutdown","reason":"signal"}
+{"ts":"2026-11-10T08:21:22Z","up_ms":7565,"unit":"alpha","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-10T08:21:22Z","up_ms":7565,"unit":"gamma","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-10T08:21:22Z","up_ms":7565,"event":"reap-orphan","pid":8276,"code":-1}
+{"ts":"2026-11-10T08:21:22Z","up_ms":7565,"event":"reap-orphan","pid":8277,"code":-1}
+{"ts":"2026-11-10T08:21:22Z","up_ms":7565,"unit":"beta","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-10T08:21:22Z","up_ms":7565,"unit":"stubborn","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-10T08:21:22Z","up_ms":7565,"unit":"alpha","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-10T08:21:22Z","up_ms":7565,"unit":"gamma","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-10T08:21:22Z","up_ms":7565,"event":"uptime-ms","value":7565}
