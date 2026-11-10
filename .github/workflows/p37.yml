@@ -29,6 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false  # x15 zizmor artipacked
       - name: сборка ядра и примитива (gcc, без сети)
         run: make agryp ed25519tool
       - name: ldd ed25519tool — только libc (Ст. 2)
@@ -59,6 +61,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false  # x15 zizmor artipacked
       - name: сборка ядра и примитива
         run: make agryp ed25519tool
       - name: демо П37 живьём (agrypctl card + ed25519-завод юнита)
