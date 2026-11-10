@@ -130,3 +130,14 @@ jobs:
         run: make clean && CFLAGS="$SAN_CFLAGS" make agryp
       - name: живая батарея под санитайзерами
         run: CFLAGS="$SAN_CFLAGS" make demo demo-ctl demo-finish demo-reload demo-stream demo-metrics demo-rotate demo-sign
+
+  # П-21 (волна триажа 2026-11-10): канон клетки — reusable workflow «канон клетки»
+  # из cell-swarm, вызов по полному SHA-пину (DRY CI: один канон безопасности
+  # наследуется всеми репо; обновление канона = один коммит в cell-swarm,
+  # учитель OpenSSF Scorecard — пин по SHA). Файл канона в cell-swarm:
+  # .github/workflows/cell-canonical.yml (workflow_call, verify fail-closed).
+  canonical:
+    name: canonical — канон клетки из cell-swarm (verify fail-closed)
+    permissions:
+      contents: read
+    uses: rtynbirf/cell-swarm/.github/workflows/cell-canonical.yml@7f7905043d42bd468376375954b3c7353725f178
