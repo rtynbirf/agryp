@@ -144,9 +144,10 @@ kill -HUP $(pgrep -f 'agryp --dir examples')
 
 Логи — JSON-строки в stdout (`boot`, `spawn`, `exit`, `restart`, `stopped`,
 `failed`, `budget-kill`, `token-kill`, `ctl-down`, `ctl-up`, `ctl-drop`,
-`ctl-kill`, `finish`, `reload`, `ready`, `unit-added`, `unit-removed`,
-`cgroup-skip`, `jail-skip`, `report-drop`, `subreaper`, `reap-orphan`,
-`shutdown`, `summary`) — удобно направлять в любой сборщик.
+`ctl-kill`, `finish`, `reload`, `reload-done`, `reload-kill`, `ready`,
+`unit-added`, `unit-removed`, `cgroup-skip`, `jail-skip`, `report-drop`,
+`subreaper`, `reap-orphan`, `shutdown`, `summary`) — удобно направлять
+в любой сборщик.
 
 ## Живое демо: что доказывает транскрипт
 
@@ -242,10 +243,16 @@ worker казнён без единого рестарта, сосед-ghost н�
   применяются сразу (дедлайн бюджета пересчитывается от живой попытки),
   новый `*.agent` — юнит появляется и стартует (с комнаткой cgroup,
   Ст. 15), удалённый — graceful-stop (`stopped reason reload`);
-  событие `reload` несёт числа добавлено/изменено/удалено, аудитор
-  сверяет их с юнит-событиями (`make demo-reload`: бюджет 5→60 на той
-  же попытке, beta удалён graceful, gamma добавлен — reload 1/1/1).
-  Перезапуск конкретного юнита — не здесь, это agrypctl stop/start.
+  событие `reload` несёт числа добавлено/изменено/удалено/пропущено и
+  gen (Виток 11, тикет 017). Скобка обязана закрыться: `reload-done`
+  сказан, когда все удалённые попытки мертвы, с теми же числами, gen
+  и честным `ms` оседания; второй SIGHUP скобку не перекрывает;
+  упрямому удалённому (TERM игнорирован GRACE_MS) — казнь
+  `reload-kill`, и скобка закрывается всё равно (`make demo-reload`:
+  бюджет 5→60 на той же попытке, beta удалён graceful, gamma добавлен,
+  stubborn с `trap '' TERM` добит по GRACE_MS — reload 1/1/2 →
+  reload-done 1/1/2, ms ≥ 3000). Перезапуск конкретного юнита — не
+  здесь, это agrypctl stop/start.
 
 ## Готовность: файл-как-API (Виток 11)
 
@@ -308,6 +315,7 @@ neverready честно 0; аудитор сверяет ms с хронолог�
 | `finish` | `ExecStopPost=/bin/sh -c '…'` | env: у нас `AGRY_EXIT_CODE`/`AGRY_BY_SIGNAL`, у systemd `$EXIT_CODE`/`$EXIT_STATUS` |
 | `finish-timeout-ms` | s6 `timeout-finish` (файл в servicedir) | у systemd потолок ExecStopPost не настраивается per-unit; дефолт 5000 = канон s6 |
 | — | `Type=notify` / `sd_notify READY=1` | готовность — файл-договор: env `AGRY_READY_PATH`, готов = создал файл (Виток 11) |
+| — | `Type=notify-reload` (RELOADING=1 → READY=1) | скобка reload→reload-done в журнале: числа + gen + честный ms оседания; упор — `reload-kill` по GRACE_MS (Виток 11, тикет 017) |
 | `jail` | — | комнаты имён не переносятся: это не контейнер |
 | — | `WorkingDirectory=` (каталог .agent) | обратная трансляция cwd не восстанавливает — это не договор |
 

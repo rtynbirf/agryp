@@ -29,6 +29,15 @@
  10. readiness (Виток 11, тикет 016): ready возможен только у живой
      попытки, один на попытку; ms — задержка от старта попытки и обязана
      сходиться с расстоянием от spawn до ready (±2 мс — такт now_ms).
+ 11. скобка reload→reload-done (Виток 11, тикет 017; школа
+     Type=notify-reload): каждый reload обязан закрыться ровно одним
+     reload-done с тем же gen и теми же числами; unit-added/unit-removed
+     в окне скобки (от предыдущего reload-done до этого) сходятся с
+     числами пары; скобка не переживает ни следующего reload, ни конца
+     журнала.
+ 12. reload-kill (Виток 11, тикет 017): казнь упрямого удалённого
+     подтверждена последующим exit'ом — пары kill→труп проверяются и для
+     неё, скобка без трупов не закрывается.
 
 Успех: печатает OK и сводку, код выхода 0. Иначе — список нарушений, код 1.
 """
@@ -42,8 +51,8 @@ VALID_EVENTS = {
     "boot", "spawn", "spawn-fail", "exit", "restart", "stopped", "failed",
     "budget-kill", "token-kill", "ctl-down", "ctl-up", "ctl-drop", "ctl-kill",
     "cgroup-skip", "jail-skip", "report-drop", "subreaper", "reap-orphan",
-    "shutdown", "summary", "uptime-ms", "finish", "reload", "unit-added",
-    "unit-removed", "unit-sign", "rotate", "ready",
+    "shutdown", "summary", "uptime-ms", "finish", "reload", "reload-done",
+    "reload-kill", "unit-added", "unit-removed", "unit-sign", "rotate", "ready",
 }
 # константы Ст. 8 — сверены с #define в src/agryp.c
 BACKOFF_CAP_MS = 30000
@@ -256,9 +265,9 @@ def main(path):
                 if fidx < eidx:
                     fail(errors, fidx, f"{name}: finish раньше своей смерти — хронология лжёт")
 
-        # каждый budget-kill / token-kill / ctl-kill → последующий exit того же юнита
+        # каждый budget-kill / token-kill / ctl-kill / reload-kill → последующий exit того же юнита
         for kidx, kev in events:
-            if kev.get("unit") == name and kev["event"] in ("budget-kill", "token-kill", "ctl-kill"):
+            if kev.get("unit") == name and kev["event"] in ("budget-kill", "token-kill", "ctl-kill", "reload-kill"):
                 if not any(eidx > kidx for eidx, _ in u["exits"]):
                     fail(errors, kidx, f"{name}: {kev['event']} без последующего exit")
 
@@ -323,15 +332,47 @@ def main(path):
     if not units:
         errors.append("в транскрипте нет ни одного юнита")
 
-    # SIGHUP-reload (Виток 6): числа события обязаны сходиться с юнит-событиями
-    reloads = [e for _, e in events if e["event"] == "reload"]
-    if len(reloads) == 1:
-        n_add = sum(1 for _, e in events if e["event"] == "unit-added")
-        n_rem = sum(1 for _, e in events if e["event"] == "unit-removed")
-        if reloads[0].get("added") != n_add or reloads[0].get("removed") != n_rem:
-            fail(errors, 0,
-                 f"reload лжёт: added={reloads[0].get('added')} (unit-added {n_add}), "
-                 f"removed={reloads[0].get('removed')} (unit-removed {n_rem})")
+    # Скобка reload→reload-done (Виток 11, тикет 017; школа Type=notify-reload):
+    # перечитывание объявляется reload'ом (числа + gen) и обязано закрыться
+    # reload-done с теми же gen и числами. Окно скобки — от предыдущего
+    # reload-done (или начала журнала) до закрывающего reload-done: события
+    # apply-прохода (unit-added/unit-removed) идут ДО строки reload, поэтому
+    # окно копится с момента открытия предыдущей скобки, а не от строки reload.
+    open_rl = None
+    win_add = win_rem = 0
+    for idx, ev in events:
+        et = ev["event"]
+        if et == "unit-added":
+            win_add += 1
+        elif et == "unit-removed":
+            win_rem += 1
+        elif et == "reload":
+            if open_rl is not None:
+                fail(errors, idx,
+                     f"reload gen={open_rl.get('gen')} не закрыт reload-done — скобка висит")
+            open_rl = ev                    # окно не трогаем: apply уже в нём
+        elif et == "reload-done":
+            if open_rl is None:
+                fail(errors, idx, "reload-done без открытого reload — скобка лжёт")
+            else:
+                for k in ("added", "changed", "removed"):
+                    if ev.get(k) != open_rl.get(k):
+                        fail(errors, idx,
+                             f"reload-done {k}={ev.get(k)}, а reload объявил "
+                             f"{open_rl.get(k)} — скобка лжёт")
+                if ev.get("gen") != open_rl.get("gen"):
+                    fail(errors, idx,
+                         f"reload-done gen={ev.get('gen')}, а скобка открыта "
+                         f"gen={open_rl.get('gen')} — пара лжёт")
+                if ev.get("added") != win_add or ev.get("removed") != win_rem:
+                    fail(errors, idx,
+                         f"reload-done added={ev.get('added')}/removed={ev.get('removed')}, "
+                         f"а в окне скобки unit-added {win_add} / unit-removed {win_rem}")
+                open_rl = None
+                win_add = win_rem = 0
+    if open_rl is not None:
+        fail(errors, events[-1][0] if events else 0,
+             f"reload gen={open_rl.get('gen')} дожил до конца журнала не закрытым — скобка висит")
 
     tail = [ev["event"] for _, ev in events[-len(units) - 1:]]
     if "uptime-ms" not in tail:

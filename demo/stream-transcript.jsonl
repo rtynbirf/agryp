@@ -1,12 +1,12 @@
-{"ts":"2026-11-09T22:15:21Z","up_ms":0,"event":"boot","units":1,"dir":"demo/stream-units","rotate_bytes":262144}
-{"ts":"2026-11-09T22:15:21Z","up_ms":0,"unit":"streamer","event":"unit-sign","old":null,"new":"9c130d9275c16a826c546da5e5c4bdc16b5893e2083efdd73d56cd9bf1e6691b","mtime":1794260470}
-{"ts":"2026-11-09T22:15:21Z","up_ms":0,"event":"subreaper","on":true}
-{"ts":"2026-11-09T22:15:21Z","up_ms":0,"unit":"streamer","event":"spawn","pid":10316,"attempt":1,"budget_sec":0,"jailed":0}
-[streamer] старт, pid=10316; жгу 500 токенов / 25 мс, пульс: /tmp/agryp-stream-last.10316
-{"ts":"2026-11-09T22:15:22Z","up_ms":237,"unit":"streamer","event":"token-kill","tokens":5000,"budget":5000}
-{"ts":"2026-11-09T22:15:22Z","up_ms":488,"unit":"streamer","event":"exit","by_signal":9,"ok":false}
-{"ts":"2026-11-09T22:15:22Z","up_ms":488,"unit":"streamer","event":"stopped","reason":"policy"}
-{"ts":"2026-11-09T22:15:22Z","up_ms":488,"event":"reap-orphan","pid":10335,"code":-1}
-{"ts":"2026-11-09T22:15:25Z","up_ms":4001,"event":"shutdown","reason":"signal"}
-{"ts":"2026-11-09T22:15:25Z","up_ms":4001,"unit":"streamer","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":1,"tokens_total":5000,"restarts":0}
-{"ts":"2026-11-09T22:15:25Z","up_ms":4001,"event":"uptime-ms","value":4001}
+{"ts":"2026-11-10T08:21:23Z","up_ms":0,"event":"boot","units":1,"dir":"demo/stream-units","rotate_bytes":262144}
+{"ts":"2026-11-10T08:21:23Z","up_ms":0,"unit":"streamer","event":"unit-sign","old":null,"new":"9c130d9275c16a826c546da5e5c4bdc16b5893e2083efdd73d56cd9bf1e6691b","mtime":1794297420}
+{"ts":"2026-11-10T08:21:23Z","up_ms":0,"event":"subreaper","on":true}
+{"ts":"2026-11-10T08:21:23Z","up_ms":0,"unit":"streamer","event":"spawn","pid":8322,"attempt":1,"budget_sec":0,"jailed":0}
+[streamer] старт, pid=8322; жгу 500 токенов / 25 мс, пульс: /tmp/agryp-stream-last.8322
+{"ts":"2026-11-10T08:21:23Z","up_ms":240,"unit":"streamer","event":"token-kill","tokens":5000,"budget":5000}
+{"ts":"2026-11-10T08:21:24Z","up_ms":491,"unit":"streamer","event":"exit","by_signal":9,"ok":false}
+{"ts":"2026-11-10T08:21:24Z","up_ms":491,"unit":"streamer","event":"stopped","reason":"policy"}
+{"ts":"2026-11-10T08:21:24Z","up_ms":491,"event":"reap-orphan","pid":8341,"code":-1}
+{"ts":"2026-11-10T08:21:27Z","up_ms":4000,"event":"shutdown","reason":"signal"}
+{"ts":"2026-11-10T08:21:27Z","up_ms":4000,"unit":"streamer","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":1,"tokens_total":5000,"restarts":0}
+{"ts":"2026-11-10T08:21:27Z","up_ms":4000,"event":"uptime-ms","value":4000}
