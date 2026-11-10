@@ -1,0 +1,4 @@
+name        = worker
+exec        = sh demo/ctl_worker.sh
+restart     = always
+cooldown-ms = 800
