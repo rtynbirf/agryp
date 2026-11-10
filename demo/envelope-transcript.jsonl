@@ -1,25 +1,26 @@
-{"ts":"2026-11-10T08:21:48Z","up_ms":0,"event":"boot","units":1,"dir":"demo/envelope-units","rotate_bytes":262144}
-{"ts":"2026-11-10T08:21:48Z","up_ms":0,"unit":"alpha","event":"unit-sign","old":null,"new":"4cff09a370a9a19f794e7e8ff88b32e73668301b6a246ab7f1d2700499114a03","mtime":1794298908}
-{"ts":"2026-11-10T08:21:48Z","up_ms":0,"event":"subreaper","on":true}
-{"ts":"2026-11-10T08:21:48Z","up_ms":1,"unit":"alpha","event":"spawn","pid":8616,"attempt":1,"budget_sec":60,"jailed":0}
-[alpha] старт попытки 8617
+{"ts":"2026-11-10T08:36:38Z","up_ms":0,"event":"boot","units":1,"dir":"demo/envelope-units","rotate_bytes":262144}
+{"ts":"2026-11-10T08:36:38Z","up_ms":0,"unit":"alpha","event":"unit-sign","old":null,"new":"4cff09a370a9a19f794e7e8ff88b32e73668301b6a246ab7f1d2700499114a03","mtime":1794299798}
+{"ts":"2026-11-10T08:36:38Z","up_ms":0,"event":"subreaper","on":true}
+{"ts":"2026-11-10T08:36:38Z","up_ms":0,"unit":"alpha","event":"spawn","pid":11398,"attempt":1,"budget_sec":60,"jailed":0}
+[alpha] старт попытки 11399
 [alpha] heartbeat
 [alpha] heartbeat
 [alpha] heartbeat
-{"ts":"2026-11-10T08:21:52Z","up_ms":3239,"unit":"beta","event":"unit-added"}
-{"ts":"2026-11-10T08:21:52Z","up_ms":3239,"unit":"beta","event":"unit-sign","old":null,"new":"62ddb576cb97fdc978edac29c7bd63ca31ff9633d10beae6503842d9ce55a4b8","mtime":1794298912}
-{"ts":"2026-11-10T08:21:52Z","up_ms":3239,"unit":"beta","event":"spawn","pid":8647,"attempt":1,"budget_sec":60,"jailed":0}
-{"ts":"2026-11-10T08:21:52Z","up_ms":3239,"event":"reload","added":1,"changed":0,"removed":0,"skipped":0,"gen":1}
-{"ts":"2026-11-10T08:21:52Z","up_ms":3239,"event":"reload-done","gen":1,"added":1,"changed":0,"removed":0,"ms":0}
-[beta] старт попытки 8648
-[alpha] heartbeat
-[beta] heartbeat
+{"ts":"2026-11-10T08:36:42Z","up_ms":3215,"unit":"beta","event":"unit-added"}
+{"ts":"2026-11-10T08:36:42Z","up_ms":3215,"unit":"beta","event":"unit-sign","old":null,"new":"62ddb576cb97fdc978edac29c7bd63ca31ff9633d10beae6503842d9ce55a4b8","mtime":1794299802}
+{"ts":"2026-11-10T08:36:42Z","up_ms":3215,"unit":"beta","event":"spawn","pid":11429,"attempt":1,"budget_sec":60,"jailed":0}
+{"ts":"2026-11-10T08:36:42Z","up_ms":3215,"event":"reload","added":1,"changed":0,"removed":0,"skipped":0,"gen":1}
+{"ts":"2026-11-10T08:36:42Z","up_ms":3215,"event":"reload-done","gen":1,"added":1,"changed":0,"removed":0,"ms":0}
+[beta] старт попытки 11430
 [alpha] heartbeat
 [beta] heartbeat
-{"ts":"2026-11-10T08:21:54Z","up_ms":5244,"event":"shutdown","reason":"signal"}
-{"ts":"2026-11-10T08:21:54Z","up_ms":5294,"unit":"alpha","event":"exit","by_signal":15,"ok":false}
-{"ts":"2026-11-10T08:21:54Z","up_ms":5294,"unit":"beta","event":"exit","by_signal":15,"ok":false}
-{"ts":"2026-11-10T08:21:54Z","up_ms":5294,"event":"reap-orphan","pid":8655,"code":-1}
-{"ts":"2026-11-10T08:21:54Z","up_ms":5294,"unit":"alpha","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
-{"ts":"2026-11-10T08:21:54Z","up_ms":5294,"unit":"beta","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
-{"ts":"2026-11-10T08:21:54Z","up_ms":5294,"event":"uptime-ms","value":5294}
+[alpha] heartbeat
+[beta] heartbeat
+{"ts":"2026-11-10T08:36:44Z","up_ms":5224,"event":"shutdown","reason":"signal"}
+{"ts":"2026-11-10T08:36:44Z","up_ms":5274,"unit":"alpha","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-10T08:36:44Z","up_ms":5274,"unit":"beta","event":"exit","by_signal":15,"ok":false}
+{"ts":"2026-11-10T08:36:44Z","up_ms":5274,"event":"reap-orphan","pid":11434,"code":-1}
+{"ts":"2026-11-10T08:36:44Z","up_ms":5274,"event":"reap-orphan","pid":11430,"code":-1}
+{"ts":"2026-11-10T08:36:44Z","up_ms":5274,"unit":"alpha","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-10T08:36:44Z","up_ms":5274,"unit":"beta","event":"summary","attempts":1,"exits_ok":0,"exits_fail":1,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":0}
+{"ts":"2026-11-10T08:36:44Z","up_ms":5274,"event":"uptime-ms","value":5274}

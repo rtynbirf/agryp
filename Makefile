@@ -104,3 +104,8 @@ clean:
 	rm -f agryp ed25519tool
 
 .PHONY: demo demo-ctl demo-finish demo-ready demo-reload demo-jail demo-stream demo-jail-host demo-metrics demo-rotate demo-sign demo-envelope journal-audit audit audit-ctl audit-finish audit-ready audit-reload audit-jail audit-stream audit-jail-host bridge-test bench bench-stdiobus test-p37 clean
+
+# Виток 11 (тикет 018): проверяльщик проверяет себя — негативные пробы
+# обязаны краснеть по делу, канарейка обязана быть зелёной (fail-closed).
+audit-neg:
+	sh tools/negative_probes.sh

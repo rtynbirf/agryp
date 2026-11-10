@@ -43,6 +43,8 @@ jobs:
         run: make audit-ready
       - name: make audit-stream
         run: make audit-stream
+      - name: make audit-neg (негативные пробы аудитора — тикет 018, fail-closed)
+        run: make audit-neg
 
   # Виток 10: супервизор тестирует себя живьём — метрики, ротация с пломбой,
   # сигнатуры договоров (тикеты 011–014, школа «метаболизма» W-AUD-12).

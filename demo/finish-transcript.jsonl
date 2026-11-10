@@ -1,45 +1,45 @@
-{"ts":"2026-11-10T08:20:59Z","up_ms":0,"event":"boot","units":2,"dir":"demo/finish-units","rotate_bytes":262144}
-{"ts":"2026-11-10T08:20:59Z","up_ms":0,"unit":"sweeper","event":"unit-sign","old":null,"new":"38ee5162cf74589048c282569ebf4038ddf25256f8e7b88d714f3d150bcdb33d","mtime":1794298859}
-{"ts":"2026-11-10T08:20:59Z","up_ms":0,"unit":"slowfin","event":"unit-sign","old":null,"new":"e90e735403347113a4d584df9479bef7552915b35d65f77050dae027d7d64f64","mtime":1794298859}
-{"ts":"2026-11-10T08:20:59Z","up_ms":0,"event":"subreaper","on":true}
-{"ts":"2026-11-10T08:20:59Z","up_ms":0,"unit":"sweeper","event":"spawn","pid":8127,"attempt":1,"budget_sec":0,"jailed":0}
-{"ts":"2026-11-10T08:20:59Z","up_ms":0,"unit":"slowfin","event":"spawn","pid":8128,"attempt":1,"budget_sec":0,"jailed":0}
-[sweeper] попытка 8129 началась
-{"ts":"2026-11-10T08:21:00Z","up_ms":1002,"unit":"slowfin","event":"exit","code":7,"ok":false}
-{"ts":"2026-11-10T08:21:00Z","up_ms":1604,"unit":"slowfin","event":"finish","timeout":true,"ms":600}
-{"ts":"2026-11-10T08:21:00Z","up_ms":1604,"unit":"slowfin","event":"restart","next_attempt":2,"backoff_ms":300,"streak":1}
+{"ts":"2026-11-10T08:35:50Z","up_ms":0,"event":"boot","units":2,"dir":"demo/finish-units","rotate_bytes":262144}
+{"ts":"2026-11-10T08:35:50Z","up_ms":0,"unit":"sweeper","event":"unit-sign","old":null,"new":"38ee5162cf74589048c282569ebf4038ddf25256f8e7b88d714f3d150bcdb33d","mtime":1794299750}
+{"ts":"2026-11-10T08:35:50Z","up_ms":0,"unit":"slowfin","event":"unit-sign","old":null,"new":"e90e735403347113a4d584df9479bef7552915b35d65f77050dae027d7d64f64","mtime":1794299750}
+{"ts":"2026-11-10T08:35:50Z","up_ms":0,"event":"subreaper","on":true}
+{"ts":"2026-11-10T08:35:50Z","up_ms":0,"unit":"sweeper","event":"spawn","pid":10956,"attempt":1,"budget_sec":0,"jailed":0}
+{"ts":"2026-11-10T08:35:50Z","up_ms":0,"unit":"slowfin","event":"spawn","pid":10957,"attempt":1,"budget_sec":0,"jailed":0}
+[sweeper] попытка 10958 началась
+{"ts":"2026-11-10T08:35:51Z","up_ms":1002,"unit":"slowfin","event":"exit","code":7,"ok":false}
+{"ts":"2026-11-10T08:35:51Z","up_ms":1604,"unit":"slowfin","event":"finish","timeout":true,"ms":600}
+{"ts":"2026-11-10T08:35:51Z","up_ms":1604,"unit":"slowfin","event":"restart","next_attempt":2,"backoff_ms":300,"streak":1}
 [sweeper] работа окончена — падаю (код 3)
-{"ts":"2026-11-10T08:21:01Z","up_ms":2105,"unit":"sweeper","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-10T08:21:01Z","up_ms":2130,"unit":"sweeper","event":"finish","code":0}
-{"ts":"2026-11-10T08:21:01Z","up_ms":2130,"unit":"sweeper","event":"restart","next_attempt":2,"backoff_ms":500,"streak":1}
-{"ts":"2026-11-10T08:21:01Z","up_ms":2130,"unit":"slowfin","event":"spawn","pid":8135,"attempt":2,"budget_sec":0,"jailed":0}
-{"ts":"2026-11-10T08:21:01Z","up_ms":2632,"unit":"sweeper","event":"spawn","pid":8137,"attempt":2,"budget_sec":0,"jailed":0}
-[sweeper] попытка 8138 началась
-{"ts":"2026-11-10T08:21:02Z","up_ms":3133,"event":"reap-orphan","pid":8133,"code":0}
-{"ts":"2026-11-10T08:21:02Z","up_ms":3133,"unit":"slowfin","event":"exit","code":7,"ok":false}
-{"ts":"2026-11-10T08:21:03Z","up_ms":3734,"unit":"slowfin","event":"finish","timeout":true,"ms":600}
-{"ts":"2026-11-10T08:21:03Z","up_ms":3735,"unit":"slowfin","event":"restart","next_attempt":3,"backoff_ms":600,"streak":2}
-{"ts":"2026-11-10T08:21:03Z","up_ms":4486,"unit":"slowfin","event":"spawn","pid":8142,"attempt":3,"budget_sec":0,"jailed":0}
+{"ts":"2026-11-10T08:35:52Z","up_ms":2106,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-10T08:35:52Z","up_ms":2131,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-10T08:35:52Z","up_ms":2131,"unit":"sweeper","event":"restart","next_attempt":2,"backoff_ms":500,"streak":1}
+{"ts":"2026-11-10T08:35:52Z","up_ms":2131,"unit":"slowfin","event":"spawn","pid":10964,"attempt":2,"budget_sec":0,"jailed":0}
+{"ts":"2026-11-10T08:35:52Z","up_ms":2632,"unit":"sweeper","event":"spawn","pid":10966,"attempt":2,"budget_sec":0,"jailed":0}
+[sweeper] попытка 10967 началась
+{"ts":"2026-11-10T08:35:53Z","up_ms":3133,"event":"reap-orphan","pid":10962,"code":0}
+{"ts":"2026-11-10T08:35:53Z","up_ms":3133,"unit":"slowfin","event":"exit","code":7,"ok":false}
+{"ts":"2026-11-10T08:35:53Z","up_ms":3736,"unit":"slowfin","event":"finish","timeout":true,"ms":600}
+{"ts":"2026-11-10T08:35:53Z","up_ms":3736,"unit":"slowfin","event":"restart","next_attempt":3,"backoff_ms":600,"streak":2}
+{"ts":"2026-11-10T08:35:54Z","up_ms":4488,"unit":"slowfin","event":"spawn","pid":10971,"attempt":3,"budget_sec":0,"jailed":0}
 [sweeper] работа окончена — падаю (код 3)
-{"ts":"2026-11-10T08:21:04Z","up_ms":4737,"unit":"sweeper","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-10T08:21:04Z","up_ms":4762,"unit":"sweeper","event":"finish","code":0}
-{"ts":"2026-11-10T08:21:04Z","up_ms":4762,"unit":"sweeper","event":"restart","next_attempt":3,"backoff_ms":1000,"streak":2}
-{"ts":"2026-11-10T08:21:04Z","up_ms":5263,"event":"reap-orphan","pid":8141,"code":0}
-{"ts":"2026-11-10T08:21:04Z","up_ms":5514,"unit":"slowfin","event":"exit","code":7,"ok":false}
-{"ts":"2026-11-10T08:21:05Z","up_ms":6116,"unit":"slowfin","event":"finish","timeout":true,"ms":600}
-{"ts":"2026-11-10T08:21:05Z","up_ms":6116,"unit":"slowfin","event":"restart","next_attempt":4,"backoff_ms":1200,"streak":3}
-{"ts":"2026-11-10T08:21:05Z","up_ms":6116,"unit":"sweeper","event":"spawn","pid":8147,"attempt":3,"budget_sec":0,"jailed":0}
-[sweeper] попытка 8148 началась
-{"ts":"2026-11-10T08:21:06Z","up_ms":7369,"unit":"slowfin","event":"spawn","pid":8150,"attempt":4,"budget_sec":0,"jailed":0}
-{"ts":"2026-11-10T08:21:06Z","up_ms":7620,"event":"reap-orphan","pid":8146,"code":0}
+{"ts":"2026-11-10T08:35:54Z","up_ms":4738,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-10T08:35:54Z","up_ms":4764,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-10T08:35:54Z","up_ms":4764,"unit":"sweeper","event":"restart","next_attempt":3,"backoff_ms":1000,"streak":2}
+{"ts":"2026-11-10T08:35:55Z","up_ms":5265,"event":"reap-orphan","pid":10970,"code":0}
+{"ts":"2026-11-10T08:35:55Z","up_ms":5516,"unit":"slowfin","event":"exit","code":7,"ok":false}
+{"ts":"2026-11-10T08:35:56Z","up_ms":6118,"unit":"slowfin","event":"finish","timeout":true,"ms":600}
+{"ts":"2026-11-10T08:35:56Z","up_ms":6118,"unit":"slowfin","event":"restart","next_attempt":4,"backoff_ms":1200,"streak":3}
+{"ts":"2026-11-10T08:35:56Z","up_ms":6118,"unit":"sweeper","event":"spawn","pid":10976,"attempt":3,"budget_sec":0,"jailed":0}
+[sweeper] попытка 10977 началась
+{"ts":"2026-11-10T08:35:57Z","up_ms":7371,"unit":"slowfin","event":"spawn","pid":10979,"attempt":4,"budget_sec":0,"jailed":0}
+{"ts":"2026-11-10T08:35:57Z","up_ms":7622,"event":"reap-orphan","pid":10975,"code":0}
 [sweeper] работа окончена — падаю (код 3)
-{"ts":"2026-11-10T08:21:07Z","up_ms":8121,"unit":"sweeper","event":"exit","code":3,"ok":false}
-{"ts":"2026-11-10T08:21:07Z","up_ms":8146,"unit":"sweeper","event":"finish","code":0}
-{"ts":"2026-11-10T08:21:07Z","up_ms":8146,"unit":"sweeper","event":"restart","next_attempt":4,"backoff_ms":2000,"streak":3}
-{"ts":"2026-11-10T08:21:07Z","up_ms":8397,"unit":"slowfin","event":"exit","code":7,"ok":false}
-{"ts":"2026-11-10T08:21:08Z","up_ms":8998,"unit":"slowfin","event":"finish","timeout":true,"ms":600}
-{"ts":"2026-11-10T08:21:08Z","up_ms":8998,"unit":"slowfin","event":"restart","next_attempt":5,"backoff_ms":2400,"streak":4}
-{"ts":"2026-11-10T08:21:08Z","up_ms":9000,"event":"shutdown","reason":"signal"}
-{"ts":"2026-11-10T08:21:08Z","up_ms":9000,"unit":"sweeper","event":"summary","attempts":3,"exits_ok":0,"exits_fail":3,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":3}
-{"ts":"2026-11-10T08:21:08Z","up_ms":9000,"unit":"slowfin","event":"summary","attempts":4,"exits_ok":0,"exits_fail":4,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":4}
-{"ts":"2026-11-10T08:21:08Z","up_ms":9000,"event":"uptime-ms","value":9000}
+{"ts":"2026-11-10T08:35:58Z","up_ms":8123,"unit":"sweeper","event":"exit","code":3,"ok":false}
+{"ts":"2026-11-10T08:35:58Z","up_ms":8148,"unit":"sweeper","event":"finish","code":0}
+{"ts":"2026-11-10T08:35:58Z","up_ms":8148,"unit":"sweeper","event":"restart","next_attempt":4,"backoff_ms":2000,"streak":3}
+{"ts":"2026-11-10T08:35:58Z","up_ms":8399,"unit":"slowfin","event":"exit","code":7,"ok":false}
+{"ts":"2026-11-10T08:35:59Z","up_ms":9000,"unit":"slowfin","event":"finish","timeout":true,"ms":600}
+{"ts":"2026-11-10T08:35:59Z","up_ms":9000,"unit":"slowfin","event":"stopped","reason":"shutdown"}
+{"ts":"2026-11-10T08:35:59Z","up_ms":9000,"event":"shutdown","reason":"signal"}
+{"ts":"2026-11-10T08:35:59Z","up_ms":9000,"unit":"sweeper","event":"summary","attempts":3,"exits_ok":0,"exits_fail":3,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":3}
+{"ts":"2026-11-10T08:35:59Z","up_ms":9000,"unit":"slowfin","event":"summary","attempts":4,"exits_ok":0,"exits_fail":4,"budget_kills":0,"token_kills":0,"tokens_total":0,"restarts":3}
+{"ts":"2026-11-10T08:35:59Z","up_ms":9000,"event":"uptime-ms","value":9000}
