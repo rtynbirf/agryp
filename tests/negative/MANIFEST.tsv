@@ -1,0 +1,13 @@
+ghost-unit.jsonl	без договора в каталоге
+no-shutdown.jsonl	нет события shutdown
+counter-lies.jsonl	summary.exits_ok
+ready-lies.jsonl	задержка лжёт
+kill-no-corpse.jsonl	без последующего exit
+spawn-overlap.jsonl	поверх живой попытки
+after-shutdown.jsonl	после shutdown
+bad-json.jsonl	битая строка журнала
+nul-hole.jsonl	NUL-байты
+ladder-lies.jsonl	ступень лестницы
+bracket-open.jsonl	скобка висит
+ready-twice.jsonl	второй ready
+attempts-gap.jsonl	номера попыток не подряд

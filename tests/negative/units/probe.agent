@@ -1,0 +1,5 @@
+# договор пробы: лестница с базой 1000 мс (аудитор сверяет ступени)
+name        = probe
+exec        = sh -c 'echo probe; sleep 30'
+restart     = always
+cooldown-ms = 1000

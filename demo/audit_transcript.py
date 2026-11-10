@@ -38,6 +38,11 @@
  12. reload-kill (Виток 11, тикет 017): казнь упрямого удалённого
      подтверждена последующим exit'ом — пары kill→труп проверяются и для
      неё, скобка без трупов не закрывается.
+ 13. аудитор против выдумки (Виток 11, тикет 018; школа fail-closed):
+     нет журнала, пуст каталог юнитов, юнит без договора, не-целые
+     ts/up_ms — всё это КРАСНЫЙ с честной причиной, а не OK и не падение.
+     Проверяльщик проверяет себя: make audit-neg гоняет негативные пробы
+     (обязаны краснеть по делу) и канарейку (обязана быть зелёной).
 
 Успех: печатает OK и сводку, код выхода 0. Иначе — список нарушений, код 1.
 """
@@ -65,12 +70,19 @@ def fail(errors, idx, msg):
 
 def load_unit_configs(repo_root):
     """cooldown-ms из *.agent — база лестницы (Ст. 8); finish — хук (Виток 6).
-    Юниты лежат в examples/ и в каталогах демо — аудитор читает все сразу."""
+    Юниты лежат в examples/ и в каталогах демо — аудитор читает все сразу.
+    AGRY_AUDIT_UNITS — дополнительные каталоги через двоеточие (негативные
+    пробы тикета 018 несут свои договоры; прод-поведение не меняют)."""
     cfgs = {}
-    for sub in ("examples", "demo/ctl-units", "demo/finish-units", "demo/reload-units",
-                "demo/jail-units", "demo/stream-units", "demo/metrics-units",
-                "demo/rotate-units", "demo/sign-units", "demo/ready-units"):
-        for p in sorted(glob.glob(os.path.join(repo_root, sub, "*.agent"))):
+    subs = ["examples", "demo/ctl-units", "demo/finish-units", "demo/reload-units",
+            "demo/jail-units", "demo/stream-units", "demo/metrics-units",
+            "demo/rotate-units", "demo/sign-units", "demo/ready-units"]
+    for d in os.environ.get("AGRY_AUDIT_UNITS", "").split(":"):
+        if d.strip():
+            subs.append(d.strip())
+    for sub in subs:
+        p = sub if os.path.isabs(sub) else os.path.join(repo_root, sub)
+        for p in sorted(glob.glob(os.path.join(p, "*.agent"))):
             cfg = {}
             with open(p, encoding="utf-8") as f:
                 for ln in f:
@@ -86,15 +98,33 @@ def load_unit_configs(repo_root):
 def main(path):
     errors = []
     cfgs = load_unit_configs(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    with open(path, "rb") as f:
-        raw = f.read()
+    if not cfgs:
+        # тикет 018 (школа fail-closed): пустой каталог = нет доказательств.
+        # Молчаливый дефолт cooldown-1000 — выдумка 5.2; против выдуманных
+        # договоров аудитор не проверяет.
+        print("FAIL: каталог юнитов пуст (*.agent не найдены) — против "
+              "выдуманных договоров не проверяем (тикет 018)")
+        return 1
+    try:
+        with open(path, "rb") as f:
+            raw = f.read()
+    except OSError as e:
+        print(f"FAIL: журнал не читается: {path}: {e} — нет доказательств, "
+              "нет вердикта «OK» (тикет 018)")
+        return 1
+
+    try:
+        raw_text = raw.decode("utf-8")
+    except UnicodeDecodeError as e:
+        print(f"FAIL: журнал не декодируется (utf-8): {e} — нет доказательств, нет вердикта (тикет 018)")
+        return 1
+
 
     if b"\x00" in raw:
         errors.append("найдены NUL-байты — журнал с дырами (нарушен O_APPEND)")
-
     events = []
     agent_lines = 0
-    for idx, line in enumerate(raw.decode("utf-8").splitlines()):
+    for idx, line in enumerate(raw_text.splitlines()):
         if not line.strip():
             continue
         if not line.startswith('{"ts":'):
@@ -105,8 +135,11 @@ def main(path):
         except json.JSONDecodeError as e:
             fail(errors, idx, f"битая строка журнала: {e}")
             continue
-        if "up_ms" not in ev or "event" not in ev:
-            fail(errors, idx, f"нет up_ms/event: {line[:80]}")
+        if not isinstance(ev, dict) or not isinstance(ev.get("event"), str) or not isinstance(ev.get("ts"), str):
+            fail(errors, idx, f"структура лжи: событие/ts не тех типов: {line[:80]}")
+            continue
+        if not isinstance(ev.get("up_ms"), int) or isinstance(ev.get("up_ms"), bool) or ev["up_ms"] < 0:
+            fail(errors, idx, f"up_ms={ev.get('up_ms')!r} — не честное время (тикет 018)")
             continue
         if ev["event"] not in VALID_EVENTS:
             fail(errors, idx, f"неизвестное событие '{ev['event']}'")
@@ -331,6 +364,18 @@ def main(path):
 
     if not units:
         errors.append("в транскрипте нет ни одного юнита")
+    for name in sorted(units):
+        if name in cfgs:
+            continue
+        # тикет 018, проба 5.2: юнит без договора — выдумка… КРОМЕ случая,
+        # когда договор умер честно: unit-removed в транскрипте (демо reload
+        # удаляет *.agent на живую — история длиннее каталога). Фантом без
+        # договора и без смерти договора не проверяется — он выдуман.
+        removed = any(e.get("unit") == name and e["event"] == "unit-removed"
+                      for _, e in events)
+        if not removed:
+            fail(errors, 0,
+                 f"юнит {name} без договора в каталоге — выдумка не проверяется (тикет 018)")
 
     # Скобка reload→reload-done (Виток 11, тикет 017; школа Type=notify-reload):
     # перечитывание объявляется reload'ом (числа + gen) и обязано закрыться

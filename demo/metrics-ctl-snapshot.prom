@@ -1,6 +1,6 @@
 # HELP agryp_up_ms Жизнь супервизора, мс
 # TYPE agryp_up_ms gauge
-agryp_up_ms 4010
+agryp_up_ms 4009
 # HELP agryp_units Юнитов в каталоге
 # TYPE agryp_units gauge
 agryp_units 2

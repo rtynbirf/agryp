@@ -1,0 +1,8 @@
+{"ts": "2026-11-10T09:00:00Z", "up_ms": 0, "event": "boot", "units": 1}
+{"ts": "2026-11-10T09:00:00Z", "up_ms": 5, "unit": "probe", "event": "spawn", "pid": 101, "attempt": 1, "budget_sec": 0, "jailed": 0}
+{"ts": "2026-11-10T09:00:02Z", "up_ms": 2000, "unit": "probe", "event": "exit", "by_signal": 15, "ok": false}
+{"ts": "2026-11-10T09:00:02Z", "up_ms": 2050, "unit": "probe", "event": "restart", "next_attempt": 2, "backoff_ms": 5000, "streak": 1}
+{"ts": "2026-11-10T09:00:05Z", "up_ms": 5000, "event": "shutdown", "reason": "signal"}
+{"ts": "2026-11-10T09:00:07Z", "up_ms": 7000, "unit": "probe", "event": "exit", "by_signal": 15, "ok": false}
+{"ts": "2026-11-10T09:00:05Z", "up_ms": 5051, "unit": "probe", "event": "summary", "attempts": 1, "exits_ok": 0, "exits_fail": 2, "budget_kills": 0, "token_kills": 0, "tokens_total": 0, "restarts": 1}
+{"ts": "2026-11-10T09:00:05Z", "up_ms": 5051, "event": "uptime-ms", "value": 5051}
