@@ -1,0 +1,4 @@
+name        = ghost
+exec        = sh demo/ctl_worker.sh
+restart     = always
+cooldown-ms = 800
