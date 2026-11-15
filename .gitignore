@@ -25,6 +25,9 @@ build/
 *.tmp
 *.bak
 *~
+# Сборочные артефакты ядра (аксиома 3: бинарники не живут в git — Release v1.1)
+/agryp
+/ed25519tool
 # Бинарники и медиа — НЕ в git (протокол Ф1/Ф2: Release или LFS)
 *.bundle
 *.zip
@@ -41,3 +44,10 @@ build/
 # Модели/данные >1MB — наружу
 *.pt
 *.ckpt
+# Рантайм-состояние agryp (Ст. 13: файл-договор, не сокет; строка возвращена
+# — потеряна в 5a8b19b при замене на канон хаба)
+.agryp-journal.ndjson*
+.agryp-metrics.prom
+.agryp-status
+.agryp-report
+.agryp-ctl/

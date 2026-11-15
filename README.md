@@ -14,8 +14,6 @@
 
 # agryp — неспящий супервизор агентов уровня PID 1
 
-<p align="center"><img src=".github/social-preview.png" alt="agryp" width="100%"></p>
-
 
 **Агенты умирают в закрытых терминалах. agryp — не спит.**
 
