@@ -2,7 +2,7 @@
  "hologram": 1,
  "root": "c223bd4a2f6a56783c1fbdb1b1f671fa61c3150ecf320c82796ea5763043a696",
  "n": 73,
- "storage": 68,
+ "storage": 36,
  "r": 3,
  "self": {
   "name": "agryp",
@@ -308,6 +308,12 @@
   {
    "name": "cell-rs",
    "desc": "Первая Rust-клетка роя: ядро контура сверки — Tolerance/reconcile/Phase, sha256, байт-цепь. Кровь одна во всех телах.",
+   "lang": "Python",
+   "cluster": "SWARM"
+  },
+  {
+   "name": "cell-swarm",
+   "desc": "РОЙ (Cell Swarm) — сингулярная эмерджентная архитектура: клетка, окно, указатели, храповик, семя",
    "lang": "Python",
    "cluster": "SWARM"
   },
