@@ -1,12 +1,12 @@
 <div align="center">
-  <img src="banner.png" alt="agryp — PID1-подобный супервизор AI-агентов — один файл C, ноль зависимостей" width="100%">
+  <img src="https://cdn.jsdelivr.net/gh/rtynbirf/agryp@main/banner.png" alt="agryp — PID1-подобный супервизор AI-агентов — один файл C, ноль зависимостей" width="100%">
 </div>
 
 <!--ФОРЖ:МУЗА:НАЧАЛО-->
 <div align="center">
-  <img src="repo-muse.svg" width="100%" alt="Муза agryp: мастерская РАДАР-ГЛАЗ, кузня ПОЛИМАТ, раунд 12 · REVE=РЕВО" />
+  <img src="https://cdn.jsdelivr.net/gh/rtynbirf/agryp@main/repo-muse.svg" width="100%" alt="Муза agryp: мастерская РАДАР-ГЛАЗ, кузня ПОЛИМАТ, раунд 12 · REVE=РЕВО" />
   <br/>
-  <img src="forge-divider.svg" width="62%" alt="делитель мастерской РАДАР-ГЛАЗ" />
+  <img src="https://cdn.jsdelivr.net/gh/rtynbirf/agryp@main/forge-divider.svg" width="62%" alt="делитель мастерской РАДАР-ГЛАЗ" />
 </div>
 <!--ФОРЖ:МУЗА:КОНЕЦ-->
 
