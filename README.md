@@ -1,4 +1,10 @@
 <div align="center">
+
+<a href="https://github.com/rtynbirf/agryp"><img src="banner.png" width="100%" alt="agryp — штандарт мастерской в каноне ORNAMENTAL MYTHO-REALISM"></a>
+
+</div>
+
+<div align="center">
   <img src="https://cdn.jsdelivr.net/gh/rtynbirf/agryp@main/banner.png" alt="agryp — PID1-подобный супервизор AI-агентов — один файл C, ноль зависимостей" width="100%">
 </div>
 
@@ -17,7 +23,7 @@
 
 | ФАЙЛОВ | ПАПОК | КОММИТОВ | ОБНОВЛЕНО | РЕЛИЗОВ |
 |---:|---:|---:|---|---:|
-| 202 | 32 | 150 | 2026-11-19 | 1 |
+| 202 | 32 | 151 | 2026-11-19 | 0 |
 <!--ФОРЖ:ПАСПОРТ:КОНЕЦ-->
 
 # agryp — неспящий супервизор агентов уровня PID 1
