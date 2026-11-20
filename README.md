@@ -61,7 +61,7 @@ fail-closed, 13 негативных проб — `make audit-neg`); живая 
 (ctl / finish / ready / reload / stream / envelope / metrics / rotate / sign);
 санитайзеры ASan+UBSan; каталог инструментов 2444 позиции × 34 категории;
 канон клетки из cell-swarm. Бинарники вне git (аксиома 3) —
-[релиз v1.1](https://github.com/rtynbirf/agryp/releases/tag/v1.1):
+релиз v1.1:
 `agryp-linux-x86_64`, `ed25519tool-linux-x86_64`.
 
 ## Документы
