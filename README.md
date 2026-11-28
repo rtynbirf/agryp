@@ -4,10 +4,6 @@
 
 </div>
 
-<div align="center">
-  <img src="https://cdn.jsdelivr.net/gh/rtynbirf/agryp@main/banner.png" alt="agryp — PID1-подобный супервизор AI-агентов — один файл C, ноль зависимостей" width="100%">
-</div>
-
 <!--ФОРЖ:МУЗА:НАЧАЛО-->
 <div align="center">
   <img src="https://cdn.jsdelivr.net/gh/rtynbirf/agryp@main/repo-muse.svg" width="100%" alt="Муза agryp: мастерская РАДАР-ГЛАЗ, кузня ПОЛИМАТ, раунд 12 · REVE=РЕВО" />
@@ -18,13 +14,31 @@
 
 <!--ФОРЖ:ПАСПОРТ:НАЧАЛО-->
 <div align="center">
-  <img src="revo-page.svg" width="100%" alt="РЕВО-паспорт страницы agryp в каноне ORNAMENTAL MYTHO-REALISM: орнаментальная решётка, медальон-миф, строение файлов, лексикон — по фактическому контенту" />
+  <img src="revo-page.svg" width="100%" alt="РЕВО-паспорт страницы agryp №18 в каноне ORNAMENTAL MYTHO-REALISM: орнаментальная решётка, медальон-миф, строение файлов, лексикон — по фактическому контенту" />
 </div>
 
 | ФАЙЛОВ | ПАПОК | КОММИТОВ | ОБНОВЛЕНО | РЕЛИЗОВ |
 |---:|---:|---:|---|---:|
-| 211 | 33 | 219 | 2026-11-28 | 1 |
+| 211 | 35 | 1 | 2026-11-28 | 2 |
 <!--ФОРЖ:ПАСПОРТ:КОНЕЦ-->
+
+# agryp
+
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/rtynbirf/agryp@main/.github/social-preview.png" alt="agryp" width="100%"></p>
+
+<div align="center">
+
+<a href="https://github.com/rtynbirf/agryp"><img src="banner.png" width="100%" alt="agryp — штандарт мастерской в каноне ORNAMENTAL MYTHO-REALISM"></a>
+
+</div>
+
+<div align="center">
+  <img src="https://cdn.jsdelivr.net/gh/rtynbirf/agryp@main/banner.png" alt="agryp — PID1-подобный супервизор AI-агентов — один файл C, ноль зависимостей" width="100%">
+</div>
+
+
+
+
 
 # agryp — неспящий супервизор агентов уровня PID 1
 
